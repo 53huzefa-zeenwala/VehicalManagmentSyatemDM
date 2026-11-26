@@ -247,6 +247,8 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | `docs/design/mockups/` | Current deliverable: PNGs (light/dark/alt) + `UI_Mockups_v1.pdf` |
 | `2026-11-26-…vehicleandpar.txt` (repo root) | The owner's export of the full working session (raw history) |
 
+**Repository:** https://github.com/53huzefa-zeenwala/VehicalManagmentSyatemDM, branch `main`. It is **public** by the owner's choice (2026-11-26), so the client documents in `docs/source/` are publicly visible. Commit and push only when the owner asks.
+
 **External references:**
 - .NET support: https://learn.microsoft.com/dotnet/core/releases-and-support
 - Flutter: https://docs.flutter.dev/install/archive
