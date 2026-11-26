@@ -28,7 +28,7 @@
 | **Transfers:** the admin chooses the vehicle and destination lot only. Any staff of the origin lot confirms departure, and **that person drives it**. Any staff member confirms arrival | D-020 | TRF-01, TRF-02 |
 | **Admins monitor only.** No ending, swapping or cancelling trips (TRP-11 and P-02 removed). They have a read-only trip detail, overdue alerts and the reminder log | D-021 | TRP-11, P-02, §4 rows |
 | **Admins have no QR scanner** | D-021 | QR-05 (admin part) |
-| **Navigation.** Staff tab bar: Home · Trips · Scan · Lots · Profile. Attendance opens from Home and Profile. Admin tab bar: Dashboard · Live · Manage · Reports | D-022 | UX-01, UX-12 |
+| **Navigation.** Staff tab bar: Home · Trips · Scan · Lots · Profile. Attendance is removed (D-023). Admin tab bar: Dashboard · Live · Manage · Reports | D-022 | UX-01, UX-12 |
 | **Open risk (OI-10).** A trip whose staff member can't act stays open, because nobody else can close it | D-021 | — |
 | **Attendance removed from the app.** No check in/out, breaks, photo + GPS, shift rules or attendance report. Location permission is no longer needed | D-023 | ATT-01–08; the shift settings in SET-01; the attendance report in RPT-02; the attendance navigation in D-022 |
 
@@ -40,23 +40,22 @@ One mobile app (Android and iOS) with two roles, **Admin** and **Staff** `[D-007
 
 It tracks municipal fleet vehicles (cars, garbage trucks, ambulances, and so on) as they leave and return to parking lots `[Client]`:
 - who took each vehicle out (staff)
-- who drove it (driver)
+- who drove it (the staff member is the driver, D-020)
 - where it went (destination)
 - how long it was out
 - how full each lot is.
 
-It also records staff attendance `[D-009]`.
+~~It also records staff attendance~~ (removed in v1.1, D-023).
 
 ## 2. Scope
 
 **In v1**
 - Authentication and accounts
-- Staff, drivers, vehicle catalogue, QR codes
+- Staff (who are also the drivers, D-020), vehicle catalogue, QR codes
 - Parking lots with capacity and a map
 - Destinations
-- Trips: start, live timer, swap, cancel, end, admin end
+- Trips: start, live timer, swap or hand-over, cancel, end (staff only; admins monitor, D-021)
 - Transfers
-- Staff attendance
 - Reminders (push notifications)
 - Admin dashboard and on-screen reports
 - Settings, audit log
@@ -65,18 +64,20 @@ It also records staff attendance `[D-009]`.
 - Web portal `[D-001]`
 - Billing and payments, maintenance management, fuel logs, live vehicle GPS `[D-009]`
 - Report exports to PDF or Excel `[D-012]`
-- Driver QR cards, driver app or driver login `[D-010]`
+- Separate driver records, driver QR cards, driver app or driver login `[D-010, D-020]`
 - More than one organisation `[D-009]`
 - Offline mode `[D-009]`
 - Arabic interface. Layouts are built ready for right-to-left so it can be added later `[D-012]`
-- Vehicle-type restrictions on drivers `[D-010]`
+- Vehicle-type restrictions on staff/drivers `[D-010]`
+- Attendance `[D-023]`
+- Admin trip actions (end, swap, cancel) and admin QR scanning `[D-021]`
 
 ## 3. Glossary
 
 | Term | Meaning |
 |---|---|
 | Trip | One period a vehicle spends outside a lot, from Start to End (the client calls it a "vehicle session") |
-| Segment | Part of a trip with one driver and one vehicle. Each swap closes the current segment and opens a new one `[D-012]` |
+| Segment | Part of a trip with one staff member (the driver) and one vehicle. Each swap closes the current segment and opens a new one `[D-012]` |
 | Origin lot / return lot | The lot a trip starts from / the lot the vehicle comes back to (can be any lot) |
 | Transfer | A move of a vehicle between lots, started by an admin |
 | Destination | The Area → Location a vehicle is sent to |
@@ -108,9 +109,9 @@ It also records staff attendance `[D-009]`.
 | Create a transfer | ✓ | — |
 | Confirm transfer departure (the person who confirms drives it, D-020) | — | Staff of the origin lot `[P-04]` |
 | Confirm transfer arrival | — | Any staff `[P-04]` |
-| Record own attendance | — | ✓ |
-| View everyone's attendance | ✓ | — |
-| Shift, reminder and ID-prefix settings | ✓ | — |
+| ~~Record own attendance~~ (removed, D-023) | — | — |
+| ~~View everyone's attendance~~ (removed, D-023) | — | — |
+| Reminder and ID-prefix settings (shift settings removed, D-023) | ✓ | — |
 | Dashboard and reports | ✓ | — |
 | Receive trip reminders | All trips | Own trips |
 | Audit log `[P-16]` | ✓ | — |
@@ -137,9 +138,9 @@ The server enforces every permission. The app only hides what a role can't use `
 
 | ID | Requirement | Source |
 |---|---|---|
-| STF-01 | Create, edit, deactivate and reactivate staff. Fields: full name, photo, mobile, email (optional), Staff ID (generated), assigned lots (one or more), status | P-01 |
+| STF-01 | Create, edit, deactivate and reactivate staff. Fields: full name, photo, mobile, email (optional), Staff ID (generated), driving licence number (D-020), assigned lots (one or more), status | P-01, D-020 |
 | STF-02 | Reset a staff member's password | D-009 |
-| STF-03 | View a staff member's trips, hours and attendance | PDF |
+| STF-03 | View a staff member's trips and hours (attendance removed, D-023) | PDF |
 
 ### 5.3 Driver management (DRV): removed in v1.1 (D-020). Rows kept for history only.
 
@@ -167,7 +168,7 @@ The server enforces every permission. The app only hides what a role can't use `
 | QR-02 | Download one QR as an image, or as a printable PDF label (QR + registration number + type) | D-009 |
 | QR-03 | Bulk print: select vehicles → one PDF sheet of labels | D-009 |
 | QR-04 | A damaged sticker is reprinted with the same code | D-009 |
-| QR-05 | Scanning works in the staff and admin flows. If a scan fails, the user can type the registration number | D-009 |
+| QR-05 | Scanning is for staff only; admins don't scan (D-021). If a scan fails, staff can type the registration number | D-009, D-021 |
 | QR-06 | An unknown QR code, or one for a vehicle that can't be used, shows a clear error and the reason | P-19 |
 
 ### 5.6 Parking lots (LOT)
@@ -193,16 +194,16 @@ The server enforces every permission. The app only hides what a role can't use `
 
 | ID | Requirement | Source |
 |---|---|---|
-| TRP-01 | **Start** (staff), in order: 1. origin lot (pre-filled when the staff member has only one) 2. vehicle (scan, or type the registration number) 3. driver (pick, or type the Driver ID) 4. destination (area → location) 5. driver signs on screen 6. confirm. The server records the start time | Client, D-009, D-010 |
-| TRP-02 | Start checks: the vehicle is Available and located at the origin lot `[P-07]`; the driver is active and not on another active trip; the staff member has no other active trip | D-009 |
-| TRP-03 | Recorded at start: staff name and ID, driver, vehicle (registration, category, type, brand, model), origin lot, destination, signature, start date and time | Client |
+| TRP-01 | **Start** (staff), in order: 1. origin lot (pre-filled when the staff member has only one) 2. vehicle (scan, or type the registration number) 3. destination (area → location) 4. **the staff member signs** on screen 5. confirm. The server records the start time. *(v1.1: no driver step; the staff member is the driver, D-020)* | Client, D-009, D-010, D-020 |
+| TRP-02 | Start checks: the vehicle is Available and located at the origin lot `[P-07]`; the staff member has no other active trip (the staff member is the driver, D-020) | D-009, D-020 |
+| TRP-03 | Recorded at start: staff name and ID (= driver, D-020), vehicle (registration, category, type, brand, model), origin lot, destination, signature, start date and time | Client |
 | TRP-04 | A **live timer** shows in the Staff app's top bar from Start until End, on every screen | Client |
 | TRP-05 | The admin sees every active trip live, with elapsed time | Client |
 | TRP-06 | **Reminders:** after a duration the admin sets, the staff member gets a push notification, repeated every 30 minutes until the trip ends. The admin is alerted on the same schedule | D-009 |
-| TRP-07 | **Swap:** on an active trip, replace the driver and/or the vehicle. It stays the same trip; the current segment closes and a new one opens at the swap time. A reason is required `[P-03]`. The new vehicle must be Available and at a lot, and it leaves that lot. For the swapped-out vehicle, staff pick the lot where it is or mark "Not at a lot" | D-010, D-012 |
+| TRP-07 | **Swap (v1.1, D-020):** on an active trip, **change the vehicle**, or **hand the trip over to another staff member** (who must have no active trip; the trip and its live bar move to their phone). It stays the same trip; the current segment closes and a new one opens at the swap time. A reason is required `[P-03]`. The new vehicle must be Available and at a lot, and it leaves that lot. For the swapped-out vehicle, staff pick the lot where it is or mark "Not at a lot" | D-010, D-012, D-020 |
 | TRP-08 | **Cancel:** reason category (driver, vehicle, technical or other issue) + note. The trip ends at the moment of cancelling and its hours count. Staff pick the lot where the vehicle is, or "Not at a lot". The vehicle's status doesn't change; the admin decides | D-010, D-012 |
 | TRP-09 | **End** (staff, own trip): identify the vehicle (scan or type) → pick the return lot (any active lot) → confirm. The server records the end time | Client, D-010 |
-| TRP-10 | **End summary:** vehicle details, category, origin and return lots, driver(s), destination, start, end, total duration, and segments if there were swaps | Client |
+| TRP-10 | **End summary:** vehicle details, category, origin and return lots, staff/driver(s) per segment, signature, destination, start, end, total duration, and segments if there were swaps | Client |
 | TRP-11 | **Removed in v1.1 (D-021).** Old text: **Admin end:** the admin enters the actual end time (after the start, not in the future), a required reason, and the return lot or "Not at a lot". The action is audited | D-009 |
 | TRP-12 | Trip history: staff see their own trips; admins see all trips, with filters | Client |
 
@@ -210,11 +211,11 @@ The server enforces every permission. The app only hides what a role can't use `
 
 | ID | Requirement | Source |
 |---|---|---|
-| TRF-01 | The admin creates a transfer: vehicle (Available, at a lot), destination lot, driver | D-010 |
-| TRF-02 | Staff of the origin lot confirm departure. Hours start and the vehicle becomes Active | D-012, P-04 |
+| TRF-01 | The admin creates a transfer: vehicle (Available, at a lot), destination lot, optional note. **No driver is chosen** (D-020) | D-010, D-020 |
+| TRF-02 | Any staff of the origin lot confirms departure, and **that person drives** the vehicle. Hours start and the vehicle becomes Active | D-012, P-04, D-020 |
 | TRF-03 | Until arrival is confirmed, the vehicle is counted at the origin lot | D-010 |
 | TRF-04 | Any staff member confirms arrival at the destination. Hours end, and the vehicle becomes Available at the destination lot | D-010, P-04 |
-| TRF-05 | Transfer hours count toward the driver's and the vehicle's hours | D-010 |
+| TRF-05 | Transfer hours count toward the hours of the staff member who confirmed departure (the driver) and the vehicle | D-010, D-020 |
 | TRF-06 | The admin can cancel a transfer before departure | P-05 |
 | TRF-07 | A transfer that is in transit gets the same reminder rule as trips | P-21 |
 
@@ -243,8 +244,8 @@ The server enforces every permission. The app only hides what a role can't use `
 
 | ID | Requirement | Source |
 |---|---|---|
-| RPT-01 | Admin dashboard: vehicles by status, trips active now, completed trips in the chosen period, staff and driver totals, lot utilization (occupied and available per lot and per type), over-capacity flags, trips over the reminder threshold | PDF, Client |
-| RPT-02 | Reports on screen with filters (date range, lot, category or type, vehicle, staff, driver): vehicle running hours · staff activity · driver hours · lot utilization · trip log (including cancelled, admin-ended and swapped trips) · transfer history · attendance | PDF, D-009, D-012 |
+| RPT-01 | Admin dashboard: vehicles by status, trips active now, completed trips in the chosen period, staff totals, free spaces, lot utilization (occupied and available per lot and per type), over-capacity flags, trips over the reminder threshold | PDF, Client |
+| RPT-02 | Reports on screen with filters (date range, lot, category or type, vehicle, staff): vehicle running hours · staff hours and activity (= driver hours, D-020) · lot utilization · trip log (including cancelled, swapped and handed-over trips) · transfer history. *(v1.1: attendance report removed, D-023; no admin-ended trips, D-021)* | PDF, D-009, D-012, D-020 |
 | RPT-03 | No exports in v1 | D-012 |
 | RPT-04 | Hours that cross midnight are split by calendar day in date-filtered reports | P-12 |
 
@@ -252,7 +253,7 @@ The server enforces every permission. The app only hides what a role can't use `
 
 | ID | Requirement | Source |
 |---|---|---|
-| SET-01 | Admin settings: Staff ID prefix, reminder delay, shift start, working days, grace period | D-011, D-009, D-012 |
+| SET-01 | Admin settings: Staff ID prefix, reminder delay *(shift settings removed, D-023)* | D-011, D-009, D-023 |
 | SET-02 | Settings for every user: theme (System, Light, Dark), profile, change password, logout | P-18, P-14 |
 | AUD-01 | Every admin create, edit or deactivate action is logged with who, when and the before/after values. So are password resets, manual trip ends and corrected times, transfers and status changes | P-16 |
 | AUD-02 | Admins can view the audit log, with filters | P-16 |
@@ -262,12 +263,12 @@ The server enforces every permission. The app only hides what a role can't use `
 | ID | Rule | Source |
 |---|---|---|
 | BR-01 | Every timestamp comes from the server clock. Times are stored in UTC and shown in Gulf Standard Time (UTC+4) | P-13 |
-| BR-02 | One active trip per staff member. One active segment per driver. One active trip or in-transit transfer per vehicle | D-009 |
+| BR-02 | One active trip per staff member (staff are the drivers). One active trip or in-transit transfer per vehicle | D-009, D-020 |
 | BR-03 | Staff start trips only from their assigned lots and can return vehicles to any active lot | D-009, D-010 |
 | BR-04 | Only a vehicle that is Available and located at the origin lot can be started or transferred | P-07 |
 | BR-05 | A lot's occupied spaces (per type and in total) = the baseline count + vehicles located there and not on a trip + vehicles in a transfer that hasn't arrived yet. Available spaces = capacity − occupied | Client, D-009, D-010 |
-| BR-06 | Driver hours and vehicle hours = the total of their segment durations. Staff hours = the full duration of the trips they started | D-012, P-11 |
-| BR-07 | Hours count for cancelled trips and for trips the admin ended | D-010 |
+| BR-06 | Staff hours (staff are the drivers) and vehicle hours = the total of their segment durations. A hand-over or vehicle swap splits the hours at the swap time | D-012, D-020 (replaces P-11) |
+| BR-07 | Hours count for cancelled trips. *(No admin-ended trips in v1.1, D-021)* | D-010, D-021 |
 | BR-08 | Records are deactivated, never deleted. Deactivated records stay in history and reports | D-009 |
 | BR-09 | Capacity warnings never block an action | D-009 |
 | BR-10 | Trip states: Active → Ended, Ended by admin, or Cancelled. Transfer states: Pending departure → In transit → Completed, or Pending departure → Cancelled | D-009, D-010, D-012 |
@@ -278,13 +279,11 @@ The server enforces every permission. The app only hides what a role can't use `
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Active: Staff starts (vehicle, driver, destination, signature)
-    Active --> Active: Swap driver/vehicle (new segment)
+    [*] --> Active: Staff starts (vehicle, destination, staff signature)
+    Active --> Active: Swap vehicle or hand over to another staff (new segment)
     Active --> Ended: Staff ends (return lot)
-    Active --> EndedByAdmin: Admin ends (actual time + reason)
     Active --> Cancelled: Staff cancels (reason; hours count)
     Ended --> [*]
-    EndedByAdmin --> [*]
     Cancelled --> [*]
 ```
 
@@ -294,7 +293,7 @@ Reminders run while a trip is Active: the first after the admin-set delay, then 
 
 ```mermaid
 stateDiagram-v2
-    [*] --> PendingDeparture: Admin creates (vehicle, destination lot, driver)
+    [*] --> PendingDeparture: Admin creates (vehicle, destination lot)
     PendingDeparture --> Cancelled: Admin cancels
     PendingDeparture --> InTransit: Origin staff confirm departure (hours start)
     InTransit --> Completed: Staff confirm arrival (hours end)
@@ -306,14 +305,14 @@ The vehicle stays counted at the origin lot until the transfer is Completed.
 
 ### 7.3 Key journeys
 
-1. **Admin setup:** categories and types → lots (capacity, baseline count) → destinations → vehicles (QR generated) → print labels → drivers → staff (assign lots).
-2. **Staff start:** home → Start → origin lot → scan vehicle → pick driver → destination → signature → confirm → timer runs.
+1. **Admin setup:** categories and types → lots (capacity, baseline count) → destinations → vehicles (QR generated) → print labels → staff (licence, assign lots).
+2. **Staff start:** home → Scan → origin lot (if several) → vehicle → destination → staff signs → review → start → live bar runs.
 3. **Staff end:** timer bar or Active trip → End → scan vehicle → return lot → confirm → summary.
-4. **Swap:** active trip → Swap → new driver and/or vehicle → reason → place the old vehicle (lot or "Not at a lot") → confirm.
+4. **Swap:** active trip → Swap → **change vehicle** (scan new, reason, place the old one: lot or "Not at a lot") **or hand over** (pick staff with no active trip, reason) → confirm.
 5. **Cancel:** active trip → Cancel → reason + note → place the vehicle → confirm.
-6. **Forgotten trip:** reminders to the staff member and the admin → staff ends it, or the admin ends it with the actual time and a reason.
+6. **Forgotten trip:** reminders to the staff member and the admin → only the staff member can end it; the admin monitors (D-021). See OI-10.
 7. **Transfer:** admin creates → origin staff are notified and confirm departure → destination staff confirm arrival.
-8. **Attendance:** check in (photo + GPS) → lunch start and end → tea start and end → check out.
+8. ~~**Attendance**~~: removed (D-023).
 9. **Monitoring:** dashboard → live active trips → reports with filters.
 
 ## 8. Non-functional requirements
@@ -328,7 +327,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 | Real-time | The admin's active-trip list and dashboard update within 5 s of a change |
 | Availability | 99.5% monthly uptime for the API |
 | Security | HTTPS (TLS 1.2+). Passwords stored with a modern adaptive hash. Short-lived access tokens with refresh tokens. Permissions checked on the server for every request. Login lockout (AUTH-08). Tokens kept in the platform's secure storage. Audit log (AUD-01). Follows the OWASP mobile security standard (MASVS) |
-| Privacy | Photos, GPS locations, signatures and phone numbers are personal data. Only admins see other people's data. Privacy policy text and retention periods come from the client (OI-02) |
+| Privacy | Staff and vehicle photos, signatures, phone numbers and licence numbers are personal data (attendance photos and GPS removed, D-023). Only admins see other people's data. Privacy policy text and retention periods come from the client (OI-02) |
 | Accessibility | WCAG 2.2 AA contrast. Supports the system text size. Touch targets ≥ 48 dp. Screen-reader labels |
 | Localization | English. Every string is kept outside the code. Right-to-left-ready layouts (direction-aware spacing, mirrored directional icons) `[D-012]` |
 | Theming | Light and dark designed as complete systems `[D-004]` |
@@ -339,13 +338,13 @@ All targets here are `[P-19]` unless tagged otherwise.
 
 - Users (admins, staff) and their roles
 - Staff lot assignments
-- Drivers
+- ~~Drivers~~ (staff are the drivers, D-020)
 - Vehicle categories and types; vehicles and their QR codes
 - Parking lots, with capacity per type and baseline counts
 - Areas and locations
 - Trips, trip segments and signatures
 - Transfers
-- Attendance entries (with photo and GPS)
+- ~~Attendance entries~~ (removed, D-023)
 - Shift and app settings
 - Notifications
 - Audit log
@@ -356,8 +355,8 @@ All targets here are `[P-19]` unless tagged otherwise.
 |---|---|---|
 | Google Maps | Lot pin picking and the map view | Needs a Google Cloud API key and billing account (OI-03) |
 | FCM (Android) / APNs (iOS) | Push reminders and transfer alerts | Needs Firebase and Apple developer accounts |
-| Device camera | QR scanning, attendance photos | Requires runtime permission |
-| Device location | GPS on attendance entries | Requires runtime permission |
+| Device camera | QR scanning (staff only) | Requires runtime permission |
+| ~~Device location~~ | ~~GPS on attendance entries~~: not needed after D-023 | — |
 | PDF generation | QR labels, single and bulk | Generated on the server or in the app (decided in Phase 5) |
 | System share sheet | Sharing QR images and labels | — |
 
@@ -377,7 +376,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 | P-08 | Inactive lots can't be used for Start, return or transfers |
 | P-09 | Baseline occupied counts are kept per type and in total |
 | P-10 | One shift setting for all staff (no per-person shifts in v1) |
-| P-11 | Staff hours = the full duration of the trips they started (swaps don't move staff hours). P-11b: attendance order rules and blocking on denied permissions (ATT-07, ATT-08) |
+| P-11 | **Superseded by D-020 (hours by segment per staff member).** Old: Staff hours = the full duration of the trips they started (swaps don't move staff hours). P-11b: attendance order rules and blocking on denied permissions (ATT-07, ATT-08) |
 | P-12 | Hours that cross midnight are split by calendar day in reports |
 | P-13 | All times come from the server, are stored in UTC and shown in GST |
 | P-14 | Users can change their own password; admins can reset other admins' passwords |
@@ -394,7 +393,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 
 | ID | Item | Needed by |
 |---|---|---|
-| OI-01 | Scale: vehicles, lots, staff, drivers, trips per day (A3) | Phase 5 |
+| OI-01 | Scale: vehicles, lots, staff, trips per day (A3) | Phase 5 |
 | OI-02 | Privacy policy text, data retention periods, and which data-protection rules apply | Phase 7 |
 | OI-03 | Who owns the Google Maps API key and billing account | Phase 7 |
 | OI-04 | App name, icon and logo (placeholder: "DM") | Phase 4 |

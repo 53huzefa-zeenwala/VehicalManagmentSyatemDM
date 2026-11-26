@@ -127,7 +127,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 - **Dashboard:** live count of vehicles on trip, a trips-per-hour chart, trips today, hours out, free spaces, then "Needs attention" (overdue trips, vehicles not at a lot, lots over capacity, transfers waiting).
 - **Live tab:** trips (overdue first) and transfers.
 - **Trip detail:** read-only, with staff, vehicle, route, segments and the reminder log.
-- **Reports** (on screen with filters, no export): vehicle running hours, staff activity/hours, lot utilization, trip log (including cancelled and handed-over trips), transfers.
+- **Reports** (5, on screen with filters, no export): vehicle running hours, staff hours and activity (= driver hours), lot utilization, trip log (including cancelled and handed-over trips), transfers.
 - **Audit log:** every admin create, edit, deactivate, status change and transfer.
 
 ## 5. Navigation and screens
@@ -245,7 +245,13 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | `docs/design/ui-preview.html` | Rejected "Fleet Signage" preview (history) |
 | `prototype/ui-mock/` | The dummy app (`screens.html`, `styles.css` = tokens, `app.js`, `deck.css`) |
 | `docs/design/mockups/` | Current deliverable: PNGs (light/dark/alt) + `UI_Mockups_v1.pdf` |
-| `2026-11-26-…vehicleandpar.txt` (repo root) | The owner's export of the full working session (raw history) |
+| `2026-11-26-…vehicleandpar.txt` (repo root) | The owner's export of the full working session (raw history), up to 2026-11-26 21:56. Later work (knowledge base rewrite, GitHub push, completeness audit) is reflected in the files themselves |
+| `tools/check_contrast.py` | Re-checks every Emerald Ops colour pair against WCAG (26/26 pass) |
+
+**Not in the repo (by design):**
+- The assistant's private memory notes (preferences, repo link). Their content is mirrored in §13 and below.
+- Generated render copies (`prototype/ui-mock/renders/`, `deck.html`); the render script rebuilds them.
+- macOS `.DS_Store` files.
 
 **Repository:** https://github.com/53huzefa-zeenwala/VehicalManagmentSyatemDM, branch `main`. It is **public** by the owner's choice (2026-11-26), so the client documents in `docs/source/` are publicly visible. Commit and push only when the owner asks.
 
@@ -263,7 +269,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 2026-11-18 | Staff UI mock-up analysed; client clarifications received (D-006); owner answers (D-007 one app, D-008 .NET 8, D-009) |
 | 2026-11-22 | Rounds 1d/1e answered (D-010–D-012); `REQUIREMENTS.md` v1.0 approved (D-013); UX architecture + wireframes; "Fleet Signage" rejected; "Emerald Ops" dummy app + PDF (D-017, D-018) |
 | 2026-11-23 | Staff = driver, admins monitor only, Profile tab (D-020–D-022); attendance removed (D-023); PDF now 24 screens |
-| 2026-11-26 | Knowledge base rewritten to the current state; project put under git and pushed to GitHub |
+| 2026-11-26 | Knowledge base rewritten to the current state; project put under git and pushed to GitHub. Completeness audit: `UX_ARCHITECTURE.md` rewritten to v0.2, `REQUIREMENTS.md` v1.1 updated inline (no stale driver, attendance or admin-end lines left), contrast checker added |
 
 ## 13. Owner preferences
 
