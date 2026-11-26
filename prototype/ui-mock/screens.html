@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>Mock screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=block" rel="stylesheet">
+<!-- Icon font subset: keep icon_names sorted and in sync with the icons used in this file and app.js. -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..24,400..500,0..1,0&icon_names=admin_panel_settings,arrow_back,arrow_forward,badge,bar_chart,battery_full,build,call,car_crash,category,check,check_box,check_circle,chevron_right,close,dark_mode,date_range,diamond,directions_car,download,draw,edit,emergency,expand_more,flag,flashlight_on,garage,group,home,id_card,info,keyboard,local_parking,local_shipping,location_on,lock,logout,more_horiz,notifications,open_in_full,park,person,person_off,pin_drop,play_arrow,priority_high,qr_code_2,qr_code_scanner,radio_button_checked,route,sailing,schedule,search,sensors,set_meal,settings,signal_cellular_alt,space_dashboard,swap_horiz,sync_alt,task_alt,timer,trending_up,tune,verified,visibility,visibility_off,warning,wifi,wrong_location&display=block" rel="stylesheet">
+<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<!-- Shared illustrations -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <symbol id="truck" viewBox="0 0 220 120">
+   <ellipse cx="110" cy="108" rx="98" ry="6" fill="#000" opacity=".14"/>
+   <rect x="8" y="16" width="130" height="70" rx="12" fill="var(--primary)"/>
+   <path d="M34 16v70M60 16v70M86 16v70M112 16v70" stroke="#fff" stroke-opacity=".16" stroke-width="3"/>
+   <rect x="8" y="62" width="130" height="9" fill="#FFB020"/>
+   <path d="M142 34h36c6 0 10 3 13 8l15 24c2 3 3 6 3 10v10c0 4-3 6-6 6h-61z" fill="#F4F7F6"/>
+   <path d="M152 42h25c3 0 5 1 7 4l11 18h-43z" fill="#16262A" opacity=".82"/>
+   <rect x="6" y="84" width="204" height="9" rx="4" fill="#26302F"/>
+   <g fill="#1A2224"><circle cx="44" cy="92" r="15"/><circle cx="108" cy="92" r="15"/><circle cx="178" cy="92" r="15"/></g>
+   <g fill="#C9D3D1"><circle cx="44" cy="92" r="6"/><circle cx="108" cy="92" r="6"/><circle cx="178" cy="92" r="6"/></g>
+   <rect x="203" y="72" width="6" height="7" rx="2" fill="#FFB020"/>
+  </symbol>
+  <symbol id="car" viewBox="0 0 220 120">
+   <ellipse cx="110" cy="108" rx="96" ry="6" fill="#000" opacity=".14"/>
+   <path d="M12 84c0-9 5-15 13-17l32-7 28-22c6-4 13-6 21-6h38c9 0 16 3 21 9l17 19 24 5c8 2 12 8 12 16v7c0 4-3 6-6 6H18c-4 0-6-2-6-6z" fill="var(--primary)"/>
+   <path d="M92 42c4-3 9-4 14-4h21v26H74z" fill="#16262A" opacity=".8"/>
+   <path d="M133 38h11c7 0 11 2 15 7l14 19h-40z" fill="#16262A" opacity=".8"/>
+   <rect x="196" y="78" width="10" height="6" rx="2" fill="#FFB020"/>
+   <g fill="#1A2224"><circle cx="58" cy="92" r="16"/><circle cx="166" cy="92" r="16"/></g>
+   <g fill="#C9D3D1"><circle cx="58" cy="92" r="6.5"/><circle cx="166" cy="92" r="6.5"/></g>
+  </symbol>
+  <symbol id="amb" viewBox="0 0 220 120">
+   <ellipse cx="110" cy="108" rx="98" ry="6" fill="#000" opacity=".14"/>
+   <rect x="36" y="10" width="34" height="8" rx="3" fill="#D92D20"/><rect x="72" y="10" width="20" height="8" rx="3" fill="#1F5EFF"/>
+   <rect x="8" y="18" width="142" height="70" rx="12" fill="#FBFCFC"/>
+   <path d="M150 34h28c6 0 10 3 13 8l15 24c2 3 3 6 3 10v10c0 4-3 6-6 6h-53z" fill="#FBFCFC"/>
+   <path d="M158 42h19c3 0 5 1 7 4l11 18h-37z" fill="#16262A" opacity=".82"/>
+   <rect x="8" y="62" width="200" height="8" fill="#D92D20"/>
+   <path d="M66 30h12v10h10v12H78v10H66V52H56V40h10z" fill="#D92D20"/>
+   <rect x="6" y="84" width="204" height="9" rx="4" fill="#26302F"/>
+   <g fill="#1A2224"><circle cx="48" cy="92" r="15"/><circle cx="174" cy="92" r="15"/></g>
+   <g fill="#C9D3D1"><circle cx="48" cy="92" r="6"/><circle cx="174" cy="92" r="6"/></g>
+  </symbol>
+  <symbol id="routes" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice">
+   <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+    <path d="M-20 200C60 170 90 90 170 100s120 70 240 10"/>
+    <path d="M-20 240C80 220 140 160 230 170s110-40 180-80" stroke-dasharray="2 8"/>
+    <path d="M40 -10c20 60 70 90 140 80"/>
+   </g>
+   <g fill="#fff"><circle cx="170" cy="100" r="5"/><circle cx="300" cy="104" r="5"/></g>
+  </symbol>
+ </defs>
+</svg>
+
+<!-- ============ C-02 LOGIN ============ -->
+<div class="screen" id="login"><div class="col">
+ <div style="position:absolute;inset:0 0 auto 0;height:400px;background:linear-gradient(160deg,var(--pDeep),var(--primary) 70%,var(--pEnd));overflow:hidden">
+  <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.2"><use href="#routes"/></svg>
+ </div>
+ <div class="sbar onhero" data-sbar></div>
+ <div style="position:relative;padding:28px 24px 0;color:#fff;display:flex;flex-direction:column;gap:14px">
+  <div style="width:58px;height:58px;border-radius:18px;background:#fff;color:var(--primary);display:grid;place-items:center;font-weight:800;font-size:20px;box-shadow:0 10px 24px -10px rgba(0,0,0,.4)"><span class="ms f" style="font-size:32px">local_shipping</span></div>
+  <div class="h-xl" style="color:#fff">Fleet &amp; Parking</div>
+  <div style="font-size:15px;opacity:.88;max-width:280px;line-height:1.45">Every vehicle, every lot, every minute, in one place.</div>
+  <svg viewBox="0 0 220 120" style="width:220px;align-self:flex-end;margin-top:-6px;margin-right:-6px"><use href="#truck"/></svg>
+ </div>
+ <div style="position:absolute;left:0;right:0;bottom:0;top:372px;background:var(--surface);border-radius:32px 32px 0 0;padding:26px 24px 40px;display:flex;flex-direction:column;gap:14px">
+  <div><div class="h-lg">Welcome back</div><div class="s" style="margin-top:4px">Sign in with the ID your admin gave you.</div></div>
+  <div><div class="lbl">Staff or Admin ID</div><div class="inp fo"><span class="ms">badge</span><span class="num" style="font-weight:600">DM2600042</span></div></div>
+  <div><div class="lbl">Password</div><div class="inp"><span class="ms">lock</span><span style="letter-spacing:3px">••••••••••</span><span class="ms" style="margin-left:auto">visibility_off</span></div></div>
+  <div class="rowc sp"><div class="rowc" style="gap:8px;font-size:14px;font-weight:600"><span class="ms f" style="color:var(--primary)">check_box</span>Remember me</div><span style="font-size:14px;font-weight:700;color:var(--primary)">Forgot password?</span></div>
+  <div class="btn" style="margin-top:4px">Sign in<span class="ms">arrow_forward</span></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-01 HOME (no trip) ============ -->
+<div class="screen" id="staff-home"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="av t-teal">RS</div><div class="grow"><div class="xs">Good morning</div><div class="h-md">Ravi Sharma</div></div><div class="icb"><span class="ms">notifications</span><span class="dotb"></span></div></div>
+ <div class="body">
+  <div class="hero" style="padding:20px">
+   <svg class="deco" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><use href="#routes"/></svg>
+   <div class="rowc sp"><span class="eyebrow">Saturday, 22 Nov</span><span class="bdg" style="background:rgba(255,255,255,.18);color:#fff"><span class="ms f">location_on</span>Karama Lot</span></div>
+   <div style="font-size:24px;font-weight:800;letter-spacing:-.5px;margin:10px 0 4px">Ready for the next vehicle</div>
+   <div class="s" style="margin-bottom:16px">Scan the QR sticker on the vehicle to start a trip.</div>
+   <div class="btn white"><span class="ms">qr_code_scanner</span>Scan to start trip</div>
+   <div class="rowc" style="gap:18px;margin-top:14px"><div><div class="xs">Trips today</div><div style="font-weight:800;font-size:18px">3</div></div><div><div class="xs">Time out today</div><div style="font-weight:800;font-size:18px" class="num">6 h 40 m</div></div></div>
+  </div>
+  <div class="card" style="flex-direction:row;align-items:center;padding:14px">
+   <div class="tile p"><span class="ms f">task_alt</span></div>
+   <div class="grow"><div class="h-md" style="font-size:15px">Last trip · 3 h 05</div><div class="s" style="display:flex;align-items:center;gap:6px;margin-top:3px"><span class="plate"><span class="c">D</span><span class="n">52210</span></span>Completed 11:20</div></div>
+   <span class="ms chev">chevron_right</span>
+  </div>
+  <div class="card" style="flex-direction:row;align-items:center;padding:14px">
+   <div class="tile i"><span class="ms f">swap_horiz</span></div>
+   <div class="grow"><div class="h-md" style="font-size:15px">Transfer ready to depart</div><div class="s" style="display:flex;align-items:center;gap:6px;margin-top:3px"><span class="plate"><span class="c">I</span><span class="n">77120</span></span>to Al Qusais</div></div>
+   <span class="ms chev">chevron_right</span>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc sp"><div class="h-md" style="font-size:15px">Karama Lot</div><span class="s"><b class="b num">38</b> of 50 free</span></div>
+   <div class="capbar"><i style="width:24%"></i></div>
+   <div class="chips" style="gap:6px"><span class="bdg ok"><span class="ms">local_shipping</span>12 trucks</span><span class="bdg ok"><span class="ms">directions_car</span>20 cars</span><span class="bdg ok"><span class="ms">emergency</span>6 amb.</span></div>
+  </div>
+ </div>
+ <div data-tabs="staff:home"></div>
+</div></div>
+
+<!-- ============ S-01 HOME (active) ============ -->
+<div class="screen" id="staff-home-active"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="livebar"><span class="pulse"></span><span class="plate"><span class="c">D</span><span class="n">41823</span></span>On trip<span class="tm">01:24:37</span></div>
+ <div class="hdr" style="padding-top:2px"><div class="av t-teal">RS</div><div class="grow"><div class="xs">Good morning</div><div class="h-md">Ravi Sharma</div></div><div class="icb"><span class="ms">notifications</span></div></div>
+ <div class="body">
+  <div class="hero">
+   <svg class="deco" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><use href="#routes"/></svg>
+   <div class="rowc sp"><span class="eyebrow">Active trip · since 08:12</span><span class="bdg" style="background:rgba(255,255,255,.18);color:#fff"><span class="ms f">radio_button_checked</span>Live</span></div>
+   <div class="rowc" style="align-items:flex-end;margin-top:6px">
+    <div class="grow"><div class="num" style="font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1">01:24:37</div><div class="s" style="margin-top:6px">Reminder at 12:12</div></div>
+    <svg viewBox="0 0 220 120" style="width:132px;margin-right:-10px"><use href="#truck"/></svg>
+   </div>
+   <div style="display:flex;flex-direction:column;gap:8px;margin:14px 0 16px;padding:12px;border-radius:16px;background:rgba(0,0,0,.16)">
+    <div class="rowc" style="gap:10px"><span class="plate" style="background:#fff"><span class="c">D</span><span class="n">41823</span></span><span style="font-weight:600;font-size:14px">Garbage truck · Isuzu FVR</span></div>
+    <div class="rowc" style="gap:8px;font-size:13.5px"><span class="ms" style="font-size:18px;opacity:.85">local_parking</span>Karama Lot<span class="ms" style="font-size:18px;opacity:.85">arrow_forward</span>Deira › Fish Market</div>
+   </div>
+   <div class="btn white"><span class="ms">flag</span>End trip</div>
+   <div class="duo" style="margin-top:10px"><div class="btn glass" style="height:46px"><span class="ms">sync_alt</span>Swap</div><div class="btn glass" style="height:46px"><span class="ms">close</span>Cancel</div></div>
+  </div>
+  <div class="card" style="flex-direction:row;align-items:center;padding:14px">
+   <div class="tile a"><span class="ms f">notifications</span></div>
+   <div class="grow"><div class="h-md" style="font-size:15px">Reminder at 12:12</div><div class="s">If the vehicle is still out after 4 h</div></div>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc sp"><div class="h-md" style="font-size:15px">Karama Lot</div><span class="s"><b class="b num">39</b> of 50 free</span></div>
+   <div class="capbar"><i style="width:22%"></i></div>
+  </div>
+ </div>
+ <div data-tabs="staff:home"></div>
+</div></div>
+
+<!-- ============ C-09 SCAN ============ -->
+<div class="screen" id="scan" style="background:#0B1112"><div class="col">
+ <div style="position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 45%,#3C4A4C 0%,#1A2426 55%,#0B1112 100%)"></div>
+ <div style="position:absolute;left:-40px;right:-40px;top:250px;height:300px;border-radius:30px;background:linear-gradient(180deg,#0E6B57,#0A4F41);filter:blur(1.5px);opacity:.9"></div>
+ <div style="position:absolute;left:-40px;right:-40px;top:470px;height:16px;background:#C8901A;opacity:.85;filter:blur(1px)"></div>
+ <div class="sbar onhero" data-sbar></div>
+ <div class="rowc sp" style="position:relative;padding:8px 20px"><div class="icb" style="background:rgba(255,255,255,.14);color:#fff;box-shadow:none"><span class="ms">close</span></div><div style="color:#fff;font-weight:700;font-size:16px">Scan vehicle QR</div><div class="icb" style="background:rgba(255,255,255,.14);color:#fff;box-shadow:none"><span class="ms">flashlight_on</span></div></div>
+ <div style="position:relative;margin:70px auto 0;width:250px;height:250px">
+  <div style="position:absolute;inset:38px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.4)"><svg class="qr" data-seed="41823" viewBox="0 0 21 21" style="width:100%;height:100%"></svg></div>
+  <svg viewBox="0 0 250 250" style="position:absolute;inset:0"><g fill="none" stroke="var(--primary)" stroke-width="7" stroke-linecap="round"><path d="M4 50V20Q4 4 20 4h30"/><path d="M200 4h30q16 0 16 16v30"/><path d="M246 200v30q0 16-16 16h-30"/><path d="M50 246H20Q4 246 4 230v-30"/></g></svg>
+  <div style="position:absolute;left:18px;right:18px;top:132px;height:3px;border-radius:2px;background:var(--primary);box-shadow:0 0 18px 4px var(--primary)"></div>
+ </div>
+ <div style="position:absolute;left:16px;right:16px;bottom:30px;background:rgba(17,28,31,.86);backdrop-filter:blur(12px);border-radius:26px;padding:18px;color:#fff;display:flex;flex-direction:column;gap:12px">
+  <div class="rowc" style="gap:10px"><div class="tile" style="background:rgba(52,211,166,.18);color:#7BE8C6"><span class="ms f">qr_code_2</span></div><div class="grow"><div style="font-weight:700">Point at the QR sticker</div><div style="font-size:13px;opacity:.75">It scans automatically. Hold steady.</div></div></div>
+  <div class="btn glass"><span class="ms">keyboard</span>Type registration number</div>
+ </div>
+</div></div>
+
+<!-- ============ S-03 START · VEHICLE ============ -->
+<div class="screen" id="start-vehicle"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Start trip</h2><span class="xs">Step 1 of 4</span></div>
+ <div class="body">
+  <div class="stepper"><i class="d"></i><i></i><i></i><i></i></div>
+  <div><div class="h-lg">Is this the vehicle?</div><div class="s" style="margin-top:4px">Check the plate and photo before you continue.</div></div>
+  <div class="card" style="padding:12px">
+   <div class="vehbox" style="height:170px"><svg viewBox="0 0 220 120" style="width:250px"><use href="#truck"/></svg></div>
+   <div class="rowc sp" style="padding:4px 4px 0"><span class="plate lg"><span class="c">D</span><span class="n">41823</span></span><span class="bdg ok"><span class="ms f">check_circle</span>Available</span></div>
+   <dl class="kv" style="padding:4px 4px 2px"><dt>Category</dt><dd>Waste › Garbage truck</dd><dt>Brand · model</dt><dd>Isuzu FVR</dd><dt>Colour</dt><dd>White / green</dd><dt>Parked at</dt><dd>Karama Lot</dd></dl>
+  </div>
+  <div style="text-align:center;font-weight:700;color:var(--primary);font-size:14.5px">Scan a different vehicle</div>
+  <div class="btn" style="margin-top:auto">Confirm vehicle<span class="ms">arrow_forward</span></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-05 START · DESTINATION ============ -->
+<div class="screen" id="start-destination"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Start trip</h2><span class="xs">Step 2 of 4</span></div>
+ <div class="body">
+  <div class="stepper"><i class="d"></i><i class="d"></i><i></i><i></i></div>
+  <div class="h-lg">Where is it going?</div>
+  <div class="chips"><span class="chip on">Deira</span><span class="chip">Bur Dubai</span><span class="chip">Jumeirah</span><span class="chip">Al Qusais</span><span class="chip">Marina</span></div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile p" style="width:40px;height:40px"><span class="ms f">set_meal</span></div><div class="grow"><div class="h-md" style="font-size:15px">Fish Market</div><div class="s">Deira · Al Ras</div></div><span class="radio on"></span></div>
+   <div class="li"><div class="tile n" style="width:40px;height:40px"><span class="ms f">diamond</span></div><div class="grow"><div class="h-md" style="font-size:15px">Gold Souk</div><div class="s">Deira</div></div><span class="radio"></span></div>
+   <div class="li"><div class="tile n" style="width:40px;height:40px"><span class="ms f">sailing</span></div><div class="grow"><div class="h-md" style="font-size:15px">Deira Creek Corniche</div><div class="s">Deira</div></div><span class="radio"></span></div>
+   <div class="li"><div class="tile n" style="width:40px;height:40px"><span class="ms f">park</span></div><div class="grow"><div class="h-md" style="font-size:15px">Al Rigga Park</div><div class="s">Deira · Al Rigga</div></div><span class="radio"></span></div>
+  </div>
+  <div class="btn" style="margin-top:auto">Continue<span class="ms">arrow_forward</span></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-06 START · SIGNATURE ============ -->
+<div class="screen" id="start-signature"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Start trip</h2><span class="xs">Step 3 of 4</span></div>
+ <div class="body">
+  <div class="stepper"><i class="d"></i><i class="d"></i><i class="d"></i><i></i></div>
+  <div><div class="h-lg">Your signature</div><div class="s" style="margin-top:4px">Sign to confirm you're taking this vehicle out.</div></div>
+  <div class="card" style="flex-direction:row;align-items:center;padding:12px 14px"><div class="av sm r t-teal">RS</div><div class="grow"><div class="h-md" style="font-size:15px">Ravi Sharma</div><div class="s num">DM2600042 · driver</div></div><span class="plate"><span class="c">D</span><span class="n">41823</span></span></div>
+  <div class="card" style="height:250px;padding:0;position:relative;overflow:hidden">
+   <div style="position:absolute;inset:14px;border:2px dashed var(--border);border-radius:16px"></div>
+   <svg viewBox="0 0 300 140" style="position:absolute;left:30px;top:40px;width:290px"><path d="M8 96C26 40 40 30 46 70s8 40 20 6 20-54 28-20 2 40 16 22 18-40 30-18 6 34 22 16 16-26 26-10 10 16 24 4 18-12 30-6 20 4 34-6" fill="none" stroke="var(--text)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+   <div style="position:absolute;left:34px;right:34px;bottom:44px;border-top:1.5px solid var(--border)"></div>
+   <div style="position:absolute;left:34px;bottom:50px;font-size:18px;color:var(--text3)">×</div>
+   <div class="rowc sp" style="position:absolute;left:28px;right:28px;bottom:16px"><span class="xs">Signed 08:11</span><span style="font-weight:700;color:var(--primary);font-size:14px">Clear</span></div>
+  </div>
+  <div class="s" style="text-align:center;padding:0 10px">You're the driver for this trip. Your signature is saved with it.</div>
+  <div class="btn" style="margin-top:auto">Continue<span class="ms">arrow_forward</span></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-07 START · REVIEW ============ -->
+<div class="screen" id="start-review"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Start trip</h2><span class="xs">Step 4 of 4</span></div>
+ <div class="body">
+  <div class="stepper"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></div>
+  <div class="h-lg">Review and start</div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile n"><span class="ms f">local_parking</span></div><div class="grow"><div class="xs">From</div><div class="h-md" style="font-size:15px">Karama Lot</div></div><span class="xs" style="color:var(--primary);font-weight:700">Edit</span></div>
+   <div class="li"><div class="tile p"><span class="ms f">local_shipping</span></div><div class="grow"><div class="xs">Vehicle</div><div class="rowc" style="gap:8px;margin-top:3px"><span class="plate"><span class="c">D</span><span class="n">41823</span></span><span class="s">Garbage truck</span></div></div><span class="xs" style="color:var(--primary);font-weight:700">Edit</span></div>
+   <div class="li"><div class="av sm r t-teal" style="width:44px;height:44px">RS</div><div class="grow"><div class="xs">Driver</div><div class="h-md" style="font-size:15px">You · Ravi Sharma <span class="s num">DM2600042</span></div></div></div>
+   <div class="li"><div class="tile i"><span class="ms f">location_on</span></div><div class="grow"><div class="xs">Destination</div><div class="h-md" style="font-size:15px">Deira › Fish Market</div></div><span class="xs" style="color:var(--primary);font-weight:700">Edit</span></div>
+   <div class="li"><div class="tile a"><span class="ms f">draw</span></div><div class="grow"><div class="xs">Signature</div><svg viewBox="0 0 300 140" style="width:120px;height:34px"><path d="M8 96C26 40 40 30 46 70s8 40 20 6 20-54 28-20 2 40 16 22 18-40 30-18 6 34 22 16 16-26 26-10 10 16 24 4 18-12 30-6 20 4 34-6" fill="none" stroke="var(--text)" stroke-width="7" stroke-linecap="round"/></svg></div><span class="bdg ok"><span class="ms f">check</span>Signed</span></div>
+  </div>
+  <div class="rowc" style="gap:8px;padding:0 4px"><span class="ms" style="color:var(--text3);font-size:18px">schedule</span><span class="s">The start time is recorded when you tap Start trip.</span></div>
+  <div class="btn" style="margin-top:auto"><span class="ms f">play_arrow</span>Start trip</div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-09 ACTIVE (overdue) ============ -->
+<div class="screen" id="active-overdue"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="livebar od"><span class="ms f" style="font-size:20px">warning</span><span class="plate"><span class="c">D</span><span class="n">41823</span></span>Overdue<span class="tm">05:02:10</span></div>
+ <div class="hdr" style="padding-top:2px"><div class="icb"><span class="ms">arrow_back</span></div><h2>Active trip</h2><div class="icb"><span class="ms">more_horiz</span></div></div>
+ <div class="body tight">
+  <div style="position:relative;width:200px;height:200px;align-self:center">
+   <svg viewBox="0 0 200 200" style="width:200px;height:200px;transform:rotate(-90deg)"><circle cx="100" cy="100" r="86" fill="none" stroke="var(--sunken)" stroke-width="14"/><circle cx="100" cy="100" r="86" fill="none" stroke="var(--danger)" stroke-width="14" stroke-linecap="round" stroke-dasharray="540 541"/></svg>
+   <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span class="bdg bad"><span class="ms f">schedule</span>Overdue</span><div class="num" style="font-size:36px;font-weight:800;letter-spacing:-1px;color:var(--dText)">05:02:10</div><div class="xs">Reminder limit 4 h</div></div>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc sp"><span class="plate lg"><span class="c">D</span><span class="n">41823</span></span><span class="s">Garbage truck</span></div>
+   <div class="rowc" style="gap:8px;font-size:13.5px;color:var(--text2)"><span class="ms" style="font-size:18px">local_parking</span>Karama Lot<span class="ms" style="font-size:18px">arrow_forward</span>Deira › Fish Market</div>
+   <div class="divider"></div>
+   <div class="tl">
+    <div class="e"><span class="dt"></span><div class="grow"><div class="rowc sp"><b style="font-size:14px">Started · Imran Thomas</b><span class="xs num">08:12</span></div></div></div>
+    <div class="e" style="padding-bottom:0"><span class="dt a"></span><div class="grow"><div class="rowc sp"><b style="font-size:14px">Handed over to you</b><span class="xs num">10:30</span></div><div class="s">Reason: shift change</div></div></div>
+   </div>
+  </div>
+  <div class="btn" style="margin-top:auto"><span class="ms">flag</span>End trip</div>
+  <div class="duo"><div class="btn sec" style="height:48px"><span class="ms">sync_alt</span>Swap</div><div class="btn sec" style="height:48px;color:var(--dText)"><span class="ms">close</span>Cancel trip</div></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-11 END · RETURN LOT ============ -->
+<div class="screen" id="end-return"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="livebar"><span class="pulse"></span><span class="plate"><span class="c">D</span><span class="n">41823</span></span>On trip<span class="tm">02:10:05</span></div>
+ <div class="hdr" style="padding-top:2px"><div class="icb"><span class="ms">arrow_back</span></div><h2>End trip</h2><span class="xs">Step 2 of 3</span></div>
+ <div class="body">
+  <div class="rowc" style="gap:10px;padding:12px 14px;border-radius:16px;background:var(--pSoft);color:var(--onPSoft)"><span class="ms f">verified</span><span style="font-weight:700;font-size:14px">Vehicle matched · D 41823</span></div>
+  <div class="h-lg">Where is it parked now?</div>
+  <div class="card" style="padding:14px;box-shadow:inset 0 0 0 2px var(--primary),var(--shadow)">
+   <div class="rowc"><span class="radio on"></span><div class="grow"><div class="h-md" style="font-size:15px">Karama Lot</div><div class="s">Started here · 12 truck spaces free</div></div><span class="bdg ok">Origin</span></div>
+   <div class="capbar"><i style="width:20%"></i></div>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc"><span class="radio"></span><div class="grow"><div class="h-md" style="font-size:15px">Al Qusais Lot</div><div class="s">You can still return here</div></div><span class="bdg wrn"><span class="ms f">warning</span>Trucks full</span></div>
+   <div class="capbar"><i class="w" style="width:100%"></i></div>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc"><span class="radio"></span><div class="grow"><div class="h-md" style="font-size:15px">Jebel Ali Lot</div><div class="s">4 truck spaces free</div></div></div>
+   <div class="capbar"><i style="width:66%"></i></div>
+  </div>
+  <div class="btn" style="margin-top:auto">Continue<span class="ms">arrow_forward</span></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-13 SUMMARY ============ -->
+<div class="screen" id="trip-summary"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><h2 style="text-align:center;padding-left:42px">Trip ended</h2><div class="icb"><span class="ms">close</span></div></div>
+ <div class="body">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0 2px">
+   <div style="width:72px;height:72px;border-radius:24px;background:var(--pSoft);display:grid;place-items:center;color:var(--primary)"><span class="ms f" style="font-size:42px">task_alt</span></div>
+   <div class="num" style="font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.05">02:10:12</div>
+   <div class="s">Total time outside the lot</div>
+  </div>
+  <div class="card" style="padding:16px 18px">
+   <div class="rowc sp"><span class="plate lg"><span class="c">D</span><span class="n">41823</span></span><span class="bdg ok"><span class="ms f">check_circle</span>Completed</span></div>
+   <dl class="kv"><dt>Category</dt><dd>Waste › Garbage truck</dd><dt>Brand · model</dt><dd>Isuzu FVR</dd><dt>From</dt><dd>Karama Lot</dd><dt>Returned to</dt><dd>Karama Lot</dd><dt>Start</dt><dd class="num">22 Nov · 08:12</dd><dt>End</dt><dd class="num">22 Nov · 10:22</dd><dt>Driver (staff)</dt><dd>Ravi Sharma <span class="s num">DM2600042</span></dd><dt>Signature</dt><dd>Signed 08:11</dd></dl>
+  </div>
+  <div class="btn" style="margin-top:auto">Done</div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-15 CANCEL ============ -->
+<div class="screen" id="cancel-trip"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="livebar"><span class="pulse"></span><span class="plate"><span class="c">D</span><span class="n">41823</span></span>On trip<span class="tm">00:41:03</span></div>
+ <div class="hdr" style="padding-top:2px"><div class="icb"><span class="ms">arrow_back</span></div><h2>Cancel trip</h2></div>
+ <div class="body tight">
+  <div class="h-lg">Why is it ending early?</div>
+  <div class="duo">
+   <div class="card" style="padding:12px;gap:6px"><div class="tile n" style="width:36px;height:36px"><span class="ms f" style="font-size:20px">person_off</span></div><b style="font-size:14px">Driver issue</b></div>
+   <div class="card" style="padding:12px;gap:6px;box-shadow:inset 0 0 0 2px var(--primary)"><div class="tile p" style="width:36px;height:36px"><span class="ms f" style="font-size:20px">car_crash</span></div><b style="font-size:14px">Vehicle issue</b></div>
+   <div class="card" style="padding:12px;gap:6px"><div class="tile n" style="width:36px;height:36px"><span class="ms f" style="font-size:20px">build</span></div><b style="font-size:14px">Technical</b></div>
+   <div class="card" style="padding:12px;gap:6px"><div class="tile n" style="width:36px;height:36px"><span class="ms f" style="font-size:20px">more_horiz</span></div><b style="font-size:14px">Other</b></div>
+  </div>
+  <div><div class="lbl">Note</div><div class="inp" style="height:64px;align-items:flex-start;padding-top:12px">Flat tyre near Gold Souk</div></div>
+  <div><div class="lbl">Where is the vehicle now?</div><div class="seg"><span>Karama Lot</span><span>Other lot</span><span class="on">Not at a lot</span></div></div>
+  <div class="rowc" style="gap:10px;padding:12px;border-radius:16px;background:var(--aSoft);color:var(--aText);align-items:flex-start"><span class="ms f">info</span><span style="font-size:13px;font-weight:600;line-height:1.4">The trip ends now and 00:41 still counts. An admin decides the vehicle's status.</span></div>
+  <div class="btn dng" style="margin-top:auto">Cancel trip</div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ S-16 MY TRIPS ============ -->
+<div class="screen" id="my-trips"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><h1>My trips</h1><div class="icb"><span class="ms">tune</span></div></div>
+ <div class="body">
+  <div class="seg"><span class="on">Today</span><span>This week</span><span>Month</span></div>
+  <div class="card" style="flex-direction:row;align-items:center;padding:14px;background:var(--aSoft);box-shadow:none">
+   <div class="tile" style="background:var(--accent);color:var(--onAccent)"><span class="ms f">local_shipping</span></div>
+   <div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">D</span><span class="n">41823</span></span><b style="font-size:14px;color:var(--aText)">On trip</b></div><div class="s" style="margin-top:4px">Karama → Deira › Fish Market</div></div>
+   <div class="num" style="font-weight:800;font-size:17px;color:var(--aText)">01:24</div>
+  </div>
+  <div class="xs">Yesterday · 21 Nov</div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile p"><span class="ms f">local_shipping</span></div><div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">D</span><span class="n">52210</span></span></div><div class="s" style="margin-top:4px">Karama → Deira › Al Ras</div></div><div style="text-align:right"><div class="num" style="font-weight:800">3 h 05</div><span class="bdg ok" style="margin-top:4px">Completed</span></div></div>
+   <div class="li"><div class="tile n"><span class="ms f">directions_car</span></div><div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">K</span><span class="n">33017</span></span></div><div class="s" style="margin-top:4px">Handed to Imran T. at 13:40</div></div><div style="text-align:right"><div class="num" style="font-weight:800">2 h 12</div><span class="bdg inf" style="margin-top:4px">Handed over</span></div></div>
+   <div class="li"><div class="tile d"><span class="ms f">local_shipping</span></div><div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">D</span><span class="n">41823</span></span></div><div class="s" style="margin-top:4px">Vehicle issue · flat tyre</div></div><div style="text-align:right"><div class="num" style="font-weight:800">0 h 41</div><span class="bdg bad" style="margin-top:4px">Cancelled</span></div></div>
+   <div class="li"><div class="tile p"><span class="ms f">emergency</span></div><div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">I</span><span class="n">77120</span></span></div><div class="s" style="margin-top:4px">Transfer · Karama → Al Qusais</div></div><div style="text-align:right"><div class="num" style="font-weight:800">0 h 38</div><span class="bdg ok" style="margin-top:4px">Completed</span></div></div>
+  </div>
+ </div>
+ <div data-tabs="staff:trips"></div>
+</div></div>
+
+<!-- ============ S-18 LOTS ============ -->
+<div class="screen" id="lots"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><h1>Parking lots</h1><div class="icb"><span class="ms">search</span></div></div>
+ <div class="body">
+  <div class="card" style="padding:0;height:190px;overflow:hidden;position:relative"><svg class="map" viewBox="0 0 350 190" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"></svg>
+   <div class="chip" style="position:absolute;right:12px;top:12px;background:var(--surface);height:32px"><span class="ms">open_in_full</span>Map</div></div>
+  <div class="card" style="padding:14px">
+   <div class="rowc sp"><div><div class="h-md">Karama Lot</div><div class="xs">Open · 24 hours · 1.2 km</div></div><div style="text-align:right"><div class="num" style="font-weight:800;font-size:20px;color:var(--primary)">38</div><div class="xs">of 50 free</div></div></div>
+   <div class="capbar"><i style="width:24%"></i></div>
+   <div class="chips" style="gap:6px"><span class="bdg ok"><span class="ms">local_shipping</span>12</span><span class="bdg ok"><span class="ms">directions_car</span>20</span><span class="bdg ok"><span class="ms">emergency</span>6</span></div>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc sp"><div><div class="h-md">Al Qusais Lot</div><div class="xs">Underground · 06:00–22:00</div></div><div style="text-align:right"><div class="num" style="font-weight:800;font-size:20px;color:var(--warn)">5</div><div class="xs">of 60 free</div></div></div>
+   <div class="capbar"><i class="w" style="width:92%"></i></div>
+   <div class="chips" style="gap:6px"><span class="bdg wrn"><span class="ms">local_shipping</span>Full</span><span class="bdg ok"><span class="ms">directions_car</span>4</span><span class="bdg ok"><span class="ms">emergency</span>1</span></div>
+  </div>
+ </div>
+ <div data-tabs="staff:lots"></div>
+</div></div>
+
+<!-- ============ S-24 PROFILE (tab) ============ -->
+<div class="screen" id="profile"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><h1>Profile</h1><div class="icb"><span class="ms">edit</span></div></div>
+ <div class="body tight">
+  <div class="hero" style="padding:16px 18px">
+   <svg class="deco" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"><use href="#routes"/></svg>
+   <div class="rowc" style="gap:14px"><div class="av" style="width:58px;height:58px;border-radius:20px;background:#fff;color:#06503F;font-size:19px">RS</div><div class="grow"><div style="font-size:20px;font-weight:800;letter-spacing:-.3px">Ravi Sharma</div><div class="s num">Staff · driver · DM2600042</div></div></div>
+   <div class="rowc" style="gap:6px;margin-top:12px;flex-wrap:wrap"><span class="bdg" style="background:rgba(255,255,255,.18);color:#fff"><span class="ms f">location_on</span>Karama Lot</span><span class="bdg" style="background:rgba(255,255,255,.18);color:#fff"><span class="ms f">location_on</span>Al Qusais Lot</span></div>
+  </div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile n" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">call</span></div><div class="grow"><div class="xs">Mobile</div><b class="num" style="font-size:14.5px">+971 50 xxx 4421</b></div></div>
+   <div class="li"><div class="tile n" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">id_card</span></div><div class="grow"><div class="xs">Driving licence</div><b class="num" style="font-size:14.5px">4471209</b></div></div>
+  </div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile p" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">route</span></div><div class="grow"><b style="font-size:14.5px">My trips this month</b><div class="s">42 trips · 86 h out</div></div><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile n" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">dark_mode</span></div><div class="grow"><b style="font-size:14.5px">Theme</b></div><span class="s">System</span><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile n" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">lock</span></div><div class="grow"><b style="font-size:14.5px">Change password</b></div><span class="ms chev">chevron_right</span></div>
+  </div>
+  <div class="btn sec" style="height:48px;color:var(--dText)"><span class="ms">logout</span>Log out</div>
+ </div>
+ <div data-tabs="staff:profile"></div>
+</div></div>
+
+<!-- ============ S-14 SWAP ============ -->
+<div class="screen" id="swap"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="livebar"><span class="pulse"></span><span class="plate"><span class="c">D</span><span class="n">41823</span></span>On trip<span class="tm">00:58:12</span></div>
+ <div class="hdr" style="padding-top:2px"><div class="icb"><span class="ms">arrow_back</span></div><h2>Swap</h2></div>
+ <div class="body tight">
+  <div class="h-lg">What's changing?</div>
+  <div class="duo">
+   <div class="card" style="padding:12px;gap:6px;box-shadow:inset 0 0 0 2px var(--primary)"><div class="tile p" style="width:36px;height:36px"><span class="ms f" style="font-size:20px">local_shipping</span></div><b style="font-size:14px">Change vehicle</b><span class="xs">Trip continues</span></div>
+   <div class="card" style="padding:12px;gap:6px"><div class="tile n" style="width:36px;height:36px"><span class="ms f" style="font-size:20px">group</span></div><b style="font-size:14px">Hand over</b><span class="xs">To another staff</span></div>
+  </div>
+  <div><div class="lbl">New vehicle</div>
+   <div class="card" style="flex-direction:row;align-items:center;padding:12px 14px"><div class="vehbox" style="width:60px;height:44px;border-radius:12px"><svg viewBox="0 0 220 120" style="width:54px"><use href="#truck"/></svg></div><div class="grow"><span class="plate"><span class="c">D</span><span class="n">52210</span></span><div class="s" style="margin-top:4px">Garbage truck · at Karama Lot</div></div><span class="bdg ok"><span class="ms f">qr_code_2</span>Scanned</span></div></div>
+  <div><div class="lbl">Reason</div><div class="inp fo">Hydraulic fault on D 41823</div></div>
+  <div><div class="lbl">Where is D 41823 now?</div><div class="seg"><span>Karama Lot</span><span>Other lot</span><span class="on">Not at a lot</span></div></div>
+  <div class="rowc" style="gap:10px;padding:12px;border-radius:16px;background:var(--iSoft);color:var(--info);align-items:flex-start"><span class="ms f">info</span><span style="font-size:13px;font-weight:600;line-height:1.4">Same trip, new segment. Hours split by vehicle from now on.</span></div>
+  <div class="btn" style="margin-top:auto">Confirm swap</div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ A-01 DASHBOARD ============ -->
+<div class="screen" id="admin-dashboard"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="av t-violet">FA</div><div class="grow"><div class="xs">Admin</div><div class="h-md">Fatima Al Amiri</div></div><div class="icb"><span class="ms">notifications</span><span class="dotb"></span></div></div>
+ <div class="body">
+  <div class="hero" style="padding:18px">
+   <div class="rowc sp"><span class="eyebrow">Live now · 22 Nov</span><span class="bdg" style="background:rgba(255,255,255,.18);color:#fff"><span class="ms f">sensors</span>Live</span></div>
+   <div class="rowc" style="align-items:flex-end;margin-top:8px">
+    <div class="grow"><div class="num" style="font-size:42px;font-weight:800;letter-spacing:-1.5px;line-height:1">24</div><div class="s" style="margin-top:4px">vehicles on trip</div></div>
+    <svg viewBox="0 0 150 60" style="width:150px;height:60px"><g fill="rgba(255,255,255,.35)"><rect x="0" y="40" width="8" height="20" rx="3"/><rect x="12" y="30" width="8" height="30" rx="3"/><rect x="24" y="22" width="8" height="38" rx="3"/><rect x="36" y="34" width="8" height="26" rx="3"/><rect x="48" y="18" width="8" height="42" rx="3"/><rect x="60" y="12" width="8" height="48" rx="3"/><rect x="72" y="26" width="8" height="34" rx="3"/><rect x="84" y="20" width="8" height="40" rx="3"/><rect x="96" y="8" width="8" height="52" rx="3"/><rect x="108" y="16" width="8" height="44" rx="3"/><rect x="120" y="28" width="8" height="32" rx="3"/></g><rect x="132" y="4" width="8" height="56" rx="3" fill="#fff"/></svg>
+   </div>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px">
+    <div style="background:rgba(0,0,0,.16);border-radius:14px;padding:10px"><div class="xs">Trips today</div><div class="num" style="font-weight:800;font-size:18px">86</div></div>
+    <div style="background:rgba(0,0,0,.16);border-radius:14px;padding:10px"><div class="xs">Hours out</div><div class="num" style="font-weight:800;font-size:18px">412</div></div>
+    <div style="background:rgba(0,0,0,.16);border-radius:14px;padding:10px"><div class="xs">Free spaces</div><div class="num" style="font-weight:800;font-size:18px">112</div></div>
+   </div>
+  </div>
+  <div class="rowc sp"><div class="h-md">Needs attention</div><span class="xs" style="color:var(--primary);font-weight:700">See all</span></div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile d"><span class="ms f">timer</span></div><div class="grow"><div class="h-md" style="font-size:15px">Overdue trips</div><div class="s">Longest 05:12 · D 33017</div></div><span class="num" style="font-weight:800;font-size:18px;color:var(--dText)">3</span><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile n"><span class="ms f">wrong_location</span></div><div class="grow"><div class="h-md" style="font-size:15px">Not at a lot</div><div class="s">After a swap or cancel</div></div><span class="num" style="font-weight:800;font-size:18px">2</span><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile w"><span class="ms f">garage</span></div><div class="grow"><div class="h-md" style="font-size:15px">Over capacity</div><div class="s">Al Qusais · trucks 104%</div></div><span class="num" style="font-weight:800;font-size:18px;color:var(--warn)">1</span><span class="ms chev">chevron_right</span></div>
+  </div>
+ </div>
+ <div data-tabs="admin:dash"></div>
+</div></div>
+
+<!-- ============ A-02 LIVE ============ -->
+<div class="screen" id="admin-live"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><h1>Live</h1><span class="bdg ok" style="height:28px"><span class="ms f">sensors</span>Live</span><div class="icb"><span class="ms">tune</span></div></div>
+ <div class="body tight">
+  <div class="seg"><span class="on">Trips · 24</span><span>Transfers · 2</span></div>
+  <div class="chips"><span class="chip on"><span class="ms">priority_high</span>Overdue first</span><span class="chip">All lots</span><span class="chip">All types</span></div>
+  <div class="card" style="padding:14px;box-shadow:inset 0 0 0 1.5px var(--dSoft),var(--shadow)">
+   <div class="rowc"><div class="tile d"><span class="ms f">directions_car</span></div><div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">K</span><span class="n">33017</span></span><span class="bdg bad"><span class="ms f">schedule</span>Overdue</span></div><div class="s" style="margin-top:5px">Ravi S. · Karama → Deira</div></div><div class="num" style="font-weight:800;font-size:17px;color:var(--dText)">05:12:40</div></div>
+  </div>
+  <div class="card" style="padding:14px;box-shadow:inset 0 0 0 1.5px var(--dSoft),var(--shadow)">
+   <div class="rowc"><div class="tile d"><span class="ms f">local_shipping</span></div><div class="grow"><div class="rowc" style="gap:8px"><span class="plate"><span class="c">D</span><span class="n">41823</span></span><span class="bdg bad"><span class="ms f">schedule</span>Overdue</span></div><div class="s" style="margin-top:5px">Imran T. · Al Qusais → Jumeirah</div></div><div class="num" style="font-weight:800;font-size:17px;color:var(--dText)">04:31:02</div></div>
+  </div>
+  <div class="card" style="padding:4px 14px;gap:0">
+   <div class="li"><div class="tile p"><span class="ms f">local_shipping</span></div><div class="grow"><span class="plate"><span class="c">D</span><span class="n">52210</span></span><div class="s" style="margin-top:5px">Ravi S. · Karama → Al Ras</div></div><div class="num" style="font-weight:700">01:02:40</div></div>
+   <div class="li"><div class="tile p"><span class="ms f">emergency</span></div><div class="grow"><span class="plate"><span class="c">I</span><span class="n">61004</span></span><div class="s" style="margin-top:5px">Aisha M. · Jebel Ali → Marina</div></div><div class="num" style="font-weight:700">00:18:22</div></div>
+   <div class="li"><div class="tile p"><span class="ms f">local_shipping</span></div><div class="grow"><span class="plate"><span class="c">D</span><span class="n">70031</span></span><div class="s" style="margin-top:5px">Omar R. · Karama → Gold Souk</div></div><div class="num" style="font-weight:700">00:04:51</div></div>
+  </div>
+ </div>
+ <div data-tabs="admin:live"></div>
+</div></div>
+
+<!-- ============ A-04 TRIP DETAIL (admin, monitor only) ============ -->
+<div class="screen" id="admin-trip"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Trip · K 33017</h2><span class="bdg ok" style="height:28px"><span class="ms f">sensors</span>Live</span></div>
+ <div class="body tight">
+  <div class="card" style="padding:16px;align-items:center;gap:6px"><span class="bdg bad"><span class="ms f">schedule</span>Overdue</span><div class="num" style="font-size:40px;font-weight:800;letter-spacing:-1px;color:var(--dText)">05:12:40</div><div class="s">Started 08:12 · reminder limit 4 h</div></div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="av sm r t-teal">RS</div><div class="grow"><div class="xs">Staff (driver)</div><b style="font-size:14.5px">Ravi Sharma <span class="s num">DM2600042</span></b></div></div>
+   <div class="li"><div class="tile n" style="width:36px;height:36px"><span class="ms f" style="font-size:19px">directions_car</span></div><div class="grow"><div class="xs">Vehicle</div><div class="rowc" style="gap:8px;margin-top:2px"><span class="plate"><span class="c">K</span><span class="n">33017</span></span><span class="s">Car · Toyota Camry</span></div></div></div>
+   <div class="li"><div class="tile i" style="width:36px;height:36px"><span class="ms f" style="font-size:19px">location_on</span></div><div class="grow"><div class="xs">Route</div><b style="font-size:14.5px">Karama Lot → Deira › Al Ras</b></div></div>
+  </div>
+  <div class="card" style="padding:14px">
+   <div class="rowc sp"><b style="font-size:15px">Reminders</b><span class="xs">Every 30 min</span></div>
+   <div class="tl">
+    <div class="e"><span class="dt a"></span><div class="grow rowc sp"><span style="font-size:13.5px;font-weight:600">Reminder 3 · staff + admin</span><span class="num xs">13:12</span></div></div>
+    <div class="e"><span class="dt a"></span><div class="grow rowc sp"><span style="font-size:13.5px;font-weight:600">Reminder 2 · staff + admin</span><span class="num xs">12:42</span></div></div>
+    <div class="e" style="padding-bottom:0"><span class="dt a"></span><div class="grow rowc sp"><span style="font-size:13.5px;font-weight:600">Reminder 1 · staff + admin</span><span class="num xs">12:12</span></div></div>
+   </div>
+  </div>
+  <div class="rowc" style="gap:10px;padding:12px;border-radius:16px;background:var(--iSoft);color:var(--info);align-items:flex-start;margin-top:auto"><span class="ms f">visibility</span><span style="font-size:13px;font-weight:600;line-height:1.4">Monitoring only. The staff member ends, swaps or cancels the trip from their phone.</span></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ A-08 MANAGE ============ -->
+<div class="screen" id="admin-manage"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><h1>Manage</h1><div class="icb"><span class="ms">search</span></div></div>
+ <div class="body tight" style="gap:8px">
+  <div class="xs">Fleet</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+   <div class="card" style="padding:12px;gap:10px"><div class="tile p"><span class="ms f">local_shipping</span></div><div><div class="h-md" style="font-size:14.5px">Vehicles</div><div class="xs">164 · 2 alerts</div></div></div>
+   <div class="card" style="padding:12px;gap:10px"><div class="tile n"><span class="ms f">category</span></div><div><div class="h-md" style="font-size:14.5px">Types</div><div class="xs">4 · 11</div></div></div>
+   <div class="card" style="padding:12px;gap:10px"><div class="tile i"><span class="ms f">qr_code_2</span></div><div><div class="h-md" style="font-size:14.5px">QR labels</div><div class="xs">Bulk print</div></div></div>
+  </div>
+  <div class="xs" style="margin-top:4px">People</div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile a"><span class="ms f">badge</span></div><div class="grow"><div class="h-md" style="font-size:15px">Staff</div><div class="xs">Drivers · lots · licences</div></div><span class="s num">38</span><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile a"><span class="ms f">admin_panel_settings</span></div><div class="grow h-md" style="font-size:15px">Admins</div><span class="s num">3</span><span class="ms chev">chevron_right</span></div>
+  </div>
+  <div class="xs" style="margin-top:4px">Places &amp; system</div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile i"><span class="ms f">local_parking</span></div><div class="grow h-md" style="font-size:15px">Parking lots</div><span class="s num">6</span><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile i"><span class="ms f">pin_drop</span></div><div class="grow h-md" style="font-size:15px">Destinations</div><span class="s num">48</span><span class="ms chev">chevron_right</span></div>
+   <div class="li"><div class="tile n"><span class="ms f">settings</span></div><div class="grow h-md" style="font-size:15px">Settings &amp; audit log</div><span class="ms chev">chevron_right</span></div>
+  </div>
+ </div>
+ <div data-tabs="admin:manage"></div>
+</div></div>
+
+<!-- ============ A-10 VEHICLE ============ -->
+<div class="screen" id="admin-vehicle"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Vehicle</h2><div class="icb"><span class="ms">edit</span></div></div>
+ <div class="body tight">
+  <div class="vehbox" style="height:150px;position:relative"><svg viewBox="0 0 220 120" style="width:230px"><use href="#truck"/></svg><span class="bdg neu" style="position:absolute;left:12px;top:12px"><span class="ms f">wrong_location</span>Not at a lot</span></div>
+  <div class="rowc sp"><div><span class="plate lg"><span class="c">D</span><span class="n">41823</span></span><div class="s" style="margin-top:8px">Waste › Garbage truck · Isuzu FVR</div></div><span class="bdg wrn"><span class="ms f">build</span>Maintenance</span></div>
+  <div class="card" style="padding:14px;background:var(--wSoft);box-shadow:none">
+   <div class="rowc" style="align-items:flex-start"><span class="ms f" style="color:var(--warn)">warning</span><div class="grow"><b style="font-size:14.5px">Location needed</b><div class="s" style="margin-top:2px">Swapped out of a trip at 11:40 · "Hydraulic fault"</div></div></div>
+   <div class="duo"><div class="btn sm" style="height:42px">Set lot</div><div class="btn sec sm" style="height:42px">Set status</div></div>
+  </div>
+  <div class="card" style="padding:14px;flex-direction:row;align-items:center">
+   <div style="width:64px;height:64px;background:#fff;border-radius:12px;padding:6px;box-shadow:inset 0 0 0 1px var(--border)"><svg class="qr" data-seed="41823" viewBox="0 0 21 21" style="width:100%;height:100%"></svg></div>
+   <div class="grow"><div class="h-md" style="font-size:15px">QR label</div><div class="s">Reprints use the same code</div></div>
+   <div class="icb"><span class="ms">download</span></div>
+  </div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><div class="tile p" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">route</span></div><div class="grow"><b style="font-size:14px">Trip · Ravi S.</b><div class="s">Today 08:12 – 11:40 · swapped out</div></div><span class="num s">3 h 28</span></div>
+   <div class="li"><div class="tile p" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">route</span></div><div class="grow"><b style="font-size:14px">Trip · Aisha M.</b><div class="s">Yesterday · completed</div></div><span class="num s">4 h 02</span></div>
+  </div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ A-18 LOT DETAIL ============ -->
+<div class="screen" id="admin-lot"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Karama Lot</h2><div class="icb"><span class="ms">edit</span></div></div>
+ <div class="body tight">
+  <div class="card" style="padding:0;height:150px;overflow:hidden"><svg class="map" data-one="1" viewBox="0 0 350 150" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%"></svg></div>
+  <div class="card" style="padding:16px">
+   <div class="rowc sp"><div><div class="xs">Free now</div><div class="rowc" style="gap:6px;align-items:baseline"><span class="num" style="font-size:34px;font-weight:800;color:var(--primary);letter-spacing:-1px">38</span><span class="s">of 50 spaces</span></div></div><span class="bdg ok"><span class="ms f">check_circle</span>Active</span></div>
+   <div class="capbar" style="height:10px"><i style="width:24%"></i></div>
+   <div class="divider"></div>
+   <div class="rowc"><div class="tile p" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">local_shipping</span></div><div class="grow"><b style="font-size:14px">Garbage truck</b><div class="capbar" style="margin-top:6px;height:6px"><i style="width:20%"></i></div></div><span class="num s"><b class="b">12</b>/15</span></div>
+   <div class="rowc"><div class="tile i" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">directions_car</span></div><div class="grow"><b style="font-size:14px">Car</b><div class="capbar" style="margin-top:6px;height:6px"><i style="width:20%"></i></div></div><span class="num s"><b class="b">20</b>/25</span></div>
+   <div class="rowc"><div class="tile d" style="width:38px;height:38px"><span class="ms f" style="font-size:20px">emergency</span></div><div class="grow"><b style="font-size:14px">Ambulance</b><div class="capbar" style="margin-top:6px;height:6px"><i style="width:40%"></i></div></div><span class="num s"><b class="b">6</b>/10</span></div>
+  </div>
+  <div class="card" style="padding:14px"><dl class="kv" style="font-size:13.5px"><dt>Code · type</dt><dd>KRM · Open</dd><dt>Hours</dt><dd>24 hours</dd><dt>Contact</dt><dd>Imran T. · 04 xxx xxxx</dd></dl></div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<!-- ============ R-1 REPORT ============ -->
+<div class="screen" id="admin-report"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">arrow_back</span></div><h2>Vehicle running hours</h2></div>
+ <div class="body tight">
+  <div class="chips"><span class="chip on"><span class="ms">date_range</span>1–22 Nov</span><span class="chip">All lots</span><span class="chip">Garbage truck</span></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+   <div class="card" style="padding:12px;gap:2px"><span class="xs">Vehicles</span><b class="num" style="font-size:22px">48</b></div>
+   <div class="card" style="padding:12px;gap:2px"><span class="xs">Hours</span><b class="num" style="font-size:22px">3,912</b></div>
+   <div class="card" style="padding:12px;gap:2px"><span class="xs">Avg / day</span><b class="num" style="font-size:22px">3.7 h</b></div>
+  </div>
+  <div class="card" style="padding:16px 14px">
+   <div class="rowc sp"><b style="font-size:15px">Hours per day</b><span class="bdg ok"><span class="ms">trending_up</span>+8%</span></div>
+   <svg class="bars" viewBox="0 0 330 120" style="width:100%;height:120px"></svg>
+  </div>
+  <div class="card" style="padding:4px 16px;gap:0">
+   <div class="li"><span class="plate"><span class="c">D</span><span class="n">41823</span></span><div class="grow"><div class="capbar" style="height:6px"><i style="width:100%"></i></div></div><span class="num" style="font-weight:800;width:52px;text-align:right">112.4</span></div>
+   <div class="li"><span class="plate"><span class="c">D</span><span class="n">52210</span></span><div class="grow"><div class="capbar" style="height:6px"><i style="width:92%"></i></div></div><span class="num" style="font-weight:800;width:52px;text-align:right">104.0</span></div>
+   <div class="li"><span class="plate"><span class="c">D</span><span class="n">70031</span></span><div class="grow"><div class="capbar" style="height:6px"><i style="width:87%"></i></div></div><span class="num" style="font-weight:800;width:52px;text-align:right">98.7</span></div>
+  </div>
+ </div>
+ <div data-tabs="admin:reports"></div>
+</div></div>
+
+<!-- ============ A-06 NEW TRANSFER ============ -->
+<div class="screen" id="admin-transfer"><div class="col">
+ <div class="sbar" data-sbar></div>
+ <div class="hdr"><div class="icb"><span class="ms">close</span></div><h2>New transfer</h2></div>
+ <div class="body">
+  <div><div class="lbl">Vehicle</div>
+   <div class="card" style="flex-direction:row;align-items:center;padding:12px 14px"><div class="vehbox" style="width:64px;height:48px;border-radius:12px"><svg viewBox="0 0 220 120" style="width:58px"><use href="#amb"/></svg></div><div class="grow"><span class="plate"><span class="c">I</span><span class="n">77120</span></span><div class="s" style="margin-top:5px">Ambulance · Toyota Hiace</div></div><span class="ms chev">expand_more</span></div></div>
+  <div class="card" style="padding:16px;gap:0;position:relative">
+   <div class="rowc"><div class="tile n"><span class="ms f">local_parking</span></div><div class="grow"><div class="xs">From</div><b style="font-size:15px">Karama Lot</b></div></div>
+   <div style="margin:6px 0 6px 21px;height:26px;border-left:2px dashed var(--border)"></div>
+   <div class="rowc"><div class="tile p"><span class="ms f">flag</span></div><div class="grow"><div class="xs">To</div><b style="font-size:15px">Al Qusais Lot</b><div class="s">6 ambulance spaces free</div></div><span class="ms chev">expand_more</span></div>
+  </div>
+  <div><div class="lbl">Note for staff (optional)</div><div class="inp"><span class="ph">Needed at Al Qusais for the night shift</span></div></div>
+  <div class="rowc" style="gap:10px;padding:12px;border-radius:16px;background:var(--iSoft);color:var(--info);align-items:flex-start"><span class="ms f">info</span><span style="font-size:13px;font-weight:600;line-height:1.4">Any Karama Lot staff member can confirm departure, and whoever does drives it. Until it arrives, the vehicle still counts at Karama.</span></div>
+  <div class="btn" style="margin-top:auto"><span class="ms">swap_horiz</span>Create transfer</div>
+ </div>
+ <div class="homeind"></div>
+</div></div>
+
+<script src="app.js"></script>
+</body>
+</html>

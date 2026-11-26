@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Low-fi Wireframes</title>
+<style>
+:root{--ink:#1f1f1f;--mid:#6b6b6b;--soft:#a9a9a9;--line:#d6d6d6;--fill:#efefef;--paper:#fff;--bg:#f6f6f4;--warn:#8a8a8a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header.top{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header.top h1{font-size:17px;margin:0}
+header.top p{margin:2px 0 0;color:var(--mid);font-size:12px}
+.tog{border:1px solid var(--ink);background:var(--paper);border-radius:8px;padding:8px 12px;font:inherit;cursor:pointer;min-height:40px}
+main{padding:8px 16px 48px;max-width:1600px;margin:0 auto}
+h2{font-size:15px;margin:28px 0 4px;scroll-margin-top:96px}
+.sub{color:var(--mid);font-size:12px;margin:0 0 12px}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:20px;align-items:start}
+figure{margin:0}
+figcaption{font-size:12px;color:var(--mid);margin-top:6px;padding-inline:2px}
+figcaption b{color:var(--ink)}
+.ph{width:100%;max-width:300px;aspect-ratio:9/18.5;background:var(--paper);border:2px solid var(--ink);border-radius:26px;overflow:hidden;display:flex;flex-direction:column;position:relative;font-size:12px}
+.sb{height:22px;display:flex;justify-content:space-between;align-items:center;padding-inline:16px;font-size:10px;color:var(--mid)}
+.sb::after{content:"";width:34px;height:8px;border-radius:3px;background:var(--soft)}
+.tmr{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;padding:7px 12px;font-size:11px}
+.tmr b{margin-inline-start:auto;font-variant-numeric:tabular-nums;font-size:13px}
+.tmr.od{background:repeating-linear-gradient(135deg,#1f1f1f 0 8px,#3a3a3a 8px 16px)}
+.tb{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);min-height:40px}
+.tb b{font-size:14px;flex:1}
+.ct{flex:1;overflow:hidden;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.bn{display:flex;border-top:1px solid var(--line);padding:6px 4px 10px}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;color:var(--mid)}
+.ni.on{color:var(--ink);font-weight:600}
+.ni.on .ic{background:var(--ink)}
+.ic{display:inline-block;width:16px;height:16px;border-radius:5px;background:var(--soft);flex:none}
+.ic.r{border-radius:50%}
+.ic.lg{width:24px;height:24px}
+.card{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.card.hl{border:2px solid var(--ink)}
+.fill{background:var(--fill);border-color:var(--fill)}
+.row{display:flex;align-items:center;gap:8px}
+.row.sp{justify-content:space-between}
+.li{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li .tx{flex:1;min-width:0}
+.t1{font-weight:600}
+.t2{color:var(--mid);font-size:11px}
+.mono{font-variant-numeric:tabular-nums}
+.big{font-size:28px;font-weight:700;letter-spacing:.5px}
+.ln{height:7px;border-radius:4px;background:var(--line)}
+.w30{width:30%}.w45{width:45%}.w60{width:60%}.w80{width:80%}.w100{width:100%}
+.btn{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;background:var(--ink);color:#fff;font-weight:600;font-size:13px}
+.btn2{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;border:1.5px solid var(--ink);font-weight:600;font-size:13px}
+.btn3{display:flex;align-items:center;justify-content:center;min-height:36px;color:var(--ink);text-decoration:underline;font-size:12px}
+.btn.dis{background:var(--soft)}
+.bot{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fld{display:flex;flex-direction:column;gap:3px}
+.fld label{font-size:10.5px;color:var(--mid)}
+.inp{border:1.5px solid var(--soft);border-radius:10px;min-height:38px;padding:9px 10px;display:flex;align-items:center;gap:6px}
+.inp.err{border-color:var(--ink);border-style:dashed}
+.hint{font-size:10.5px;color:var(--mid)}
+.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--soft);border-radius:999px;padding:3px 9px;font-size:10.5px}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;border:1px solid var(--ink);border-radius:6px;padding:1px 6px}
+.tag.mut{border-color:var(--soft);color:var(--mid);font-weight:500}
+.img{background:repeating-linear-gradient(45deg,var(--fill) 0 6px,#e2e2e2 6px 12px);border-radius:10px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--fill);border:1px solid var(--line);flex:none}
+.bar{height:8px;border-radius:4px;background:var(--fill);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink)}
+.steps{display:flex;gap:4px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.steps i.on{background:var(--ink)}
+.bnr{display:flex;align-items:center;gap:8px;background:var(--fill);padding:7px 12px;font-size:11px}
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:flex-end}
+.sheet{background:var(--paper);width:100%;border-radius:18px 18px 0 0;padding:14px 12px 16px;display:flex;flex-direction:column;gap:8px}
+.grab{width:36px;height:4px;border-radius:2px;background:var(--soft);align-self:center}
+.view{flex:1;background:#2b2b2b;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.view i{width:150px;height:150px;border:3px solid #fff;border-radius:16px}
+.sig{flex:1;border:1.5px dashed var(--soft);border-radius:12px;display:flex;align-items:flex-end;padding:10px;color:var(--mid);font-size:11px;min-height:150px}
+.tl{display:flex;flex-direction:column;gap:0}
+.tl .e{display:flex;gap:8px;position:relative;padding-bottom:10px}
+.tl .e::before{content:"";position:absolute;inset-inline-start:5px;top:12px;bottom:0;width:2px;background:var(--line)}
+.tl .e:last-child::before{display:none}
+.dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);flex:none;margin-top:2px}
+.dot.f{background:var(--ink)}
+.dot.o{border-style:dashed;border-color:var(--soft)}
+.map{flex:1;min-height:120px;background:linear-gradient(0deg,transparent 48%,var(--line) 48% 52%,transparent 52%),linear-gradient(90deg,transparent 30%,var(--line) 30% 33%,transparent 33%),var(--fill);border-radius:12px;position:relative}
+.pin{position:absolute;width:22px;height:22px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--ink)}
+.stat{display:flex;flex-direction:column;gap:2px;padding:8px;border:1px solid var(--line);border-radius:10px}
+.stat b{font-size:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+table{border-collapse:collapse;width:100%;font-size:10.5px}
+td,th{border-bottom:1px solid var(--line);padding:5px 2px;text-align:start}
+th{color:var(--mid);font-weight:600}
+.sk{background:linear-gradient(90deg,var(--fill),#f7f7f7,var(--fill));border-radius:8px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:16px}
+.note{font-size:11px;color:var(--mid);border-inline-start:3px solid var(--ink);padding:4px 8px;background:var(--paper);margin:0 0 10px;max-width:920px}
+[dir=rtl] .flip{transform:scaleX(-1)}
+@media (prefers-reduced-motion:no-preference){.sk{animation:sh 1.4s infinite}@keyframes sh{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Vehicle &amp; Parking Management — Low-fi Wireframes</h1>
+    <p>Phase 2 · v0.1 · 2026-11-22 · Structure only, greyscale on purpose. Colours and type come in Phase 3. Screen IDs match <code>docs/ux/UX_ARCHITECTURE.md</code>.</p>
+  </div>
+  <button class="tog" id="rtl" type="button" aria-pressed="false">Toggle RTL preview</button>
+</header>
+<main>
+
+<h2>1 · Common</h2>
+<p class="sub">One app. The account's role decides which shell loads after login (D-007).</p>
+<div class="board">
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="ct" style="justify-content:center;gap:12px;padding:18px">
+  <div class="img" style="width:56px;height:56px;align-self:center"></div>
+  <div style="text-align:center"><div class="t1" style="font-size:16px">Sign in</div><div class="t2">Use the ID and password from your admin</div></div>
+  <div class="fld"><label>Staff or Admin ID</label><div class="inp">DM2600042</div></div>
+  <div class="fld"><label>Password</label><div class="inp">••••••••<span style="margin-inline-start:auto" class="ic"></span></div></div>
+  <div class="row"><span class="ic" style="width:14px;height:14px"></span><span>Remember me</span></div>
+  <div class="btn">Sign in</div>
+  <div class="btn3">Forgot password?</div>
+</div></div><figcaption><b>C-02</b> Login · no role toggle · "Forgot password" opens a sheet: "Ask your admin to reset it"</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Scan vehicle</b><span class="ic"></span></div>
+<div class="ct"><div class="view"><i></i></div>
+  <div class="t2" style="text-align:center">Point at the QR sticker on the vehicle</div>
+  <div class="btn2">Type registration number</div></div></div>
+<figcaption><b>C-09</b> Scanner · torch at the top end · manual entry is always one tap away</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Scan vehicle</b><span></span></div>
+<div class="ct"><div class="view" style="flex:.6"><i style="width:100px;height:100px"></i></div>
+  <div class="card hl"><div class="row"><span class="ic lg"></span><div><div class="t1">Can't start this vehicle</div><div class="t2">D 41823 · Garbage truck</div></div></div>
+  <div>It's parked at <b>Al Qusais Lot</b>. You can start vehicles only from your lots: Karama Lot.</div>
+  <div class="t2">Ask an admin to transfer it, or scan another vehicle.</div></div>
+  <div class="bot"><div class="btn">Scan another</div></div></div></div>
+<figcaption><b>C-09</b> Blocked result · always says why and what to do next (BR-04, QR-06)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Profile</b><span></span></div>
+<div class="ct"><div class="row"><div class="av" style="width:52px;height:52px"></div><div><div class="t1">Ravi S.</div><div class="t2">Staff · DM2600042</div></div></div>
+  <div class="card"><div class="t2">Assigned lots</div><div class="chips"><span class="chip">Karama Lot</span><span class="chip">Al Qusais Lot</span></div></div>
+  <div class="li"><div class="tx"><div class="t1">Theme</div></div><span class="chips"><span class="chip on">System</span><span class="chip">Light</span><span class="chip">Dark</span></span></div>
+  <div class="li"><div class="tx t1">Change password</div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx t1">Notifications</div><span class="ic flip"></span></div>
+  <div class="bot"><div class="btn2">Log out</div></div></div></div>
+<figcaption><b>C-05</b> Profile and preferences · opened from the avatar in the top bar</figcaption></figure>
+</div>
+
+<h2>2 · Staff · Home and Start trip</h2>
+<p class="sub">Home changes with state. Start trip is a stepped flow: Lot (only if the staff member has more than one) → Vehicle → Driver → Destination → Signature → Review.</p>
+<div class="board">
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Good morning, Ravi</b><span class="ic r"></span><span class="av" style="width:26px;height:26px"></span></div>
+<div class="ct">
+  <div class="card fill"><div class="row sp"><div><div class="t1">Not checked in</div><div class="t2">Shift starts 08:00</div></div><div class="btn2" style="min-height:34px;padding:0 12px">Check in</div></div></div>
+  <div class="card hl" style="padding:14px"><div class="t1" style="font-size:15px">No active trip</div><div class="t2">Scan a vehicle to start</div><div class="btn">Start trip</div></div>
+  <div class="card"><div class="row sp"><div class="t1">Transfer to confirm</div><span class="tag">1</span></div><div class="t2">D 77120 → Al Qusais Lot · Confirm departure</div></div>
+  <div class="card"><div class="row sp"><div class="t1">Karama Lot</div><span class="t2">38 / 50 free</span></div><div class="bar"><i style="width:24%"></i></div></div>
+</div>
+<nav class="bn"><span class="ni on"><span class="ic"></span>Home</span><span class="ni"><span class="ic"></span>Trips</span><span class="ni"><span class="ic"></span>Lots</span><span class="ni"><span class="ic"></span>Attendance</span></nav></div>
+<figcaption><b>S-01</b> Home · no trip · one primary action</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tmr"><span class="ic"></span><span>D 41823 · On trip</span><b>01:24:37</b></div>
+<div class="tb"><b>Home</b><span class="ic r"></span><span class="av" style="width:26px;height:26px"></span></div>
+<div class="ct">
+  <div class="card hl" style="padding:14px"><div class="t2">Active trip · started 08:12</div><div class="big mono">01:24:37</div>
+  <div class="t1">D 41823 · Garbage truck</div><div class="t2">Driver Omar F. · To Deira › Fish Market</div>
+  <div class="btn">End trip</div><div class="duo"><div class="btn2">Swap</div><div class="btn2">Cancel trip</div></div></div>
+  <div class="card fill"><div class="row sp"><div><div class="t1">Checked in 07:56</div><div class="t2">Next: Start lunch</div></div><span class="ic flip"></span></div></div>
+</div>
+<nav class="bn"><span class="ni on"><span class="ic"></span>Home</span><span class="ni"><span class="ic"></span>Trips</span><span class="ni"><span class="ic"></span>Lots</span><span class="ni"><span class="ic"></span>Attendance</span></nav></div>
+<figcaption><b>S-01</b> Home · active trip · the timer bar is pinned on every staff screen (UX-02)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Start trip</b><span class="t2">2 / 5</span></div>
+<div class="ct"><div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+  <div class="t1">Vehicle</div>
+  <div class="card hl"><div class="img" style="height:90px"></div><div class="row sp"><div><div class="t1" style="font-size:15px">D 41823</div><div class="t2">Waste › Garbage truck · Isuzu FVR · White</div></div><span class="tag">Available</span></div><div class="t2">At Karama Lot</div></div>
+  <div class="btn3">Not this one? Scan again</div>
+  <div class="bot"><div class="btn">Next · Driver</div></div></div></div>
+<figcaption><b>S-03</b> Vehicle confirm card after the scan · check the photo and plate</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Start trip</b><span class="t2">3 / 5</span></div>
+<div class="ct"><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+  <div class="t1">Driver</div>
+  <div class="inp"><span class="ic"></span><span class="t2">Search name or Driver ID</span></div>
+  <div class="t2">Recent</div>
+  <div class="li"><div class="av"></div><div class="tx"><div class="t1">Omar F.</div><div class="t2">ID 100245</div></div><span class="ic r"></span></div>
+  <div class="li"><div class="av"></div><div class="tx"><div class="t1">Sameer K.</div><div class="t2">ID 100311</div></div><span class="ic r"></span></div>
+  <div class="li" style="opacity:.5"><div class="av"></div><div class="tx"><div class="t1">Yousef A.</div><div class="t2">On trip since 07:40</div></div></div>
+  <div class="bot"><div class="btn dis">Next · Destination</div></div></div></div>
+<figcaption><b>S-04</b> Driver picker · recent first · a busy driver is shown but can't be picked (BR-02)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Start trip</b><span class="t2">4 / 5</span></div>
+<div class="ct"><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <div class="t1">Destination</div>
+  <div class="chips"><span class="chip on">Deira</span><span class="chip">Bur Dubai</span><span class="chip">Jumeirah</span><span class="chip">Al Qusais</span></div>
+  <div class="inp"><span class="ic"></span><span class="t2">Search location in Deira</span></div>
+  <div class="li"><div class="tx t1">Fish Market</div><span class="ic r" style="background:var(--ink)"></span></div>
+  <div class="li"><div class="tx t1">Gold Souk</div><span class="ic r"></span></div>
+  <div class="li"><div class="tx t1">Al Ras</div><span class="ic r"></span></div>
+  <div class="bot"><div class="btn">Next · Signature</div></div></div></div>
+<figcaption><b>S-05</b> Destination · area chips, then location list (Area → Location)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Start trip</b><span class="t2">5 / 5</span></div>
+<div class="ct"><div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+  <div class="t1">Driver signature</div><div class="t2">Hand the phone to Omar F. to sign</div>
+  <div class="sig">Sign here</div>
+  <div class="row sp"><span class="t2">Signed by Omar F.</span><span class="btn3">Clear</span></div>
+  <div class="bot"><div class="btn">Next · Review</div></div></div></div>
+<figcaption><b>S-06</b> Signature · Next stays off until signed</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Review trip</b><span></span></div>
+<div class="ct">
+  <div class="li"><div class="tx"><div class="t2">From</div><div class="t1">Karama Lot</div></div><span class="btn3">Edit</span></div>
+  <div class="li"><div class="tx"><div class="t2">Vehicle</div><div class="t1">D 41823 · Garbage truck</div></div><span class="btn3">Edit</span></div>
+  <div class="li"><div class="tx"><div class="t2">Driver</div><div class="t1">Omar F. · 100245</div></div><span class="btn3">Edit</span></div>
+  <div class="li"><div class="tx"><div class="t2">Destination</div><div class="t1">Deira › Fish Market</div></div><span class="btn3">Edit</span></div>
+  <div class="li"><div class="tx"><div class="t2">Signature</div><div class="img" style="height:28px;width:110px"></div></div></div>
+  <div class="t2">Start time is recorded when you tap Start trip.</div>
+  <div class="bot"><div class="btn">Start trip</div></div></div></div>
+<figcaption><b>S-07</b> Review · each line can be edited · the server sets the start time</figcaption></figure>
+</div>
+
+<h2>3 · Staff · Active trip, End, Swap, Cancel</h2>
+<div class="board">
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tmr od"><span class="ic"></span><span>D 41823 · Overdue</span><b>05:02:10</b></div>
+<div class="tb"><span class="ic flip"></span><b>Active trip</b><span></span></div>
+<div class="ct">
+  <div style="text-align:center"><div class="big mono">05:02:10</div><div class="t2">Started 08:12 · <b>Overdue</b> · reminder sent 12:42</div></div>
+  <div class="card"><div class="t1">D 41823 · Garbage truck</div><div class="t2">Karama Lot → Deira › Fish Market</div></div>
+  <div class="t2">Segments</div>
+  <div class="tl"><div class="e"><span class="dot f"></span><div><div class="t1">08:12 Started</div><div class="t2">Driver Yousef A. · D 41823</div></div></div>
+  <div class="e"><span class="dot"></span><div><div class="t1">10:30 Driver swapped</div><div class="t2">Omar F. · reason: shift change</div></div></div></div>
+  <div class="bot"><div class="btn">End trip</div><div class="duo"><div class="btn2">Swap</div><div class="btn2">Cancel trip</div></div></div></div></div>
+<figcaption><b>S-09</b> Active trip · overdue gets a pattern and a word, not just a colour</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tmr"><span class="ic"></span><span>D 41823 · On trip</span><b>02:10:05</b></div>
+<div class="tb"><span class="ic flip"></span><b>End trip</b><span class="t2">2 / 2</span></div>
+<div class="ct"><div class="card fill"><div class="row"><span class="ic"></span><span>Vehicle matched · D 41823</span></div></div>
+  <div class="t1">Where is the vehicle now?</div>
+  <div class="li"><span class="ic r" style="background:var(--ink)"></span><div class="tx"><div class="t1">Karama Lot</div><div class="t2">Started here · 12 garbage truck spaces free</div></div></div>
+  <div class="li"><span class="ic r"></span><div class="tx"><div class="t1">Al Qusais Lot</div><div class="t2"><b>Full</b> for garbage trucks · you can still return here</div></div></div>
+  <div class="li"><span class="ic r"></span><div class="tx"><div class="t1">Jebel Ali Lot</div><div class="t2">4 free</div></div></div>
+  <div class="bot"><div class="btn">Continue</div></div></div></div>
+<figcaption><b>S-11</b> Return lot · origin pre-selected · a full lot warns but doesn't block (BR-09)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tmr"><span class="ic"></span><span>D 41823 · On trip</span><b>02:10:09</b></div>
+<div class="tb"><b>End trip</b></div>
+<div class="ct"><div class="ln w80"></div><div class="ln w60"></div><div class="ln w45"></div></div>
+<div class="scrim"><div class="sheet"><span class="grab"></span>
+  <div class="t1" style="font-size:15px">End this trip?</div>
+  <div>D 41823 returns to <b>Karama Lot</b>.</div><div class="t2">Duration so far 02:10:09. The end time is recorded when you confirm.</div>
+  <div class="btn">End trip</div><div class="btn3">Not now</div></div></div></div>
+<figcaption><b>S-12</b> Confirm sheet · restates what will happen (UX-05)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Trip ended</b><span></span></div>
+<div class="ct"><div style="text-align:center"><span class="ic lg r" style="background:var(--ink)"></span><div class="big mono">02:10:12</div><div class="t2">Total time outside the lot</div></div>
+  <table><tr><th>Vehicle</th><td>D 41823 · Isuzu FVR</td></tr><tr><th>Category</th><td>Waste › Garbage truck</td></tr><tr><th>From</th><td>Karama Lot</td></tr><tr><th>Returned to</th><td>Karama Lot</td></tr><tr><th>Start</th><td>22 Nov · 08:12</td></tr><tr><th>End</th><td>22 Nov · 10:22</td></tr><tr><th>Driver</th><td>Omar F.</td></tr><tr><th>Staff</th><td>Ravi S. · DM2600042</td></tr></table>
+  <div class="bot"><div class="btn">Done</div></div></div></div>
+<figcaption><b>S-13</b> Trip summary · every field the client listed (TRP-10)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tmr"><span class="ic"></span><span>D 41823 · On trip</span><b>01:02:40</b></div>
+<div class="tb"><span class="ic flip"></span><b>Swap</b><span></span></div>
+<div class="ct"><div class="t1">What are you changing?</div>
+  <div class="chips"><span class="chip">Driver</span><span class="chip on">Vehicle</span><span class="chip">Both</span></div>
+  <div class="card"><div class="t2">New vehicle</div><div class="t1">D 52210 · Garbage truck</div><div class="btn3" style="justify-content:flex-start">Scan a different one</div></div>
+  <div class="fld"><label>Reason (required)</label><div class="inp">Hydraulic fault on D 41823</div></div>
+  <div class="t1">Where is D 41823 now?</div>
+  <div class="chips"><span class="chip">Karama Lot</span><span class="chip">Other lot…</span><span class="chip on">Not at a lot</span></div>
+  <div class="t2">An admin will set its location and status.</div>
+  <div class="bot"><div class="btn">Confirm swap</div></div></div></div>
+<figcaption><b>S-14</b> Swap · same trip, new segment (D-012) · the old vehicle gets placed somewhere</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tmr"><span class="ic"></span><span>D 41823 · On trip</span><b>00:41:03</b></div>
+<div class="tb"><span class="ic flip"></span><b>Cancel trip</b><span></span></div>
+<div class="ct"><div class="t1">Why is this trip being cancelled?</div>
+  <div class="duo"><div class="btn2">Driver issue</div><div class="btn" >Vehicle issue</div><div class="btn2">Technical issue</div><div class="btn2">Other</div></div>
+  <div class="fld"><label>Note (required)</label><div class="inp" style="min-height:58px;align-items:flex-start">Flat tyre near Gold Souk</div></div>
+  <div class="t1">Where is the vehicle now?</div>
+  <div class="chips"><span class="chip">Karama Lot</span><span class="chip">Other lot…</span><span class="chip on">Not at a lot</span></div>
+  <div class="card fill"><div class="t2">The trip ends now, and its 00:41 still counts toward hours. An admin decides the vehicle's status.</div></div>
+  <div class="bot"><div class="btn">Cancel trip</div></div></div></div>
+<figcaption><b>S-15</b> Cancel · the consequence is stated before the user confirms</figcaption></figure>
+</div>
+
+<h2>4 · Staff · Trips, Lots, Attendance, Transfers</h2>
+<div class="board">
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>My trips</b><span class="ic"></span></div>
+<div class="ct"><div class="chips"><span class="chip on">Today</span><span class="chip">7 days</span><span class="chip">30 days</span><span class="chip">Custom</span></div>
+  <div class="card hl"><div class="row sp"><span class="t1">D 41823</span><span class="tag">Active</span></div><div class="t2">08:12 → now · 01:24 · Omar F.</div></div>
+  <div class="t2">Yesterday</div>
+  <div class="li"><div class="tx"><div class="t1">D 52210 · 3 h 05 min</div><div class="t2">Karama → Karama · Sameer K.</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">D 41823 · 0 h 41 min</div><div class="t2">Cancelled · vehicle issue</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">D 33017 · 5 h 12 min</div><div class="t2">Ended by admin</div></div><span class="ic flip"></span></div>
+</div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Home</span><span class="ni on"><span class="ic"></span>Trips</span><span class="ni"><span class="ic"></span>Lots</span><span class="ni"><span class="ic"></span>Attendance</span></nav></div>
+<figcaption><b>S-16</b> My trips · the vehicles I started (Client §1) · how each ended is labelled</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Lots</b><span class="chips"><span class="chip on">List</span><span class="chip">Map</span></span></div>
+<div class="ct"><div class="inp"><span class="ic"></span><span class="t2">Search lots</span></div>
+  <div class="card"><div class="row sp"><span class="t1">Karama Lot</span><span class="t2">38 / 50 free</span></div><div class="bar"><i style="width:24%"></i></div><div class="t2">Garbage truck 12 · Car 20 · Ambulance 6</div></div>
+  <div class="card"><div class="row sp"><span class="t1">Al Qusais Lot</span><span class="tag">Full · trucks</span></div><div class="bar"><i style="width:92%"></i></div><div class="t2">Garbage truck 0 · Car 4</div></div>
+  <div class="card"><div class="row sp"><span class="t1">Jebel Ali Lot</span><span class="t2">21 / 30 free</span></div><div class="bar"><i style="width:30%"></i></div><div class="t2">Underground · Open 06:00–22:00</div></div>
+</div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Home</span><span class="ni"><span class="ic"></span>Trips</span><span class="ni on"><span class="ic"></span>Lots</span><span class="ni"><span class="ic"></span>Attendance</span></nav></div>
+<figcaption><b>S-18</b> Lots · availability across all lots, by type · list/map toggle</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Lots</b><span class="chips"><span class="chip">List</span><span class="chip on">Map</span></span></div>
+<div class="ct"><div class="map"><span class="pin" style="top:30%;left:28%"></span><span class="pin" style="top:58%;left:62%"></span><span class="pin" style="top:20%;left:70%;background:var(--soft)"></span></div>
+  <div class="card"><div class="row sp"><span class="t1">Karama Lot</span><span class="t2">38 free</span></div><div class="t2">Open 24 h · Contact Imran · 04 xxx xxxx</div><div class="btn2">View lot</div></div>
+</div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Home</span><span class="ni"><span class="ic"></span>Trips</span><span class="ni on"><span class="ic"></span>Lots</span><span class="ni"><span class="ic"></span>Attendance</span></nav></div>
+<figcaption><b>C-11</b> Lots map · Google Maps · tap a pin to see its summary card</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Attendance</b><span class="btn3">Month</span></div>
+<div class="ct"><div class="card fill"><div class="t2">Saturday 22 Nov · Shift 08:00</div><div class="t1">On lunch since 13:02</div></div>
+  <div class="tl">
+   <div class="e"><span class="dot f"></span><div><div class="t1">07:56 Checked in</div><div class="t2">Photo · Karama Lot area</div></div></div>
+   <div class="e"><span class="dot f"></span><div><div class="t1">10:30 – 10:45 Tea break</div></div></div>
+   <div class="e"><span class="dot f"></span><div><div class="t1">13:02 Lunch started</div></div></div>
+   <div class="e"><span class="dot o"></span><div><div class="t2">Check out</div></div></div></div>
+  <div class="bot"><div class="btn">End lunch</div></div></div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Home</span><span class="ni"><span class="ic"></span>Trips</span><span class="ni"><span class="ic"></span>Lots</span><span class="ni on"><span class="ic"></span>Attendance</span></nav></div>
+<figcaption><b>S-19</b> Attendance today · one next action + a timeline (UX-09)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Check in</b><span></span></div>
+<div class="ct"><div class="view" style="border-radius:50%;aspect-ratio:1;flex:none;width:80%;align-self:center"><i style="display:none"></i></div>
+  <div class="card fill"><div class="row"><span class="ic"></span><span>Location found · ±12 m</span></div><div class="row"><span class="ic"></span><span>The time is recorded by the server</span></div></div>
+  <div class="bot"><div class="btn">Take photo &amp; check in</div><div class="btn3">Retake</div></div></div></div>
+<figcaption><b>S-20</b> Capture · front camera + GPS both required (ATT-02) · denied permission → primer</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>November</b><span class="ic"></span></div>
+<div class="ct"><div class="grid3"><div class="stat"><span class="t2">Present</span><b>17</b></div><div class="stat"><span class="t2">Late</span><b>2</b></div><div class="stat"><span class="t2">Absent</span><b>1</b></div></div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:10px;text-align:center">
+   <span class="t2">S</span><span class="t2">S</span><span class="t2">M</span><span class="t2">T</span><span class="t2">W</span><span class="t2">T</span><span class="t2">F</span>
+   <span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span style="border:1.5px solid var(--ink);border-radius:6px;height:22px">L</span><span class="ln" style="height:22px"></span><span style="border:1.5px dashed var(--ink);border-radius:6px;height:22px">A</span><span style="height:22px"></span>
+   <span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span class="ln" style="height:22px"></span><span style="height:22px"></span></div>
+  <div class="t2">L = late · A = absent · days off are blank</div></div></div>
+<figcaption><b>S-21</b> Month summary · status shown with letters and outlines, not colour alone</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Transfer</b><span></span></div>
+<div class="ct"><div class="card hl"><div class="t1">D 77120 · Ambulance</div><div class="t2">Karama Lot → Al Qusais Lot · Driver Sameer K.</div><div class="t2">Created by Admin Fatima · 09:05</div></div>
+  <div class="tl"><div class="e"><span class="dot f"></span><div class="t1">Created</div></div><div class="e"><span class="dot"></span><div class="t1">Departure · waiting for you</div></div><div class="e"><span class="dot o"></span><div class="t2">Arrival</div></div></div>
+  <div class="t2">Confirm only when the vehicle is leaving. Hours start counting from this moment.</div>
+  <div class="bot"><div class="btn">Confirm departure</div></div></div></div>
+<figcaption><b>S-22</b> Transfer task · origin staff confirm departure, any staff confirm arrival (P-04)</figcaption></figure>
+</div>
+
+<h2>5 · Admin</h2>
+<p class="sub">Manage by exception: the dashboard leads with what needs attention (UX-10). The Live tab combines trips and transfers (UX-06).</p>
+<div class="board">
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Dashboard</b><span class="ic"></span><span class="ic r"></span><span class="av" style="width:26px;height:26px"></span></div>
+<div class="ct"><div class="t1">Needs attention</div>
+  <div class="li"><span class="tag">3</span><div class="tx t1">Overdue trips</div><span class="ic flip"></span></div>
+  <div class="li"><span class="tag">2</span><div class="tx t1">Vehicles not at a lot</div><span class="ic flip"></span></div>
+  <div class="li"><span class="tag">1</span><div class="tx t1">Lot over capacity · Al Qusais</div><span class="ic flip"></span></div>
+  <div class="li"><span class="tag mut">2</span><div class="tx">Transfers waiting</div><span class="ic flip"></span></div>
+  <div class="t1" style="margin-top:4px">Fleet now</div>
+  <div class="grid3"><div class="stat"><span class="t2">On trip</span><b>24</b></div><div class="stat"><span class="t2">Available</span><b>131</b></div><div class="stat"><span class="t2">Unavailable</span><b>9</b></div></div>
+  <div class="row sp"><span class="t2">Lot use</span><span class="t2">Today: 86 trips · 412 h</span></div>
+  <div class="row"><span style="width:60px" class="t2">Karama</span><div class="bar" style="flex:1"><i style="width:76%"></i></div></div>
+  <div class="row"><span style="width:60px" class="t2">Al Qusais</span><div class="bar" style="flex:1"><i style="width:100%"></i></div></div>
+</div>
+<nav class="bn"><span class="ni on"><span class="ic"></span>Dashboard</span><span class="ni"><span class="ic"></span>Live</span><span class="ni"><span class="ic"></span>Manage</span><span class="ni"><span class="ic"></span>Reports</span></nav></div>
+<figcaption><b>A-01</b> Dashboard · neutral numbers, no decorative KPI tiles · scan icon in the top bar</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Live</b><span class="t2">● Live</span><span class="ic"></span></div>
+<div class="ct"><div class="chips"><span class="chip on">Trips 24</span><span class="chip">Transfers 2</span></div>
+  <div class="chips"><span class="chip">All lots</span><span class="chip">All types</span></div>
+  <div class="li"><span class="ic"></span><div class="tx"><div class="t1">D 33017 · <b>Overdue</b></div><div class="t2">Ravi S. · Karama → Deira</div></div><b class="mono">05:12:40</b></div>
+  <div class="li"><span class="ic"></span><div class="tx"><div class="t1">D 41823 · <b>Overdue</b></div><div class="t2">Imran T. · Al Qusais → Jumeirah</div></div><b class="mono">04:31:02</b></div>
+  <div class="li"><div class="tx"><div class="t1">D 52210</div><div class="t2">Ravi S. · Karama → Al Ras</div></div><span class="mono">01:02:40</span></div>
+  <div class="li"><div class="tx"><div class="t1">D 61004</div><div class="t2">Aisha M. · Jebel Ali → Marina</div></div><span class="mono">00:18:22</span></div>
+</div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Dashboard</span><span class="ni on"><span class="ic"></span>Live</span><span class="ni"><span class="ic"></span>Manage</span><span class="ni"><span class="ic"></span>Reports</span></nav></div>
+<figcaption><b>A-02</b> Live trips · overdue at the top · updates within 5 s</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Trip</b><span></span></div>
+<div class="ct"><div style="text-align:center"><div class="big mono">05:12:40</div><div class="t2">Overdue · started 08:12 by Ravi S.</div></div>
+  <div class="card"><div class="t1">D 33017 · Car</div><div class="t2">Karama Lot → Deira › Al Ras · Driver Yousef A.</div></div>
+  <div class="t2">Reminders sent: 12:12, 12:42, 13:12</div>
+  <div class="bot"><div class="btn">End trip</div><div class="duo"><div class="btn2">Swap</div><div class="btn2">Cancel trip</div></div></div></div></div>
+<figcaption><b>A-04</b> Trip detail (admin) · admins can end, swap or cancel any trip (P-02)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Trip</b></div><div class="ct"><div class="ln w80"></div></div>
+<div class="scrim"><div class="sheet"><span class="grab"></span>
+  <div class="t1" style="font-size:15px">End trip as admin</div>
+  <div class="fld"><label>Actual end time</label><div class="inp">22 Nov · 12:05<span class="ic" style="margin-inline-start:auto"></span></div><span class="hint">Between 08:12 and now</span></div>
+  <div class="fld"><label>Reason (required)</label><div class="inp err">&nbsp;</div><span class="hint">Enter a reason. It's saved in the audit log.</span></div>
+  <div class="fld"><label>Vehicle is at</label><div class="inp">Karama Lot<span class="ic flip" style="margin-inline-start:auto"></span></div></div>
+  <div class="btn">End trip</div></div></div></div>
+<figcaption><b>A-05</b> Admin end · actual time + reason + location · audited (TRP-11)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>New transfer</b><span></span></div>
+<div class="ct"><div class="fld"><label>Vehicle</label><div class="inp">D 77120 · Ambulance · Karama Lot<span class="ic" style="margin-inline-start:auto"></span></div></div>
+  <div class="fld"><label>To lot</label><div class="inp">Al Qusais Lot<span class="ic flip" style="margin-inline-start:auto"></span></div><span class="hint">6 ambulance spaces free</span></div>
+  <div class="fld"><label>Driver</label><div class="inp">Sameer K. · 100311<span class="ic flip" style="margin-inline-start:auto"></span></div></div>
+  <div class="card fill"><div class="t2">Karama Lot staff get a notification to confirm departure. The vehicle counts at Karama until arrival is confirmed.</div></div>
+  <div class="bot"><div class="btn">Create transfer</div></div></div></div>
+<figcaption><b>A-06</b> New transfer · explains what happens next</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Manage</b><span class="ic"></span></div>
+<div class="ct"><div class="t2">Fleet</div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Vehicles</div><span class="t2">164</span></div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Categories &amp; types</div><span class="ic flip"></span></div>
+  <div class="li"><span class="ic"></span><div class="tx t1">QR labels</div><span class="ic flip"></span></div>
+  <div class="t2">People</div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Staff</div><span class="t2">38</span></div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Drivers</div><span class="t2">212</span></div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Admins</div><span class="t2">3</span></div>
+  <div class="t2">Places · System</div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Parking lots · Destinations</div><span class="ic flip"></span></div>
+  <div class="li"><span class="ic"></span><div class="tx t1">Settings · Attendance rules · Audit log</div><span class="ic flip"></span></div>
+</div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Dashboard</span><span class="ni"><span class="ic"></span>Live</span><span class="ni on"><span class="ic"></span>Manage</span><span class="ni"><span class="ic"></span>Reports</span></nav></div>
+<figcaption><b>A-08</b> Manage hub · Fleet · People · Places · System (UX-07)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>D 41823</b><span class="ic"></span></div>
+<div class="ct"><div class="img" style="height:80px"></div>
+  <div class="row sp"><div><div class="t1">Isuzu FVR · White</div><div class="t2">Waste › Garbage truck</div></div><span class="tag">Not at a lot</span></div>
+  <div class="card fill"><div class="t1">Location needed</div><div class="t2">Swapped out of a trip at 11:40 · "Hydraulic fault"</div><div class="duo"><div class="btn2" style="min-height:34px">Set lot</div><div class="btn2" style="min-height:34px">Set status</div></div></div>
+  <div class="li"><div class="tx t1">QR label</div><span class="btn3">Download</span></div>
+  <div class="li"><div class="tx t1">History</div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx t1">Status</div><span class="t2">Available ›</span></div>
+</div></div>
+<figcaption><b>A-10</b> Vehicle detail · resolve "Not at a lot" · QR · history (D-012)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>New parking lot</b><span></span></div>
+<div class="ct" style="gap:6px"><div class="t2">Basics</div>
+  <div class="duo"><div class="fld"><label>Name</label><div class="inp">Karama Lot</div></div><div class="fld"><label>Code</label><div class="inp">KRM</div></div></div>
+  <div class="chips"><span class="chip on">Open</span><span class="chip">Underground</span><span class="chip">Other</span></div>
+  <div class="t2">Location</div><div class="map" style="min-height:60px;flex:none"><span class="pin" style="top:20%;left:46%"></span></div>
+  <div class="t2">Capacity per type</div>
+  <div class="li"><div class="tx">Garbage truck</div><div class="inp" style="width:56px;min-height:30px;padding:4px 8px">15</div></div>
+  <div class="li"><div class="tx">Car</div><div class="inp" style="width:56px;min-height:30px;padding:4px 8px">25</div></div>
+  <div class="row sp"><span class="t2">Total 50 · Baseline used 0</span><span class="btn3">+ Add type</span></div>
+  <div class="bot"><div class="btn">Save lot</div></div></div></div>
+<figcaption><b>A-18</b> Lot form · sections; contact, hours, status and baseline are below the fold</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Reports</b><span></span></div>
+<div class="ct">
+  <div class="li"><div class="tx"><div class="t1">Vehicle running hours</div><div class="t2">Hours per vehicle, split by segment</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">Staff activity</div><div class="t2">Trips started and ended, hours</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">Driver hours</div><div class="t2">Hours per driver</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">Lot utilization</div><div class="t2">Occupancy over time, by type</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">Trip log</div><div class="t2">Every trip, swap and cancellation</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">Transfers</div></div><span class="ic flip"></span></div>
+  <div class="li"><div class="tx"><div class="t1">Attendance</div><div class="t2">Present, late, absent</div></div><span class="ic flip"></span></div>
+</div>
+<nav class="bn"><span class="ni"><span class="ic"></span>Dashboard</span><span class="ni"><span class="ic"></span>Live</span><span class="ni"><span class="ic"></span>Manage</span><span class="ni on"><span class="ic"></span>Reports</span></nav></div>
+<figcaption><b>A-24</b> Reports hub · on screen only, no exports in v1 (D-012)</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Vehicle running hours</b><span></span></div>
+<div class="ct"><div class="chips"><span class="chip on">1–22 Nov</span><span class="chip">All lots</span><span class="chip">Garbage truck</span><span class="chip">+ Filter</span></div>
+  <div class="grid3"><div class="stat"><span class="t2">Vehicles</span><b>48</b></div><div class="stat"><span class="t2">Hours</span><b>3,912</b></div><div class="stat"><span class="t2">Avg / day</span><b>3.7</b></div></div>
+  <table><tr><th>Vehicle</th><th>Trips</th><th>Hours</th></tr><tr><td>D 41823</td><td>41</td><td>112.4</td></tr><tr><td>D 52210</td><td>38</td><td>104.0</td></tr><tr><td>D 33017</td><td>35</td><td>98.7</td></tr><tr><td>D 61004</td><td>30</td><td>88.1</td></tr></table>
+  <div class="t2">Tap a row to see its trips. Hours crossing midnight are split by day (P-12).</div></div></div>
+<figcaption><b>R-1</b> Report view · filter chips + summary + table → drill-down</figcaption></figure>
+</div>
+
+<h2>6 · States</h2>
+<p class="sub">Every data screen defines these states (UX_ARCHITECTURE §6).</p>
+<div class="board">
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>My trips</b></div>
+<div class="ct"><div class="sk" style="height:62px"></div><div class="sk" style="height:46px"></div><div class="sk" style="height:46px"></div><div class="sk" style="height:46px"></div></div></div>
+<figcaption><b>Loading</b> · skeleton in the shape of the content</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Vehicles</b><span class="ic"></span></div>
+<div class="ct"><div class="empty"><span class="ic lg"></span><div class="t1">No vehicles yet</div><div class="t2">Add categories and types first, then your vehicles. QR codes are created automatically.</div><div class="btn" style="padding:0 16px">Add vehicle</div></div></div></div>
+<figcaption><b>Empty</b> · says why it's empty and what to do next</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="bnr"><span class="ic"></span><span>You're offline. Actions are paused.</span></div>
+<div class="tb"><b>Home</b></div>
+<div class="ct"><div class="card hl" style="padding:14px"><div class="t1">No active trip</div><div class="btn dis">Start trip</div><div class="t2">Needs a connection · last updated 09:38</div></div>
+  <div class="card"><div class="row sp"><div class="t1">Karama Lot</div><span class="t2">38 / 50 free</span></div></div></div></div>
+<figcaption><b>Offline</b> · banner + disabled actions with a reason · data marked stale</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><span class="ic flip"></span><b>Review trip</b></div>
+<div class="ct"><div class="card hl"><div class="row"><span class="ic"></span><div class="t1">Couldn't start the trip</div></div><div class="t2">The connection dropped. Nothing was saved, and your details are still here.</div><div class="btn">Try again</div></div>
+  <div class="card hl"><div class="row"><span class="ic"></span><div class="t1">Vehicle no longer available</div></div><div class="t2">D 41823 was just started by Imran T.</div><div class="btn2">Choose another vehicle</div></div></div></div>
+<figcaption><b>Error · Conflict</b> · nothing entered is lost · clear way to recover</figcaption></figure>
+
+<figure><div class="ph"><div class="sb">9:41</div>
+<div class="tb"><b>Attendance</b></div><div class="ct"><div class="ln w80"></div></div>
+<div class="scrim"><div class="sheet"><span class="grab"></span><span class="ic lg"></span>
+  <div class="t1" style="font-size:15px">Allow location to check in</div>
+  <div class="t2">Each attendance entry records where you are. Location is used only when you tap check in, a break or check out.</div>
+  <div class="btn">Open settings</div><div class="btn3">Not now</div></div></div></div>
+<figcaption><b>Permission</b> · explained just before it's needed (UX-11)</figcaption></figure>
+</div>
+
+<p class="note" style="margin-top:24px">Next: approve the structure (D-014) → Phase 3 design system (Ink Heather / Putty Grey / Canary Flash, light and dark) → Phase 4 high-fidelity screens.</p>
+</main>
+<script>
+(function(){var b=document.getElementById('rtl');b.addEventListener('click',function(){var r=document.documentElement.dir==='rtl';document.documentElement.dir=r?'ltr':'rtl';b.setAttribute('aria-pressed',String(!r));b.textContent=r?'Toggle RTL preview':'Back to LTR';});})();
+</script>
+</body>
+</html>

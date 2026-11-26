@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fleet Signage Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Readex+Pro:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..24,400,0..1,0&display=block" rel="stylesheet">
+<style>
+/* ---------- theme tokens (DESIGN_SYSTEM.md §2) ---------- */
+[data-theme=light]{--bg:#F6F3EC;--surface:#FFFFFF;--surface2:#FFFFFF;--sunken:#EEEAE2;--border:#E0DBD1;--borderS:#8F897E;--text:#1F2229;--text2:#50545D;--text3:#6B675F;--accent:#FFE014;--accentP:#E6C800;--onAccent:#1F2229;--ink:#262A33;--onInk:#FFFFFF;--focus:#262A33;--accentText:#1F2229;--capFill:#1F2229;
+ --sucF:#1B6B43;--sucB:#E2F2E8;--danF:#B42318;--danB:#FDE8E6;--warF:#9A4B00;--warB:#FCEBD8;--infF:#245BA0;--infB:#E3ECF8;--neuF:#50545D;--neuB:#ECE8E0;--danSolid:#B42318;
+ --shadow:0 1px 2px rgba(31,34,41,.06),0 0 0 1px var(--border);--sheetShadow:0 -8px 24px rgba(31,34,41,.16);--scrim:rgba(31,34,41,.42);--frame:#1F2229}
+[data-theme=dark]{--bg:#262A33;--surface:#2F3440;--surface2:#383E4B;--sunken:#20232B;--border:#434957;--borderS:#8A8F9A;--text:#F4F1EA;--text2:#C1BBAF;--text3:#A29D93;--accent:#FFE014;--accentP:#E6C800;--onAccent:#1F2229;--ink:#F4F1EA;--onInk:#1F2229;--focus:#FFE014;--accentText:#FFE014;--capFill:#C1BBAF;
+ --sucF:#86D5A8;--sucB:#1E3A2C;--danF:#FFA39A;--danB:#4A2321;--warF:#F7B776;--warB:#48331C;--infF:#A8C6F2;--infB:#233550;--neuF:#C1BBAF;--neuB:#383E4B;--danSolid:#C0262D;
+ --shadow:none;--sheetShadow:none;--scrim:rgba(10,12,16,.6);--frame:#0E1014}
+
+/* ---------- page chrome ---------- */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;background:var(--bg);color:var(--text);transition:background .2s}
+.top{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--bg);border-bottom:1px solid var(--border)}
+.top h1{font:600 18px/1.2 "Readex Pro",sans-serif;margin:0}
+.top p{margin:4px 0 0;font-size:12.5px;color:var(--text2)}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px}
+.seg{display:inline-flex;border:1.5px solid var(--borderS);border-radius:12px;overflow:hidden}
+.seg button{font:600 13px "IBM Plex Sans",sans-serif;border:0;background:transparent;color:var(--text);padding:0 14px;min-height:40px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--onInk)}
+.seg button:focus-visible,.tg:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.tg{font:600 13px "IBM Plex Sans",sans-serif;border:1.5px solid var(--borderS);background:transparent;color:var(--text);border-radius:12px;padding:0 14px;min-height:40px;cursor:pointer}
+main{max-width:1680px;margin:0 auto;padding:8px 20px 64px}
+.blk{margin-top:36px}
+.blk h2{font:600 20px/1.3 "Readex Pro",sans-serif;margin:0 0 4px;scroll-margin-top:110px}
+.blk>p{margin:0 0 18px;color:var(--text2);font-size:13.5px;max-width:900px}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:28px 22px;align-items:start}
+body[data-view=both] .board{grid-template-columns:repeat(auto-fill,minmax(600px,1fr))}
+figure{margin:0}
+.pair{display:flex;gap:14px}
+body[data-view=light] .pair>[data-theme=dark],body[data-view=dark] .pair>[data-theme=light]{display:none}
+figcaption{margin-top:10px;font-size:12.5px;color:var(--text2);max-width:600px}
+figcaption b{font-family:"IBM Plex Mono",monospace;color:var(--text);font-weight:600;margin-inline-end:6px}
+
+/* ---------- phone ---------- */
+.ph{width:286px;height:592px;flex:none;border-radius:38px;padding:7px;background:var(--frame);box-shadow:0 18px 40px rgba(20,22,28,.18)}
+.scr{position:relative;height:100%;border-radius:31px;overflow:hidden;background:var(--bg);color:var(--text);display:flex;flex-direction:column;font-size:13px;line-height:1.4}
+.sb{height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font:600 12px "IBM Plex Sans",sans-serif;color:var(--text)}
+.sb .ms{font-size:15px}
+.ms{font-family:"Material Symbols Rounded";font-weight:400;font-style:normal;font-size:20px;line-height:1;display:inline-block;letter-spacing:normal;text-transform:none;white-space:nowrap;direction:ltr;-webkit-font-smoothing:antialiased;font-variation-settings:"FILL" 0,"opsz" 20;flex:none}
+.ms.f{font-variation-settings:"FILL" 1,"opsz" 20}
+[dir=rtl] .ms.dir{transform:scaleX(-1)}
+
+/* live strip — the anchor */
+.live{flex:none;display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;background:var(--accent);color:var(--onAccent);font-weight:600;font-size:12.5px}
+.live .t{margin-inline-start:auto;font:600 15px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;direction:ltr}
+.live .plate{border-color:var(--onAccent);color:var(--onAccent);background:transparent}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--onAccent);flex:none}
+.live.od{background:var(--danSolid);color:#fff}
+.live.od .plate{border-color:#fff;color:#fff}
+@media (prefers-reduced-motion:no-preference){.live .dot{animation:pulse 2s ease-in-out infinite}@keyframes pulse{50%{opacity:.25}}}
+
+.ab{flex:none;display:flex;align-items:center;gap:6px;height:50px;padding:0 10px 0 14px}
+.ab h3{font:600 19px/1.2 "Readex Pro",sans-serif;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab.in h3{font:600 16px/1.2 "IBM Plex Sans",sans-serif}
+.ib{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;position:relative;color:var(--text)}
+.ib .bd{position:absolute;top:7px;inset-inline-end:7px;min-width:15px;height:15px;border-radius:8px;background:var(--danSolid);color:#fff;font:600 9.5px/15px "IBM Plex Sans";text-align:center;padding:0 3px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--sunken);color:var(--text2);display:grid;place-items:center;font:600 11.5px "IBM Plex Sans";flex:none}
+.av.lg{width:44px;height:44px;font-size:14px}
+.ct{flex:1;min-height:0;overflow:hidden;padding:4px 14px 14px;display:flex;flex-direction:column;gap:10px}
+.nav{flex:none;display:flex;padding:6px 6px 16px;background:var(--surface);border-top:1px solid var(--border)}
+.it{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--text2);font-weight:500}
+.it .pi{width:52px;height:28px;border-radius:14px;display:grid;place-items:center}
+.it.on{color:var(--text);font-weight:600}
+.it.on .pi{background:var(--accent);color:var(--onAccent)}
+.it.on .ms{font-variation-settings:"FILL" 1,"opsz" 20}
+
+/* type */
+.h-dsp{font:600 24px/1.2 "Readex Pro",sans-serif;margin:0}
+.h2{font:600 15.5px/1.3 "Readex Pro",sans-serif;margin:0}
+.ttl{font-weight:600;font-size:14px}
+.sm{font-size:12px;color:var(--text2)}
+.cap{font-size:11px;color:var(--text3);font-weight:500}
+.mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.timer{font:600 38px/1 "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--accentText);letter-spacing:-.5px;direction:ltr;display:inline-block}
+
+/* components */
+.card{background:var(--surface);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+[data-theme=dark] .card{border:1px solid var(--border)}
+.card.em{box-shadow:0 0 0 2px var(--text)}
+[data-theme=dark] .card.em{border-color:transparent}
+.card.sk{background:var(--sunken);box-shadow:none;border:0}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:14px;background:var(--accent);color:var(--onAccent);font:600 14px "IBM Plex Sans",sans-serif;border:0;width:100%}
+.btn.sec{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1.5px var(--borderS)}
+.btn.ink{background:var(--ink);color:var(--onInk)}
+.btn.dis{background:var(--sunken);color:var(--text3)}
+.btn.txt{background:transparent;color:var(--text);min-height:40px;text-decoration:underline;text-underline-offset:3px;font-weight:500}
+.btn.dng{background:var(--danB);color:var(--danF)}
+.btn.sm{min-height:38px;font-size:13px;border-radius:12px;width:auto;padding:0 14px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bot{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:6px}
+.plate{display:inline-flex;align-items:center;gap:5px;font:600 12.5px "IBM Plex Mono",monospace;padding:2px 7px;border:1.5px solid var(--text);border-radius:6px;color:var(--text);background:var(--surface);direction:ltr;white-space:nowrap}
+.plate i{font-style:normal;font-size:9px;font-family:"IBM Plex Sans";font-weight:600;opacity:.75}
+.plate.lg{font-size:17px;padding:3px 10px;border-width:2px}
+.bdg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 7px 2px 5px;border-radius:6px;white-space:nowrap}
+.bdg .ms{font-size:14px}
+.s-suc{color:var(--sucF);background:var(--sucB)}.s-dan{color:var(--danF);background:var(--danB)}.s-war{color:var(--warF);background:var(--warB)}.s-inf{color:var(--infF);background:var(--infB)}.s-neu{color:var(--neuF);background:var(--neuB)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:0 12px;border-radius:10px;font-size:12px;font-weight:600;color:var(--text);box-shadow:inset 0 0 0 1px var(--borderS)}
+.chip.on{background:var(--ink);color:var(--onInk);box-shadow:none}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:12px;font-weight:600;color:var(--text2)}
+.inp{display:flex;align-items:center;gap:8px;min-height:46px;padding:0 12px;border-radius:10px;background:var(--sunken);box-shadow:inset 0 0 0 1px var(--borderS);color:var(--text);font-size:14px}
+.inp.fo{box-shadow:inset 0 0 0 2px var(--focus)}
+.inp .ph-t{color:var(--text3)}
+.inp .ms{color:var(--text2)}
+.row{display:flex;align-items:center;gap:10px;min-height:54px;padding:6px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:0}
+.row.cmp{min-height:48px;padding:4px 0}
+.row .tx{flex:1;min-width:0}
+.row .ms.dir{color:var(--text3)}
+.radio{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--borderS);flex:none}
+.radio.on{box-shadow:inset 0 0 0 6px var(--text)}
+.steps{display:flex;gap:4px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--border)}
+.steps i.d{background:var(--text)}
+.steps i.c{background:var(--accent)}
+.capb{height:8px;border-radius:4px;background:var(--sunken);overflow:hidden}
+.capb i{display:block;height:100%;background:var(--capFill);border-radius:4px}
+.capb i.w{background:var(--warF)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:12.5px}
+.kv dt{color:var(--text2)}
+.kv dd{margin:0;font-weight:500;text-align:end}
+.tl{display:flex;flex-direction:column}
+.tl .e{display:flex;gap:10px;position:relative;padding-bottom:12px}
+.tl .e::before{content:"";position:absolute;inset-inline-start:5px;top:14px;bottom:0;width:2px;background:var(--border)}
+.tl .e:last-child::before{display:none}
+.tl .d{width:12px;height:12px;border-radius:50%;margin-top:3px;flex:none;background:var(--text)}
+.tl .d.c{background:var(--surface);box-shadow:0 0 0 3px var(--accent) inset}
+.tl .d.u{background:transparent;border:2px dashed var(--borderS)}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font:600 22px/1.1 "Readex Pro",sans-serif}
+.att{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 0;border-bottom:1px solid var(--border)}
+.att:last-child{border-bottom:0}
+.cnt{min-width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font:600 12px "IBM Plex Mono",monospace}
+.scrim{position:absolute;inset:0;background:var(--scrim);display:flex;align-items:flex-end}
+.sheet{width:100%;background:var(--surface2);border-radius:22px 22px 0 0;padding:10px 16px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--sheetShadow)}
+[data-theme=dark] .sheet{background:var(--surface2)}
+.grab{width:38px;height:4px;border-radius:2px;background:var(--borderS);align-self:center;margin-bottom:4px}
+.photo{border-radius:12px;background:var(--sunken);display:grid;place-items:center;color:var(--text3)}
+.photo .ms{font-size:44px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.sw div{border-radius:12px;padding:10px;font-size:11px;min-height:70px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.sw code{font:500 11px "IBM Plex Mono",monospace}
+.panel{background:var(--bg);color:var(--text);border-radius:18px;padding:18px;border:1px solid var(--border);display:flex;flex-direction:column;gap:14px;min-width:0}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.spec{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--border);padding:6px 0}
+.spec span{width:64px;flex:none;font:500 11px "IBM Plex Mono",monospace;color:var(--text3)}
+.wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lbl{font-size:11px;font-weight:600;color:var(--text3)}
+</style>
+</head>
+<body data-view="both">
+<header class="top">
+  <div>
+    <h1>Fleet Signage: Design System v0.1 + key screens</h1>
+    <p>Phase 3 preview · 2026-11-22 · Ink Heather · Putty Grey · Canary Flash (D-004) · tokens in <code>docs/design/DESIGN_SYSTEM.md</code> · structure from the Phase 2 wireframes</p>
+  </div>
+  <div class="ctrls">
+    <div class="seg" role="group" aria-label="Theme view">
+      <button type="button" data-v="light" aria-pressed="false">Light</button>
+      <button type="button" data-v="dark" aria-pressed="false">Dark</button>
+      <button type="button" data-v="both" aria-pressed="true">Side by side</button>
+    </div>
+    <button class="tg" id="rtl" type="button" aria-pressed="false">RTL preview</button>
+  </div>
+</header>
+
+<main>
+<!-- ================= FOUNDATIONS ================= -->
+<section class="blk" id="foundations">
+<h2>Foundations</h2>
+<p>Canary is used only for what's live and what to do next (10%). Ink Heather and Putty carry the rest. Status uses muted tints, always with an icon and a word.</p>
+<div class="panels">
+ <div class="panel" data-theme="light" data-found>
+  <div class="lbl">Light · colour</div>
+  <div class="sw">
+   <div style="background:#F6F3EC;color:#1F2229">bg<code>#F6F3EC</code></div>
+   <div style="background:#FFFFFF;color:#1F2229">surface<code>#FFFFFF</code></div>
+   <div style="background:#EEEAE2;color:#1F2229">sunken<code>#EEEAE2</code></div>
+   <div style="background:#C1BBAF;color:#1F2229">putty<code>#C1BBAF</code></div>
+   <div style="background:#262A33;color:#F4F1EA">ink<code>#262A33</code></div>
+   <div style="background:#FFE014;color:#1F2229">accent<code>#FFE014</code></div>
+  </div>
+  <div class="lbl">Status</div>
+  <div class="wrap"><span class="bdg s-suc"><span class="ms">check_circle</span>Available</span><span class="bdg s-dan"><span class="ms">schedule</span>Overdue</span><span class="bdg s-war"><span class="ms">build</span>Maintenance</span><span class="bdg s-inf"><span class="ms">swap_horiz</span>In transfer</span><span class="bdg s-neu"><span class="ms">block</span>Inactive</span></div>
+  <div class="lbl">Components</div>
+  <div class="wrap"><span class="plate">D 41823</span><span class="plate"><i>DXB</i>A 7712</span><span class="chip on">Deira</span><span class="chip">Bur Dubai</span></div>
+  <div class="duo"><span class="btn">Start trip</span><span class="btn sec">Swap</span></div>
+  <div class="duo"><span class="btn ink">Scan another</span><span class="btn dis">Needs connection</span></div>
+  <div class="inp fo"><span class="ms">search</span><span class="ph-t">Search name or Driver ID</span></div>
+ </div>
+ <div class="panel" data-theme="dark" data-found>
+  <div class="lbl">Dark · colour</div>
+  <div class="sw">
+   <div style="background:#262A33;color:#F4F1EA">bg · Ink Heather<code>#262A33</code></div>
+   <div style="background:#2F3440;color:#F4F1EA">surface<code>#2F3440</code></div>
+   <div style="background:#383E4B;color:#F4F1EA">surface-2<code>#383E4B</code></div>
+   <div style="background:#20232B;color:#F4F1EA">sunken<code>#20232B</code></div>
+   <div style="background:#C1BBAF;color:#1F2229">text-2 · putty<code>#C1BBAF</code></div>
+   <div style="background:#FFE014;color:#1F2229">accent<code>#FFE014</code></div>
+  </div>
+  <div class="lbl">Status</div>
+  <div class="wrap"><span class="bdg s-suc"><span class="ms">check_circle</span>Available</span><span class="bdg s-dan"><span class="ms">schedule</span>Overdue</span><span class="bdg s-war"><span class="ms">build</span>Maintenance</span><span class="bdg s-inf"><span class="ms">swap_horiz</span>In transfer</span><span class="bdg s-neu"><span class="ms">block</span>Inactive</span></div>
+  <div class="lbl">Components</div>
+  <div class="wrap"><span class="plate">D 41823</span><span class="plate"><i>DXB</i>A 7712</span><span class="chip on">Deira</span><span class="chip">Bur Dubai</span></div>
+  <div class="duo"><span class="btn">Start trip</span><span class="btn sec">Swap</span></div>
+  <div class="duo"><span class="btn ink">Scan another</span><span class="btn dis">Needs connection</span></div>
+  <div class="inp fo"><span class="ms">search</span><span class="ph-t">Search name or Driver ID</span></div>
+ </div>
+ <div class="panel" data-theme="light" data-found>
+  <div class="lbl">Type · Readex Pro / IBM Plex Sans / IBM Plex Mono</div>
+  <div class="spec"><span>timer</span><span class="timer" style="font-size:34px;width:auto;color:var(--text)">01:24:37</span></div>
+  <div class="spec"><span>display</span><span style="font:600 26px/1.2 'Readex Pro'">Good morning</span></div>
+  <div class="spec"><span>h1</span><span style="font:600 21px/1.2 'Readex Pro'">Active trip</span></div>
+  <div class="spec"><span>h2</span><span style="font:600 17px/1.3 'Readex Pro'">Needs attention</span></div>
+  <div class="spec"><span>title</span><span style="font-weight:600;font-size:16px">Karama Lot</span></div>
+  <div class="spec"><span>body</span><span style="font-size:15px">Point at the QR sticker on the vehicle.</span></div>
+  <div class="spec"><span>caption</span><span style="font-size:12px;color:var(--text3);font-weight:500">Started 08:12 · reminder sent</span></div>
+  <div class="spec"><span>data</span><span class="mono" style="font-size:14px;font-weight:500">DM2600042 · 100245</span></div>
+  <div class="lbl">Live strip: the one element you'll remember</div>
+  <div style="border-radius:12px;overflow:hidden"><div class="live"><span class="dot"></span><span class="plate">D 41823</span>On trip<span class="t">01:24:37</span></div><div class="live od"><span class="ms">warning</span><span class="plate">D 33017</span>Overdue<span class="t">05:12:40</span></div></div>
+ </div>
+</div>
+</section>
+
+<!-- ================= STAFF ================= -->
+<section class="blk" id="staff">
+<h2>Staff · the core loop</h2>
+<p>Built for one hand, a waiting driver, and glare. One canary action per screen. Scan first, type as a fallback.</p>
+<div class="board">
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ct" style="justify-content:center;gap:14px;padding:16px 20px 22px">
+  <div style="width:52px;height:52px;border-radius:14px;background:var(--accent);color:var(--onAccent);display:grid;place-items:center;font:600 18px 'Readex Pro'">DM</div>
+  <div><p class="h-dsp">Sign in</p><p class="sm" style="margin:4px 0 0">Use the ID and password your admin gave you.</p></div>
+  <div class="fld"><label>Staff or Admin ID</label><div class="inp fo"><span class="mono">DM2600042</span></div></div>
+  <div class="fld"><label>Password</label><div class="inp">••••••••••<span class="ms" style="margin-inline-start:auto">visibility_off</span></div></div>
+  <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="ms f" style="color:var(--text)">check_box</span>Remember me on this phone</div>
+  <span class="btn">Sign in</span>
+  <span class="btn txt">Forgot password?</span>
+ </div></div></div></div>
+ <figcaption><b>C-02</b>Login. No role toggle; the account decides the role (D-007). The ID field uses mono type.</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab"><h3>Good morning, Ravi</h3><span class="ib"><span class="ms">notifications</span><span class="bd">2</span></span><span class="av">RS</span></div>
+ <div class="ct">
+  <div class="card" style="flex-direction:row;align-items:center;gap:10px"><span class="ms" style="color:var(--text2)">badge</span><div style="flex:1"><div class="ttl">Not checked in</div><div class="sm">Shift starts 08:00</div></div><span class="btn sec sm">Check in</span></div>
+  <div class="card em" style="padding:16px;gap:10px"><p class="h2">Ready for the next vehicle</p><p class="sm" style="margin:0">Scan the QR sticker to start a trip.</p><span class="btn"><span class="ms">qr_code_scanner</span>Start trip</span></div>
+  <div class="card" style="flex-direction:row;align-items:center;gap:10px"><span class="bdg s-inf"><span class="ms">swap_horiz</span>1</span><div style="flex:1;min-width:0"><div class="ttl">Transfer waiting</div><div class="sm"><span class="plate" style="font-size:11px">D 77120</span> → Al Qusais</div></div><span class="ms dir">chevron_right</span></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="ttl">Karama Lot</span><span class="sm"><b class="mono" style="color:var(--text)">38</b> / 50 free</span></div><div class="capb"><i style="width:24%"></i></div></div>
+ </div>
+ <div class="nav"><span class="it on"><span class="pi"><span class="ms">home</span></span>Home</span><span class="it"><span class="pi"><span class="ms">route</span></span>Trips</span><span class="it"><span class="pi"><span class="ms">local_parking</span></span>Lots</span><span class="it"><span class="pi"><span class="ms">badge</span></span>Attendance</span></div>
+ </div></div></div>
+ <figcaption><b>S-01</b>Home, no trip. One canary action. The active tab sits on a canary pill.</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="live"><span class="dot"></span><span class="plate">D 41823</span>On trip<span class="t">01:24:37</span></div>
+ <div class="ab"><h3>Home</h3><span class="ib"><span class="ms">notifications</span></span><span class="av">RS</span></div>
+ <div class="ct">
+  <div class="card" style="padding:14px;gap:8px">
+   <span class="cap">Active trip · started 08:12</span>
+   <span class="timer">01:24:37</span>
+   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span class="plate lg">D 41823</span><span class="sm">Garbage truck</span></div>
+   <div class="sm">Omar F. · to Deira › Fish Market</div>
+   <span class="btn"><span class="ms">flag</span>End trip</span>
+   <div class="duo"><span class="btn sec">Swap</span><span class="btn sec">Cancel trip</span></div>
+  </div>
+  <div class="card" style="flex-direction:row;align-items:center;gap:10px;padding:10px 14px"><span class="ms" style="color:var(--sucF)">check_circle</span><div style="flex:1"><div class="ttl">Checked in 07:56</div><div class="sm">Next: start lunch</div></div><span class="ms dir">chevron_right</span></div>
+ </div>
+ <div class="nav"><span class="it on"><span class="pi"><span class="ms">home</span></span>Home</span><span class="it"><span class="pi"><span class="ms">route</span></span>Trips</span><span class="it"><span class="pi"><span class="ms">local_parking</span></span>Lots</span><span class="it"><span class="pi"><span class="ms">badge</span></span>Attendance</span></div>
+ </div></div></div>
+ <figcaption><b>S-01</b>Home, trip running. The live strip stays pinned on every staff screen (client requirement, UX-02).</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab in"><span class="ib"><span class="ms dir">arrow_back</span></span><h3>Start trip</h3><span class="cap">Step 2 of 5</span></div>
+ <div class="ct">
+  <div class="steps"><i class="d"></i><i class="c"></i><i></i><i></i><i></i></div>
+  <p class="h2" style="margin-top:4px">Is this the vehicle?</p>
+  <div class="card" style="padding:12px">
+   <div class="photo" style="height:118px"><span class="ms">local_shipping</span></div>
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="plate lg">D 41823</span><span class="bdg s-suc"><span class="ms">check_circle</span>Available</span></div>
+   <dl class="kv" style="margin:0"><dt>Type</dt><dd>Waste › Garbage truck</dd><dt>Make</dt><dd>Isuzu FVR · White</dd><dt>Parked at</dt><dd>Karama Lot</dd></dl>
+  </div>
+  <span class="btn txt">Not this one? Scan again</span>
+  <div class="bot"><span class="btn">Yes, choose driver<span class="ms dir">arrow_forward</span></span></div>
+ </div></div></div></div>
+ <figcaption><b>S-03</b>Vehicle check after the scan. Photo and plate badge make the wrong vehicle hard to miss.</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab in"><span class="ib"><span class="ms dir">arrow_back</span></span><h3>Start trip</h3><span class="cap">Step 3 of 5</span></div>
+ <div class="ct">
+  <div class="steps"><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i></div>
+  <p class="h2" style="margin-top:4px">Who's driving?</p>
+  <div class="inp fo"><span class="ms">search</span><span class="ph-t">Search name or Driver ID</span></div>
+  <div class="cap">Recent</div>
+  <div>
+   <div class="row"><span class="av">OF</span><div class="tx"><div class="ttl">Omar Farooq</div><div class="sm mono">100245</div></div><span class="radio on"></span></div>
+   <div class="row"><span class="av">SK</span><div class="tx"><div class="ttl">Sameer Khan</div><div class="sm mono">100311</div></div><span class="radio"></span></div>
+   <div class="row" style="opacity:.62"><span class="av">YA</span><div class="tx"><div class="ttl">Yousef Ali</div><div class="sm">On a trip since 07:40</div></div><span class="bdg s-neu"><span class="ms">block</span>Busy</span></div>
+  </div>
+  <div class="bot"><span class="btn">Next: destination<span class="ms dir">arrow_forward</span></span></div>
+ </div></div></div></div>
+ <figcaption><b>S-04</b>Driver picker. Recent drivers first. A busy driver can be seen but not picked (BR-02).</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab in"><span class="ib"><span class="ms dir">arrow_back</span></span><h3>Review trip</h3><span></span></div>
+ <div class="ct" style="gap:6px">
+  <div class="card" style="gap:0;padding:4px 14px">
+   <div class="row"><span class="ms" style="color:var(--text2)">local_parking</span><div class="tx"><div class="cap">From</div><div class="ttl">Karama Lot</div></div><span class="btn txt" style="width:auto">Edit</span></div>
+   <div class="row"><span class="ms" style="color:var(--text2)">local_shipping</span><div class="tx"><div class="cap">Vehicle</div><div class="ttl"><span class="plate">D 41823</span> Garbage truck</div></div><span class="btn txt" style="width:auto">Edit</span></div>
+   <div class="row"><span class="ms" style="color:var(--text2)">person</span><div class="tx"><div class="cap">Driver</div><div class="ttl">Omar Farooq <span class="sm mono">100245</span></div></div><span class="btn txt" style="width:auto">Edit</span></div>
+   <div class="row"><span class="ms" style="color:var(--text2)">location_on</span><div class="tx"><div class="cap">Destination</div><div class="ttl">Deira › Fish Market</div></div><span class="btn txt" style="width:auto">Edit</span></div>
+   <div class="row"><span class="ms" style="color:var(--text2)">draw</span><div class="tx"><div class="cap">Signature</div><svg width="120" height="26" viewBox="0 0 120 26" aria-label="Driver signature" role="img"><path d="M2 20c10-16 14-16 16-4s6 6 10-4 8-8 9 4 7 6 12-6 9-4 10 6 8 2 14-6 12 2 14 0 10 2 20-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div></div>
+  </div>
+  <p class="cap" style="margin:4px 2px">The start time is recorded by the server when you tap Start trip.</p>
+  <div class="bot"><span class="btn"><span class="ms">play_arrow</span>Start trip</span></div>
+ </div></div></div></div>
+ <figcaption><b>S-07</b>Review before start. Every line can be edited, and the server sets the time.</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="live od"><span class="ms">warning</span><span class="plate">D 41823</span>Overdue<span class="t">05:02:10</span></div>
+ <div class="ab in"><span class="ib"><span class="ms dir">arrow_back</span></span><h3>Active trip</h3><span class="ib"><span class="ms">more_vert</span></span></div>
+ <div class="ct">
+  <div style="text-align:center"><span class="timer" style="color:var(--danF)">05:02:10</span><div class="sm" style="margin-top:6px"><span class="bdg s-dan"><span class="ms">schedule</span>Overdue</span> · reminders sent 12:42, 13:12</div></div>
+  <div class="card" style="gap:6px"><div style="display:flex;align-items:center;gap:8px"><span class="plate">D 41823</span><span class="sm">Garbage truck</span></div><div class="sm">Karama Lot → Deira › Fish Market</div></div>
+  <div class="cap">Segments</div>
+  <div class="tl">
+   <div class="e"><span class="d"></span><div><div class="ttl">08:12 Started</div><div class="sm">Yousef Ali · <span class="mono">D 41823</span></div></div></div>
+   <div class="e"><span class="d c"></span><div><div class="ttl">10:30 Driver swapped</div><div class="sm">Omar Farooq · shift change</div></div></div>
+  </div>
+  <div class="bot"><span class="btn"><span class="ms">flag</span>End trip</span><div class="duo"><span class="btn sec">Swap</span><span class="btn sec">Cancel trip</span></div></div>
+ </div></div></div></div>
+ <figcaption><b>S-09</b>Overdue trip. The strip turns solid red with an icon and the word "Overdue", so colour isn't the only signal. Each swap starts a new segment (D-012).</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="live"><span class="dot"></span><span class="plate">D 41823</span>On trip<span class="t">02:10:05</span></div>
+ <div class="ab in"><span class="ib"><span class="ms dir">arrow_back</span></span><h3>End trip</h3><span class="cap">Step 2 of 2</span></div>
+ <div class="ct">
+  <div class="bdg s-suc" style="align-self:flex-start;font-size:12px;padding:5px 9px"><span class="ms">verified</span>Vehicle matched · D 41823</div>
+  <p class="h2">Where is the vehicle now?</p>
+  <div class="card" style="gap:0;padding:2px 14px">
+   <div class="row"><span class="radio on"></span><div class="tx"><div class="ttl">Karama Lot</div><div class="sm">Started here · 12 truck spaces free</div></div></div>
+   <div class="row"><span class="radio"></span><div class="tx"><div class="ttl">Al Qusais Lot</div><div class="sm"><span class="bdg s-war"><span class="ms">warning</span>Full for trucks</span> You can still return here</div></div></div>
+   <div class="row"><span class="radio"></span><div class="tx"><div class="ttl">Jebel Ali Lot</div><div class="sm">4 truck spaces free</div></div></div>
+  </div>
+  <div class="bot"><span class="btn">Continue</span></div>
+ </div></div></div></div>
+ <figcaption><b>S-11</b>Return lot. The starting lot is pre-selected. A full lot shows a warning but isn't blocked (BR-09).</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="live"><span class="dot"></span><span class="plate">D 41823</span>On trip<span class="t">02:10:09</span></div>
+ <div class="ab in"><span class="ib"><span class="ms dir">arrow_back</span></span><h3>End trip</h3></div>
+ <div class="ct"><div class="card sk" style="height:60px"></div><div class="card sk" style="height:160px"></div></div>
+ <div class="scrim"><div class="sheet"><span class="grab"></span>
+  <p class="h2" style="font-size:18px">End this trip?</p>
+  <p style="margin:0"><span class="plate">D 41823</span> goes back to <b>Karama Lot</b>.</p>
+  <p class="sm" style="margin:0">Time out so far <b class="mono" style="color:var(--text)">02:10:09</b>. The end time is recorded when you confirm.</p>
+  <span class="btn"><span class="ms">flag</span>End trip</span><span class="btn txt">Not now</span>
+ </div></div>
+ </div></div></div>
+ <figcaption><b>S-12</b>Confirm sheet. It says exactly what will happen before you commit (UX-05).</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab in"><h3>Trip ended</h3><span class="ib"><span class="ms">close</span></span></div>
+ <div class="ct">
+  <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;padding:2px 0 4px"><span class="ms f" style="font-size:34px;color:var(--sucF)">check_circle</span><span class="timer">02:10:12</span><span class="sm">Total time outside the lot</span></div>
+  <div class="card" style="padding:12px 14px"><dl class="kv" style="margin:0">
+   <dt>Vehicle</dt><dd><span class="plate">D 41823</span></dd><dt>Category</dt><dd>Waste › Garbage truck</dd><dt>Brand · model</dt><dd>Isuzu FVR</dd><dt>From</dt><dd>Karama Lot</dd><dt>Returned to</dt><dd>Karama Lot</dd><dt>Start</dt><dd class="mono">22 Nov · 08:12</dd><dt>End</dt><dd class="mono">22 Nov · 10:22</dd><dt>Driver</dt><dd>Omar Farooq</dd><dt>Staff</dt><dd>Ravi S. <span class="mono sm">DM2600042</span></dd></dl></div>
+  <div class="bot"><span class="btn">Done</span></div>
+ </div></div></div></div>
+ <figcaption><b>S-13</b>Summary with every field the client asked for (TRP-10).</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab"><h3>Attendance</h3><span class="btn txt" style="width:auto;font-size:13px">November</span></div>
+ <div class="ct">
+  <div class="card" style="flex-direction:row;align-items:center;gap:10px"><span class="ms" style="color:var(--text2)">restaurant</span><div style="flex:1"><div class="ttl">On lunch since 13:02</div><div class="sm">Saturday 22 Nov · shift 08:00</div></div></div>
+  <div class="card" style="gap:0;padding:4px 14px">
+   <div class="att"><span class="ms" style="color:var(--sucF)">login</span><div style="flex:1"><div class="ttl">Checked in</div><div class="sm">Photo · location ±12 m</div></div><span class="mono">07:56</span></div>
+   <div class="att"><span class="ms" style="color:var(--text2)">coffee</span><div style="flex:1"><div class="ttl">Tea break</div></div><span class="mono">10:30–10:45</span></div>
+   <div class="att"><span class="ms" style="color:var(--text)">restaurant</span><div style="flex:1"><div class="ttl">Lunch</div><div class="sm">In progress</div></div><span class="mono">13:02–</span></div>
+   <div class="att" style="opacity:.6"><span class="ms">logout</span><div style="flex:1"><div class="ttl">Check out</div></div><span class="mono">—</span></div>
+  </div>
+  <div class="duo" style="grid-template-columns:repeat(3,1fr)"><div class="stat"><span class="cap">Present</span><b>17</b></div><div class="stat"><span class="cap">Late</span><b>2</b></div><div class="stat"><span class="cap">Absent</span><b>1</b></div></div>
+  <div class="bot"><span class="btn"><span class="ms">photo_camera</span>End lunch</span></div>
+ </div>
+ <div class="nav"><span class="it"><span class="pi"><span class="ms">home</span></span>Home</span><span class="it"><span class="pi"><span class="ms">route</span></span>Trips</span><span class="it"><span class="pi"><span class="ms">local_parking</span></span>Lots</span><span class="it on"><span class="pi"><span class="ms">badge</span></span>Attendance</span></div>
+ </div></div></div>
+ <figcaption><b>S-19</b>Attendance. One next action (photo + GPS), today's log, and the month's counts.</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab"><h3>Lots</h3><div class="chips"><span class="chip on">List</span><span class="chip">Map</span></div></div>
+ <div class="ct">
+  <div class="inp"><span class="ms">search</span><span class="ph-t">Search lots</span></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="ttl">Karama Lot</span><span class="sm"><b class="mono" style="color:var(--text)">38</b> / 50 free</span></div><div class="capb"><i style="width:24%"></i></div><div class="sm">Truck 12 · Car 20 · Ambulance 6</div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span class="ttl">Al Qusais Lot</span><span class="bdg s-war"><span class="ms">warning</span>Trucks full</span></div><div class="capb"><i class="w" style="width:92%"></i></div><div class="sm">Truck 0 · Car 4 · Ambulance 1</div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="ttl">Jebel Ali Lot</span><span class="sm"><b class="mono" style="color:var(--text)">21</b> / 30 free</span></div><div class="capb"><i style="width:30%"></i></div><div class="sm">Underground · 06:00–22:00</div></div>
+ </div>
+ <div class="nav"><span class="it"><span class="pi"><span class="ms">home</span></span>Home</span><span class="it"><span class="pi"><span class="ms">route</span></span>Trips</span><span class="it on"><span class="pi"><span class="ms">local_parking</span></span>Lots</span><span class="it"><span class="pi"><span class="ms">badge</span></span>Attendance</span></div>
+ </div></div></div>
+ <figcaption><b>S-18</b>Lots. Free spaces by type. A full type gets an orange warning (orange, never canary).</figcaption></figure>
+</div>
+</section>
+
+<!-- ================= ADMIN ================= -->
+<section class="blk" id="admin">
+<h2>Admin · manage by exception</h2>
+<p>The dashboard leads with what needs attention, and the numbers stay neutral. The Live tab updates in real time, with overdue trips at the top.</p>
+<div class="board">
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab"><h3>Dashboard</h3><span class="ib"><span class="ms">qr_code_scanner</span></span><span class="ib"><span class="ms">notifications</span><span class="bd">3</span></span><span class="av">FA</span></div>
+ <div class="ct">
+  <p class="h2">Needs attention</p>
+  <div class="card" style="gap:0;padding:2px 14px">
+   <div class="row cmp"><span class="cnt s-dan">3</span><div class="tx ttl">Overdue trips</div><span class="ms dir">chevron_right</span></div>
+   <div class="row cmp"><span class="cnt s-neu">2</span><div class="tx ttl">Vehicles not at a lot</div><span class="ms dir">chevron_right</span></div>
+   <div class="row cmp"><span class="cnt s-war">1</span><div class="tx ttl">Over capacity · Al Qusais</div><span class="ms dir">chevron_right</span></div>
+   <div class="row cmp"><span class="cnt s-inf">2</span><div class="tx ttl">Transfers waiting</div><span class="ms dir">chevron_right</span></div>
+  </div>
+  <div class="card" style="flex-direction:row;justify-content:space-between;padding:12px 14px"><div class="stat"><span class="cap">On trip</span><b>24</b></div><div class="stat"><span class="cap">Available</span><b>131</b></div><div class="stat"><span class="cap">Unavailable</span><b>9</b></div></div>
+  <div class="card" style="gap:6px"><div style="display:flex;justify-content:space-between"><span class="cap">Lot use</span><span class="cap">Today 86 trips · 412 h</span></div>
+   <div style="display:flex;align-items:center;gap:8px"><span class="sm" style="width:62px">Karama</span><div class="capb" style="flex:1"><i style="width:76%"></i></div><span class="mono sm">76%</span></div>
+   <div style="display:flex;align-items:center;gap:8px"><span class="sm" style="width:62px">Al Qusais</span><div class="capb" style="flex:1"><i class="w" style="width:100%"></i></div><span class="mono sm">104%</span></div></div>
+ </div>
+ <div class="nav"><span class="it on"><span class="pi"><span class="ms">space_dashboard</span></span>Dashboard</span><span class="it"><span class="pi"><span class="ms">sensors</span></span>Live</span><span class="it"><span class="pi"><span class="ms">tune</span></span>Manage</span><span class="it"><span class="pi"><span class="ms">bar_chart</span></span>Reports</span></div>
+ </div></div></div>
+ <figcaption><b>A-01</b>Dashboard. Counts sit in small status-tinted tags, not coloured tiles (UX-10). Scan button in the top bar.</figcaption></figure>
+
+<figure><div class="pair"><div class="ph" data-theme="light"><div class="scr">
+ <div class="sb"><span>9:41</span><span><span class="ms">signal_cellular_alt</span> <span class="ms">wifi</span> <span class="ms">battery_full</span></span></div>
+ <div class="ab"><h3>Live</h3><span class="bdg s-suc"><span class="ms">sensors</span>Live</span><span class="ib"><span class="ms">filter_list</span></span></div>
+ <div class="ct">
+  <div class="chips"><span class="chip on">Trips · 24</span><span class="chip">Transfers · 2</span></div>
+  <div class="card" style="gap:0;padding:2px 14px">
+   <div class="row"><div class="tx"><div style="display:flex;align-items:center;gap:6px"><span class="plate">D 33017</span><span class="bdg s-dan"><span class="ms">schedule</span>Overdue</span></div><div class="sm" style="margin-top:3px">Ravi S. · Karama → Deira</div></div><span class="mono" style="color:var(--danF);font-weight:600">05:12:40</span></div>
+   <div class="row"><div class="tx"><div style="display:flex;align-items:center;gap:6px"><span class="plate">D 41823</span><span class="bdg s-dan"><span class="ms">schedule</span>Overdue</span></div><div class="sm" style="margin-top:3px">Imran T. · Al Qusais → Jumeirah</div></div><span class="mono" style="color:var(--danF);font-weight:600">04:31:02</span></div>
+   <div class="row"><div class="tx"><span class="plate">D 52210</span><div class="sm" style="margin-top:3px">Ravi S. · Karama → Al Ras</div></div><span class="mono">01:02:40</span></div>
+   <div class="row"><div class="tx"><span class="plate">D 61004</span><div class="sm" style="margin-top:3px">Aisha M. · Jebel Ali → Marina</div></div><span class="mono">00:18:22</span></div>
+   <div class="row"><div class="tx"><span class="plate">D 70031</span><div class="sm" style="margin-top:3px">Omar R. · Karama → Gold Souk</div></div><span class="mono">00:04:51</span></div>
+  </div>
+ </div>
+ <div class="nav"><span class="it"><span class="pi"><span class="ms">space_dashboard</span></span>Dashboard</span><span class="it on"><span class="pi"><span class="ms">sensors</span></span>Live</span><span class="it"><span class="pi"><span class="ms">tune</span></span>Manage</span><span class="it"><span class="pi"><span class="ms">bar_chart</span></span>Reports</span></div>
+ </div></div></div>
+ <figcaption><b>A-02</b>Live trips. Overdue first. Elapsed times tick in mono so the columns stay aligned.</figcaption></figure>
+</div>
+</section>
+</main>
+
+<script>
+(function(){
+  // Duplicate every light phone as a dark twin so each screen is written once.
+  document.querySelectorAll('.pair').forEach(function(p){
+    var light=p.querySelector('.ph[data-theme=light]');
+    if(!light) return;
+    var dark=light.cloneNode(true); dark.setAttribute('data-theme','dark'); p.appendChild(dark);
+  });
+  var body=document.body, btns=document.querySelectorAll('.seg button');
+  function setView(v){
+    body.dataset.view=v;
+    btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===v));});
+    document.documentElement.setAttribute('data-theme', v==='dark'?'dark':'light');
+    try{localStorage.setItem('fs-view',v);}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){setView(b.dataset.v);});});
+  var saved=null; try{saved=localStorage.getItem('fs-view');}catch(e){}
+  setView(saved||'both');
+  var r=document.getElementById('rtl');
+  r.addEventListener('click',function(){
+    var on=document.documentElement.dir!=='rtl';
+    document.documentElement.dir=on?'rtl':'ltr';
+    r.setAttribute('aria-pressed',String(on)); r.textContent=on?'Back to LTR':'RTL preview';
+  });
+})();
+</script>
+</body>
+</html>
