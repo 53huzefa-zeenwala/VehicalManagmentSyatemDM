@@ -78,6 +78,21 @@ public sealed class AuthTests(ApiFactory factory)
     }
 
     [Fact]
+    public async Task Password_is_stored_as_typed_and_compared_case_sensitively()
+    {
+        var staff = await factory.CreateUserAsync(UserRole.Staff, password: "Plain-Pass-123");
+        var client = factory.CreateApiClient();
+
+        var stored = await factory.WithDbAsync((db, _) => db.Users.Where(u => u.Id == staff.Id).Select(u => u.Password).SingleAsync());
+        var wrongCase = await client.LoginAsync(staff.LoginId, "plain-pass-123");
+        var right = await client.LoginAsync(staff.LoginId, "Plain-Pass-123");
+
+        Assert.Equal("Plain-Pass-123", stored); // D-051
+        await ApiAssert.ErrorAsync(wrongCase, HttpStatusCode.Unauthorized, ErrorCodes.InvalidCredentials);
+        Assert.Equal(HttpStatusCode.OK, right.StatusCode);
+    }
+
+    [Fact]
     public async Task Fifth_failed_attempt_locks_the_account_even_for_the_right_password()
     {
         var staff = await factory.CreateUserAsync(UserRole.Staff);

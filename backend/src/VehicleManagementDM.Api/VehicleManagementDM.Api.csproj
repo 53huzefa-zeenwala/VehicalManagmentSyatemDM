@@ -22,6 +22,8 @@
   <ItemGroup>
     <!-- Development settings (exception details, Swagger) never reach the server. -->
     <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
+    <!-- Server settings live only on the server (DEPLOYMENT.md §3.3); a local copy must never overwrite them. -->
+    <Content Update="appsettings.Production.json" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
 </Project>

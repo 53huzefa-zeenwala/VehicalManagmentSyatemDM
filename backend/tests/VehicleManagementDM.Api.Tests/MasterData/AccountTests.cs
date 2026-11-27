@@ -74,7 +74,7 @@ public sealed class AccountTests(ApiFactory factory)
     }
 
     [Fact]
-    public async Task Password_reset_ends_sessions_and_is_audited_without_the_hash()
+    public async Task Password_reset_ends_sessions_and_is_audited_without_the_password()
     {
         var admin = await factory.AdminClientAsync();
         var staff = await admin.CreateStaffAsync();

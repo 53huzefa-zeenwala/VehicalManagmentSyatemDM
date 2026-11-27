@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Errors;
@@ -19,7 +18,6 @@ namespace VehicleManagementDM.Api.Features.Accounts;
 public sealed class AccountService(
     AppDbContext db,
     LoginIdGenerator loginIdGenerator,
-    IPasswordHasher<User> passwordHasher,
     FileStore fileStore)
 {
     private static readonly Expression<Func<User, StaffResponse>> ToStaff = u => new StaffResponse(
@@ -128,7 +126,7 @@ public sealed class AccountService(
     public async Task ResetPasswordAsync(int id, UserRole role, string newPassword, CancellationToken cancellationToken)
     {
         var user = await FindAsync(id, role, cancellationToken);
-        user.PasswordHash = passwordHasher.HashPassword(user, newPassword);
+        user.Password = newPassword;
         user.SecurityStamp = User.NewSecurityStamp();
         user.FailedLoginCount = 0;
         user.LockoutEndUtc = null;
@@ -163,7 +161,7 @@ public sealed class AccountService(
     {
         await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
         user.LoginId = await loginIdGenerator.NextAsync(user.Role, cancellationToken);
-        user.PasswordHash = passwordHasher.HashPassword(user, password);
+        user.Password = password;
         db.Users.Add(user);
         await db.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using VehicleManagementDM.Api.Common.Errors;
 using VehicleManagementDM.Api.Domain.Entities;
@@ -44,7 +43,6 @@ public static class AuthServiceCollectionExtensions
 
         AddDataProtection(services);
 
-        services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<LoginIdGenerator>();
 
         services.AddRateLimiter(options =>

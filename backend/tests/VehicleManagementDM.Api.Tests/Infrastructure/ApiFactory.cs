@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -47,6 +46,7 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
             ["DataProtection:KeysPath"] = Path.Combine(TempRoot, "keys"),
             ["Auth:LoginAttemptsPerMinute"] = "10000",
             ["Swagger:Enabled"] = "false",
+            ["Database:StartupWaitSeconds"] = "1",
             ["Seed:FirstAdmin:FullName"] = "Test Admin",
             ["Seed:FirstAdmin:Mobile"] = "+971500000001",
             ["Seed:FirstAdmin:Password"] = AdminPassword,
@@ -130,8 +130,8 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
                 Mobile = "+971500000002",
                 LicenceNumber = role == UserRole.Staff ? "LIC-TEST" : null,
                 IsActive = isActive,
+                Password = password,
             };
-            user.PasswordHash = services.GetRequiredService<IPasswordHasher<User>>().HashPassword(user, password);
             db.Users.Add(user);
             await db.SaveChangesAsync();
             return user;

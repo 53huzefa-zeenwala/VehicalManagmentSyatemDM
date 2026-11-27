@@ -14,13 +14,13 @@ namespace VehicleManagementDM.Api.Data.Interceptors;
 /// Records every change an admin makes to an <see cref="IAuditable"/> entity (AUD-01): who, when,
 /// what, and the changed fields before and after. Audit rows are saved in the same transaction as
 /// the change (a transaction is opened when the caller has none), so a change is never saved
-/// without its audit entry. Secrets (password hashes, security stamps) are never written.
+/// without its audit entry. Secrets (passwords, security stamps) are never written.
 /// </summary>
 public sealed class AuditInterceptor(IHttpContextAccessor httpContextAccessor, TimeProvider timeProvider) : SaveChangesInterceptor
 {
     private static readonly HashSet<string> HiddenProperties =
     [
-        nameof(User.PasswordHash), nameof(User.SecurityStamp), nameof(User.RowVersion), nameof(User.FailedLoginCount),
+        nameof(User.Password), nameof(User.SecurityStamp), nameof(User.RowVersion), nameof(User.FailedLoginCount),
         nameof(User.LockoutEndUtc), nameof(IHasTimestamps.CreatedAtUtc), nameof(IHasTimestamps.UpdatedAtUtc),
     ];
 
@@ -185,7 +185,7 @@ public sealed class AuditInterceptor(IHttpContextAccessor httpContextAccessor, T
         {
             action = "Update";
         }
-        else if (changed.Contains(nameof(User.PasswordHash)))
+        else if (changed.Contains(nameof(User.Password)))
         {
             action = KeyOf(entry) == adminId ? "PasswordChange" : "PasswordReset";
         }

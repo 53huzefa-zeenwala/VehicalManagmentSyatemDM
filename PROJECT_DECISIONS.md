@@ -59,6 +59,8 @@ Permanent record of every important decision. Never delete entries: replaced dec
 | D-048 | 2026-11-27 | Business logic | Details settled while building M4–M6 (transfer rules, notification audiences, dashboard and report definitions, deployment layout) | Approved |
 | D-049 | 2026-11-27 | Architecture | API controllers live in one `Controllers/` folder; business logic stays in `Features/<Area>` | Approved |
 | D-050 | 2026-11-27 | Deployment | API hosted in IIS on the app server, port 8445 (HTTPS), ASP.NET Core 8.0.18 runtime; first admin created by the owner | Approved |
+| D-051 | 2026-11-27 | Security | Passwords stored as plain text (replaces PBKDF2 hashing); risk accepted by the owner | Approved |
+| D-052 | 2026-11-27 | Deployment | Production connects with the `sa` login; server settings in `appsettings.Production.json` kept only on the server; risk accepted by the owner | Approved |
 
 ---
 
@@ -889,3 +891,32 @@ Permanent record of every important decision. Never delete entries: replaced dec
 - **Reasoning:** Owner's answers; matches D-028 (nothing new installed on the server).
 - **Status:** Approved (owner answers)
 - **Impact:** Resolves OI-13. `DEPLOYMENT.md` §1, §3.3, §7. The Flutter app's base URL is the server address on port 8445 (kept out of the public repo).
+
+## D-051 — Passwords stored as plain text
+
+- **Date:** 2026-11-27
+- **Category:** Security
+- **Decision:**
+  - `Users.PasswordHash` (PBKDF2 via `PasswordHasher<T>`) is replaced by `Users.Password`, nvarchar(128), plain text.
+  - Sign-in and password change compare in code (`Passwords.Matches`: constant-time, case-sensitive), never in SQL, because the database collation is case-insensitive.
+  - Passwords are still never returned by the API, logged or written to the audit log. Lockout, rate limiting and session rules (D-031) are unchanged.
+  - Migration `PlainTextPasswords` drops the old hashes: existing accounts get an empty password that never matches and must have their password set again (SQL or reset-password).
+  - The first admin can be created with a SQL script (DEPLOYMENT.md §3.4).
+- **Reasoning:** Owner's choice, so admins can be created and passwords set directly with SQL.
+- **Risk (explained to and accepted by the owner):** anyone who can read the database, a backup or an exported copy sees every staff and admin password, and people often reuse passwords for other accounts. Mitigations: SQL access only for trusted people, the app's own SQL login (OI-12), protected backup files.
+- **Alternatives considered:** keep hashing and provide a SQL script with a pre-computed hash; first admin via the seed variables (still available).
+- **Status:** Approved (owner, after the risk was explained)
+- **Impact:** Replaces "Passwords stored with a modern adaptive hash" (REQUIREMENTS.md §8) and ARCHITECTURE.md §4 "Passwords". DATABASE_DESIGN.md Users table; DEPLOYMENT.md §3.4.
+
+## D-052 — Production database login and settings file
+
+- **Date:** 2026-11-27
+- **Category:** Deployment, Security
+- **Decision:**
+  - The API connects to `VehicleManagementDM` on the app server's SQL Server with the **`sa`** login (`Server=localhost,1433`). The API creates the database and tables on first start (D-030).
+  - Server settings (connection string, data folders) live in `appsettings.Production.json` in the site folder. It is git-ignored and never published (`CopyToPublishDirectory="Never"`), so deploys don't overwrite it. The owner fills in the `sa` password before deploy.
+- **Reasoning:** Owner's choice.
+- **Risk (explained to and accepted by the owner):** the `sa` password sits in plain text in the settings file; anyone who reads it controls every database on that SQL Server (including the Sufizz Bikes one) and can run commands on the server. Port 1433 is reachable from the internet. With plain-text passwords (D-051), `sa` also exposes every user's password. Mitigations: long random `sa` password, port 1433 limited to known IPs, read access to the site folder limited.
+- **Alternatives considered:** a dedicated `vms_app` login with rights on this database only (DEPLOYMENT.md §3.2), still possible later by changing the connection string.
+- **Status:** Approved (owner, after the risk was explained). Resolves OI-12.
+- **Impact:** DEPLOYMENT.md §3.2, §3.3, §7; `.gitignore`; API project file.

@@ -17,3 +17,5 @@ obj/
 TestResults/
 # Runtime data written by the API in development (logs, uploaded files, keys)
 backend/src/VehicleManagementDM.Api/App_Data/
+# Server settings with secrets: kept only on the server (DEPLOYMENT.md §3.3)
+backend/src/VehicleManagementDM.Api/appsettings.Production.json

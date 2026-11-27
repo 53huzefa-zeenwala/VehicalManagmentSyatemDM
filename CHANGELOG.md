@@ -2,6 +2,20 @@
 
 Notable changes to the code. Dates are GST. Documentation-only changes are tracked in `PROJECT_DECISIONS.md` and `docs/KNOWLEDGE_BASE.md`.
 
+## 2026-11-27 — Cold-start wait
+
+- During startup, API requests now wait up to 15 s (`Database:StartupWaitSeconds`) for the database check before answering `503 DATABASE_NOT_READY`. Found on the server: the first request after IIS restarted the app got 503. DEPLOYMENT.md §3.3 now also lists *Idle Time-out = 0* and *Preload Enabled*. 107 tests pass.
+
+## 2026-11-27 — Server settings file (D-052)
+
+- Server settings go in `appsettings.Production.json` in the site folder; the file is git-ignored and excluded from publish, so deploys never overwrite it. Production connects with `sa` (owner choice, risk accepted). DEPLOYMENT.md §3.3 has the template.
+
+## 2026-11-27 — Plain-text passwords (D-051)
+
+- `Users.PasswordHash` replaced by `Users.Password` (plain text, nvarchar(128)); migration `PlainTextPasswords`. Existing accounts must have their password set again.
+- Passwords compared in code, constant-time and case-sensitive. Still never returned, logged or audited.
+- DEPLOYMENT.md §3.4: SQL script to create the first admin and to set a password. 106 tests pass.
+
 ## 2026-11-27 — Controllers in one folder (D-049)
 
 - API controllers moved to `Controllers/` (one per file, `AdminsController` now separate). Business logic stays in `Features/<Area>`. No route or behaviour change; 105 tests pass.

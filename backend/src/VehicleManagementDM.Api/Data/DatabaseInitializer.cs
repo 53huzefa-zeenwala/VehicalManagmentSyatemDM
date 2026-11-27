@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Database;
@@ -110,8 +109,8 @@ public sealed class DatabaseInitializer(
             LoginId = await services.GetRequiredService<LoginIdGenerator>().NextAsync(UserRole.Admin, cancellationToken),
             FullName = fullName.Trim(),
             Mobile = mobile.Trim(),
+            Password = password,
         };
-        admin.PasswordHash = services.GetRequiredService<IPasswordHasher<User>>().HashPassword(admin, password);
 
         db.Users.Add(admin);
         await db.SaveChangesAsync(cancellationToken);

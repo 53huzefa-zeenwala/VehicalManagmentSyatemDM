@@ -60,7 +60,7 @@ erDiagram
 | Email | nvarchar(256) | ✓ | Optional (P-01) |
 | LicenceNumber | nvarchar(50) | ✓ | Driving licence. Required for staff, null for admins (D-020) |
 | PhotoFileName | varchar(40) | ✓ | API-generated name only (D-034) |
-| PasswordHash | varchar(200) | | `PasswordHasher<T>` (PBKDF2) |
+| Password | nvarchar(128) | | Plain text, by owner decision (D-051). Compared in code, case-sensitive. Was `PasswordHash` (PBKDF2) until migration `PlainTextPasswords` |
 | SecurityStamp | char(32) | | Rotated on deactivate, password reset or change; every session checks it (AUTH-07) |
 | FailedLoginCount | int | | Reset on success |
 | LockoutEndUtc | datetime2(3) | ✓ | 5 failures → now + 15 min (AUTH-08) |
@@ -242,7 +242,7 @@ Index `(UserId, ReadAtUtc, CreatedAtUtc)`.
 | Action | varchar(40) | `Create`, `Update`, `Delete` (join rows, e.g. a removed per-type lot capacity), `Deactivate`, `Reactivate`, `StatusChange`, `LocationResolve`, `PasswordReset` (another account), `PasswordChange` (own); transfers add their own actions in M4 |
 | EntityType | varchar(40) | e.g. `Vehicle` |
 | EntityId | int | |
-| BeforeJson, AfterJson | nvarchar(max), null | Changed fields only. Password hashes and security stamps are never written |
+| BeforeJson, AfterJson | nvarchar(max), null | Changed fields only. Passwords and security stamps are never written |
 
 Written by an EF `SaveChanges` interceptor for admin changes. Indexes on `(AtUtc)`, `(UserId)`, `(EntityType, EntityId)`. Kept forever (small).
 

@@ -35,6 +35,7 @@
 | `README.md` | GitHub landing page: what the project is, where to start, how to re-render. |
 | `docs/design/DESIGN_SYSTEM.md` | Design system v1.0 "Emerald Ops" (D-017). |
 | `prototype/ui-mock/` | Dummy app (HTML/CSS) whose screens are rendered for review. `styles.css` holds the design tokens. |
+| `tools/seed-test-data.ps1` | Creates TEST master data (categories, lots, destinations, vehicles, staff) through the API as an admin; safe to re-run. |
 | `tools/render_mockups.py` | Renders the dummy app to PNG (3×) and builds the PDF. Flags: `--check-only`, `--deck-only`. |
 | `docs/design/mockups/` | Rendered PNGs (light, dark, alt) + `UI_Mockups_v1.pdf`. The review deliverable (D-018). |
 | `docs/design/ui-preview.html` | v0.1 "Fleet Signage" preview. Rejected (D-015); kept for history. |

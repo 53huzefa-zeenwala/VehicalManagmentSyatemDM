@@ -329,7 +329,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 | Performance | API p95 < 500 ms for standard requests. Scan to vehicle details < 2 s. App cold start < 3 s on a mid-range phone |
 | Real-time | ~~The admin's active-trip list and dashboard update within 5 s of a change~~ Superseded by D-035: no auto-updates; data loads on screen open and manual pull to refresh. Trip timers tick on the phone |
 | Availability | 99.5% monthly uptime for the API |
-| Security | HTTPS (TLS 1.2+) with a self-signed certificate that the app accepts without verification (D-036, risk accepted). Passwords stored with a modern adaptive hash. **Cookie-based sessions** (HttpOnly, Secure, encrypted; ended immediately on deactivation or password reset) *(replaces "short-lived access tokens with refresh tokens", D-031)*. Permissions checked on the server for every request. Login lockout (AUTH-08). The session cookie is kept in the platform's secure storage. Audit log (AUD-01). Follows the OWASP mobile security standard (MASVS) |
+| Security | HTTPS (TLS 1.2+) with a self-signed certificate that the app accepts without verification (D-036, risk accepted). ~~Passwords stored with a modern adaptive hash.~~ Passwords stored as plain text, by owner decision (D-051, risk accepted). **Cookie-based sessions** (HttpOnly, Secure, encrypted; ended immediately on deactivation or password reset) *(replaces "short-lived access tokens with refresh tokens", D-031)*. Permissions checked on the server for every request. Login lockout (AUTH-08). The session cookie is kept in the platform's secure storage. Audit log (AUD-01). Follows the OWASP mobile security standard (MASVS) |
 | Privacy | Staff and vehicle photos, signatures, phone numbers and licence numbers are personal data (attendance photos and GPS removed, D-023). Only admins see other people's data. Privacy policy text and retention periods come from the client (OI-02) |
 | Accessibility | WCAG 2.2 AA contrast. Supports the system text size. Touch targets ≥ 48 dp. Screen-reader labels |
 | Localization | English. Every string is kept outside the code. Right-to-left-ready layouts (direction-aware spacing, mirrored directional icons) `[D-012]` |
@@ -407,6 +407,6 @@ All targets here are `[P-19]` unless tagged otherwise.
 | OI-09 | .NET 8 is past end of support; revisit D-008 | Before Phase 7 |
 | OI-10 | ~~How does a trip close if its staff member can't act?~~ Closed by D-024: it stays open; risk accepted | — |
 | OI-11 | iOS builds and signing: a Mac or a cloud macOS build service (development is on Windows, D-025) | Phase 8 |
-| OI-12 | A new database (D-029); still open: its own least-privilege login on the server's SQL Server (2019 Express) | Phase 7 |
+| OI-12 | **Resolved 2026-11-27 (D-052):** new database `VehicleManagementDM` (D-029), connected with the `sa` login by owner choice (risk accepted) | Phase 7 |
 | OI-14 | ~~HTTPS with a domain name and a real certificate~~ Closed by D-036: self-signed certificate, accepted by the app (risk accepted) | — |
 | OI-13 | ~~Server's exact ASP.NET Core 8 runtime patch and hosting model~~ **Resolved 2026-11-27 (D-050):** IIS, ASP.NET Core 8.0.18, port 8445 | Before first deploy |

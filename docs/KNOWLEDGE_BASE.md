@@ -1,6 +1,6 @@
 # Project Knowledge Base
 
-**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-050. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
+**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-052. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
 
 **Reading order for a new session:**
 1. This file
@@ -211,6 +211,8 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | D-048 | M4–M6 details: transfer rules, notification audiences (all staff / all admins), dashboard and report definitions, deployment layout | Approved |
 | D-049 | API controllers in one `Controllers/` folder; logic stays in `Features/<Area>` | Approved |
 | D-050 | Hosting: IIS on the app server, ASP.NET Core 8.0.18, port 8445; first admin created by the owner | Approved |
+| D-051 | **Passwords stored as plain text** (replaces hashing); compared in code, case-sensitive; risk accepted by the owner | Approved |
+| D-052 | Production connects with `sa` (owner choice, risk accepted); settings in `appsettings.Production.json` on the server only | Approved |
 
 ## 8. Phase status
 
@@ -239,7 +241,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | OI-09 | .NET 8 is past end of support (10 Nov 2026); revisit | Before Phase 7 |
 | OI-10 | ~~Who closes a trip if its staff member can't~~ Closed by D-024 (stays open) | — |
 | OI-11 | iOS builds and signing: a Mac or a cloud macOS build service | Phase 8 |
-| OI-12 | **Database for this app.** Reachable via the app server's SQL Server (2019 Express). New database decided (D-029). Still to set up: its own least-privilege login (not the `sysadmin` one). Express limits: 10 GB per database, ~1.4 GB buffer memory, 4 cores. SQL Server port open to the internet with a `sysadmin` login is a security risk | Phase 7, now |
+| OI-12 | **Resolved 2026-11-27 (D-052):** database `VehicleManagementDM` on the app server's SQL Server 2019 Express, connected with `sa` by owner choice (risk accepted). Express limits: 10 GB per database, ~1.4 GB buffer memory, 4 cores. Recommended later: a least-privilege login and closing port 1433 to the public | Done |
 | OI-13 | **Resolved 2026-11-27 (D-050):** IIS on the app server, ASP.NET Core 8.0.18 runtime, API on port 8445 (HTTPS) | Done |
 | OI-14 | ~~HTTPS with domain + real certificate~~ Closed by D-036 (self-signed, app accepts all certificates) | — |
 
@@ -330,6 +332,13 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 2026-11-27 (later) | Owner approved D-048. No open decisions remain for the API |
 | 2026-11-27 (later) | Owner: controllers into one folder. All 13 controllers moved to `Controllers/` (D-049); 105 tests pass |
 | 2026-11-27 (later) | Owner: IIS, runtime 8.0.18, port 8445 (OI-13 resolved, D-050). Release package built; changes committed and pushed |
+| 2026-11-27 (later) | Owner: store passwords in plain text (D-051, risk explained and accepted). Migration `PlainTextPasswords` applied to the dev database (existing dev accounts need a new password); first-admin SQL script in DEPLOYMENT.md §3.4; 106 tests pass |
+| 2026-11-27 (later) | Owner: production uses `sa` (D-052, OI-12 resolved, risk explained). Server settings in `appsettings.Production.json` (git-ignored, never published); template prepared locally, password filled in by the owner before deploy |
+| 2026-11-27 (later) | **First deploy.** Owner set up the IIS site on port 8445, data folders and `appsettings.Production.json`. API created the database and applied all 6 migrations on first start (503 `DATABASE_NOT_READY` until done). Checked from outside: `/health` Healthy, unknown route JSON 404, no session JSON 401, bad login `INVALID_CREDENTIALS`, Swagger off. Next: first admin (DEPLOYMENT.md §3.4), restart check, backups |
+| 2026-11-27 (later) | Owner created the first admin `ADM2600001` on the server with the SQL script. Added `tools/seed-test-data.ps1` (TEST master data through the API, idempotent; tested twice on a throwaway local database). Owner runs it against the server, since Claude does not type passwords into the live server |
+| 2026-11-27 (later) | Owner's seed run got `503 DATABASE_NOT_READY`: IIS had stopped the idle app and the first request restarted it. Fix: requests wait up to 15 s for startup (`Database:StartupWaitSeconds`); DEPLOYMENT.md asks for Idle Time-out 0 + Preload Enabled. 107 tests pass; release zip rebuilt, not yet deployed |
+| 2026-11-27 (later) | Owner's 2nd seed run also got 503 (server still on the old build). `seed-test-data.ps1` now retries sign-in on `DATABASE_NOT_READY` (12 × 5 s; tested against an unreachable database). **Security finding:** the SQL Server error log shows continuous `sa` password-guessing from many internet IPs (hundreds to 1,000+ attempts per IP, 2026-11-20 to 27). Port 1433 must be firewalled and the `sa` password changed (D-052 risk) |
+| 2026-11-27 (later) | Owner changed the `sa` password and limited port 1433 to the dev PC's IP (AWS security group + Windows Firewall rule *SQL 1433 - trusted IPs only*); no outside login attempts since. Dev/test user-secrets updated; 107 tests pass. Seed script run on the server: 2 categories / 4 types, lots TEST-A/TEST-B, 2 areas / 4 locations, vehicles TEST-1001…1005, staff DM2600001/DM2600002; all audited. Verified via SQL |
 | 2026-11-27 (later) | Owner approved M3 and D-046, then removed staff lot assignment (D-047): API, migration `RemoveStaffLots`, tests (94 pass) and docs updated |
 | 2026-11-27 (later) | Owner approved M2 and D-045. **M3 built**: trips with app-lock concurrency, `Trips` migration applied to the dev database; 95 tests pass. D-046 proposed |
 | 2026-11-27 (later) | **M2 built**: master data endpoints, occupancy, audit interceptor, `MasterData` migration applied to the dev database; 78 tests pass. D-045 proposed |

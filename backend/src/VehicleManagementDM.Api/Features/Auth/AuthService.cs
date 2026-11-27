@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using VehicleManagementDM.Api.Common.Auth;
@@ -18,16 +17,11 @@ namespace VehicleManagementDM.Api.Features.Auth;
 /// <summary>Sign-in, sign-out and password change (AUTH-01, 02, 07, 08; D-031).</summary>
 public sealed class AuthService(
     AppDbContext db,
-    IPasswordHasher<User> passwordHasher,
     IHttpContextAccessor httpContextAccessor,
     IOptions<AuthOptions> authOptions,
     TripQueries tripQueries,
     TimeProvider timeProvider)
 {
-    // Used when the ID doesn't exist, so a wrong ID takes as long as a wrong password.
-    private static readonly Lazy<string> TimingHash =
-        new(() => new PasswordHasher<User>().HashPassword(new User(), Guid.NewGuid().ToString("N")));
-
     private HttpContext HttpContext =>
         httpContextAccessor.HttpContext ?? throw new InvalidOperationException("No current HTTP request.");
 
@@ -40,7 +34,6 @@ public sealed class AuthService(
         var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(u => u.LoginId == loginId, cancellationToken);
         if (user is null)
         {
-            passwordHasher.VerifyHashedPassword(new User(), TimingHash.Value, request.Password);
             throw InvalidCredentials();
         }
 
@@ -49,8 +42,7 @@ public sealed class AuthService(
             throw Locked(user.LockoutEndUtc.Value);
         }
 
-        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
-        if (result == PasswordVerificationResult.Failed)
+        if (!Passwords.Matches(user.Password, request.Password))
         {
             await RecordFailedLoginAsync(user, options, now, cancellationToken);
         }
@@ -68,14 +60,6 @@ public sealed class AuthService(
         {
             await db.Users.Where(u => u.Id == user.Id).ExecuteUpdateAsync(
                 s => s.SetProperty(u => u.FailedLoginCount, 0).SetProperty(u => u.LockoutEndUtc, (DateTime?)null),
-                cancellationToken);
-        }
-
-        if (result == PasswordVerificationResult.SuccessRehashNeeded)
-        {
-            var rehashed = passwordHasher.HashPassword(user, request.Password);
-            await db.Users.Where(u => u.Id == user.Id).ExecuteUpdateAsync(
-                s => s.SetProperty(u => u.PasswordHash, rehashed),
                 cancellationToken);
         }
 
@@ -121,7 +105,7 @@ public sealed class AuthService(
         var user = await db.Users.SingleOrDefaultAsync(u => u.Id == userId, cancellationToken)
             ?? throw new NotFoundException("Your account was not found.");
 
-        if (passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword) == PasswordVerificationResult.Failed)
+        if (!Passwords.Matches(user.Password, request.CurrentPassword))
         {
             throw BadRequestException.ForField("currentPassword", "Your current password is incorrect.");
         }
@@ -131,7 +115,7 @@ public sealed class AuthService(
             throw BadRequestException.ForField("newPassword", "The new password must be different from the current one.");
         }
 
-        user.PasswordHash = passwordHasher.HashPassword(user, request.NewPassword);
+        user.Password = request.NewPassword;
         user.SecurityStamp = User.NewSecurityStamp();
         await db.SaveChangesAsync(cancellationToken);
 

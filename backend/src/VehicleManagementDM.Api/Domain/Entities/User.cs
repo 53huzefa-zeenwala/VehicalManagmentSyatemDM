@@ -24,7 +24,8 @@ public class User : IHasTimestamps, IAuditable
     /// <summary>API-generated file name only (D-034).</summary>
     public string? PhotoFileName { get; set; }
 
-    public string PasswordHash { get; set; } = string.Empty;
+    /// <summary>Plain text by owner decision (D-051). Never returned by the API, logged or audited; compare with <c>Passwords.Matches</c>.</summary>
+    public string Password { get; set; } = string.Empty;
 
     /// <summary>Changes on deactivation and password change or reset; ends every existing session (AUTH-07).</summary>
     public string SecurityStamp { get; set; } = NewSecurityStamp();

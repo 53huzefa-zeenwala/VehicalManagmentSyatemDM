@@ -39,7 +39,7 @@ public sealed class TestEndpointsController(AppDbContext db) : ControllerBase
             Role = UserRole.Admin,
             FullName = "Duplicate",
             Mobile = "+971500000003",
-            PasswordHash = "x",
+            Password = "x",
         });
         await db.SaveChangesAsync();
         return Ok();

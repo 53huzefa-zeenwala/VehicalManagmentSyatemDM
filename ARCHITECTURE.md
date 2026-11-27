@@ -97,7 +97,7 @@ All NuGet packages ship inside the publish folder, so nothing is installed on th
 | `Swashbuckle.AspNetCore` | Swagger UI for development |
 | Tests: `xunit`, `Microsoft.NET.Test.Sdk`, `Microsoft.AspNetCore.Mvc.Testing` 8.0.x | Tests |
 
-**Deliberately not used** (built into .NET 8 instead): Serilog, AutoMapper, MediatR, FluentValidation, ASP.NET Core Identity tables, Hangfire. Password hashing uses `PasswordHasher<T>` from the shared framework; validation uses DataAnnotations; mapping is written by hand; jobs use `BackgroundService`.
+**Deliberately not used** (built into .NET 8 instead): Serilog, AutoMapper, MediatR, FluentValidation, ASP.NET Core Identity tables, Hangfire. Passwords are plain text (D-051); validation uses DataAnnotations; mapping is written by hand; jobs use `BackgroundService`.
 
 ## 3. Database and migrations (D-029, D-030)
 
@@ -115,7 +115,7 @@ Developer changes an entity / configuration
 ```
 
 - EF Core can't change the database without a migration file; the `migrations add` step is what turns a model change into a schema change. A test runs `dotnet ef migrations has-pending-model-changes` (available from EF Core 8) and **fails if a model change has no migration**, so nothing slips through.
-- **Startup never crashes because of the database.** If the database is unreachable at startup, the API still starts, logs the failure, and retries the migration in the background. Until it succeeds every request gets the JSON error `503 DATABASE_NOT_READY` (§5). Reason: a crashed .NET app on IIS shows IIS's own HTML error page, which D-032 forbids.
+- **Startup never crashes because of the database.** If the database is unreachable at startup, the API still starts, logs the failure, and retries the migration in the background. Until it succeeds every request gets the JSON error `503 DATABASE_NOT_READY` (§5), after waiting up to `Database:StartupWaitSeconds` (default 15 s) in case startup finishes meanwhile; so the first request after IIS starts the app (cold start) is answered normally. Reason: a crashed .NET app on IIS shows IIS's own HTML error page, which D-032 forbids.
 - **First admin (AUTH-06):** when the Users table is empty after migrating, the initializer creates the first admin from configuration (`Seed:FirstAdmin:*`, set as server environment variables, never in git). With no seed configured it does nothing.
 - **Destructive changes** (dropping or renaming columns) are reviewed by hand in the generated migration before commit. Records are never deleted (BR-08), so most changes are additive.
 - **SQL login [Proposed]:** the app gets its own SQL login, `db_owner` of its own database only (needed to run migrations), never `sa`/sysadmin. The first database creation needs `dbcreator`, or our team creates the empty database once by hand.
@@ -134,7 +134,7 @@ Developer changes an entity / configuration
 | Remember me (AUTH-02) [Proposed] | `rememberMe=true` → persistent cookie, 30 days sliding. Otherwise a 12-hour cookie |
 | Instant deactivation (AUTH-07) | Each user has a `SecurityStamp` copied into the cookie. On every request the API checks the user is still active and the stamp still matches. Deactivation, password reset or password change rotates the stamp, so every existing session ends immediately |
 | Lockout (AUTH-08) | 5 failed attempts → locked for 15 minutes (`FailedLoginCount`, `LockoutEndUtc`) |
-| Passwords | `PasswordHasher<T>` (PBKDF2, salted), never stored or logged in plain text |
+| Passwords | **Stored as plain text** by owner decision (D-051, risk accepted; replaces PBKDF2 hashing). Compared in code with a constant-time, case-sensitive check (`Passwords.Matches`), never in SQL (the collation is case-insensitive). Never returned by the API, logged or written to the audit log |
 | Login abuse | Built-in rate limiter on the login endpoint |
 | Roles | `[Authorize(Roles = "Admin")]` / `"Staff"` on every controller. The server checks every permission; the app only hides things (D-007). Ownership checks (e.g. "own trips only") live in the services |
 | No redirects | Cookie events are overridden: not logged in → `401` JSON, wrong role → `403` JSON. Never a redirect to a login page |
