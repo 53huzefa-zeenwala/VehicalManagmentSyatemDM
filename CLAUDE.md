@@ -43,6 +43,8 @@
 | `API_DOCUMENTATION.md` | API conventions and endpoints (Phase 7). |
 | `DEVELOPMENT_ROADMAP.md` | Phases, status, what is done and what remains. |
 | `CHANGELOG.md` | Notable changes, once code exists. |
+| `DEPLOYMENT.md` | Publishing the API to the server, settings, backups, go-live checklist. |
+| `backend/` | API solution (.NET 8): `src/VehicleManagementDM.Api`, `tests/VehicleManagementDM.Api.Tests`. Setup in `README.md`. |
 
 Create a file only when its phase starts. Do not create documentation without a clear purpose.
 

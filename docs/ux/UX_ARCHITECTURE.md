@@ -45,7 +45,7 @@ One app. After login, the account's role decides which shell loads (D-007).
 | Trips | The vehicles I started (Client §1) | Active trip + history, labelled by outcome (completed, cancelled, handed over); date filter |
 | **Scan** (centre) | Main action | Opens the scanner: starts a trip, ends the current one, or confirms a transfer, depending on context |
 | Lots | Space across all lots (Client §1) | Map + list with free spaces per type |
-| Profile | Me | Details, driving licence, assigned lots, my trips this month, theme, change password, log out |
+| Profile | Me | Details, driving licence, my trips this month, theme, change password, log out |
 
 **Admin shell: bottom navigation, 4 tabs, no Scan**
 
@@ -69,7 +69,7 @@ flowchart TD
   LOG -->|Admin| AD[A-01 Dashboard]
 
   subgraph STAFF[Staff shell]
-    SH --> ST[S-02..S-07 Start trip flow]
+    SH --> ST[S-03..S-07 Start trip flow]
     SH --> SA[S-09 Active trip]
     SA --> SE[S-10..S-13 End trip]
     SA --> SW[S-14 Swap or hand over]
@@ -128,7 +128,7 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 | ID | Screen | Req | Notes |
 |---|---|---|---|
 | S-01 ✓ | Home | TRP-04, TRF | Changes with state: no trip (scan hero, last trip, transfer task, lot space) · trip running (timer hero, End / Swap / Cancel, reminder time) · overdue |
-| S-02 | Start · Lot | TRP-01 | Skipped when the staff member has only one assigned lot |
+| ~~S-02~~ | ~~Start · Lot~~ | — | **Removed (D-047)**: staff have no assigned lots; the origin is the lot the vehicle is parked at |
 | S-03 ✓ | Start · Vehicle (1/4) | TRP-01, TRP-02 | C-09, then a vehicle confirm card; blocks with the reason if the vehicle isn't eligible |
 | ~~S-04~~ | ~~Start · Driver~~ | — | **Removed (D-020)**: the staff member is the driver |
 | S-05 ✓ | Start · Destination (2/4) | DST-02 | Area chips, then a location list |
@@ -146,8 +146,8 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 | S-17 | Trip detail | TRP-10 | Read-only; segment timeline |
 | S-18 ✓ | Lots | LOT-07 | Map + per-lot cards with free spaces per type |
 | ~~S-19–S-21~~ | ~~Attendance~~ | — | **Removed (D-023)** |
-| S-22 | Transfer task | TRF-02, TRF-04 | Shows the transfer; **Confirm departure** (any staff of the origin lot; the person who confirms drives) or **Confirm arrival** (any staff) |
-| S-24 ✓ | Profile (tab) | P-01 + licence | Details, driving licence, assigned lots, my trips this month, theme, change password, log out |
+| S-22 | Transfer task | TRF-02, TRF-04 | Shows the transfer; **Confirm departure** (any staff member, D-047; the person who confirms drives) or **Confirm arrival** (any staff) |
+| S-24 ✓ | Profile (tab) | P-01 + licence | Details, driving licence, my trips this month, theme, change password, log out *(assigned lots removed, D-047; the mock-up still shows them)* |
 
 ### 4.3 Admin
 
@@ -168,7 +168,7 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 | A-13 | Bulk QR print | QR-03 | Select vehicles (filters, select all) → generate PDF → share or print |
 | A-14 | Categories & types | VEH-01 | Category list with expandable types; add or edit inline |
 | ~~A-15~~ | ~~Drivers~~ | — | **Removed (D-020)**: drivers are staff |
-| A-16 | Staff · list / detail / form | STF-01..03 | Generated ID shown after creation · licence number · assigned lots · reset password · trips and hours |
+| A-16 | Staff · list / detail / form | STF-01..03 | Generated ID shown after creation · licence number · reset password · trips and hours *(no assigned lots, D-047)* |
 | A-17 | Admins · list / form | AUTH-05, 06 | Add an admin · reset password · deactivate (can't deactivate yourself) |
 | A-18 ✓ | Parking lots · list / detail / form | LOT-01, 02 | Detail designed. Form sections: basics · location (A-19) · contact and hours · capacity per type · baseline counts |
 | A-19 | Map pin picker | LOT-01 | Search an address or drag the pin |
@@ -185,7 +185,7 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 
 | # | Screen | User | System | Edge cases |
 |---|---|---|---|---|
-| 1 | S-01 | Taps **Scan to start trip** (or the centre Scan button) | Opens the scanner; lot step skipped if only one lot | Already on an active trip → Start is hidden (BR-02) |
+| 1 | S-01 | Taps **Scan to start trip** (or the centre Scan button) | Opens the scanner (no lot step, D-047) | Already on an active trip → Start is hidden (BR-02) |
 | 2 | S-03 / C-09 | Scans the vehicle QR | Shows the vehicle card (photo, plate, type, current lot) | Unknown QR · vehicle at another lot · Inactive or Under maintenance · already on a trip → a blocking card explains why and how to fix it |
 | 3 | S-05 | Picks area → location | — | — |
 | 4 | S-06 | Signs to confirm taking the vehicle | — | Empty signature → Continue disabled, with a hint |
@@ -215,17 +215,17 @@ S-09 → **Cancel trip** → reason (driver, vehicle, technical or other issue) 
 
 ### J6 · Transfer
 
-1. **Admin:** A-03 → **New transfer** → vehicle, destination lot, optional note. Staff of the origin lot get a push.
+1. **Admin:** A-03 → **New transfer** → vehicle, destination lot, optional note. All active staff are notified (D-047).
 2. **Departure:** any one of those staff opens S-22 → **Confirm departure**. That person drives, and hours start.
 3. **Arrival:** any staff member opens the task (from a push or by scanning) → **Confirm arrival**.
 
 ### J7 · Admin setup (first run)
 
-Manage → Categories & types → Parking lots (capacity per type, baseline) → Destinations → Vehicles (QR generated) → Bulk QR print → Staff (licence, assign lots, share the ID and password). The empty state of each list says what to create first.
+Manage → Categories & types → Parking lots (capacity per type, baseline) → Destinations → Vehicles (QR generated) → Bulk QR print → Staff (licence, share the ID and password). The empty state of each list says what to create first.
 
 ### J8 · Admin monitoring
 
-Dashboard "Needs attention" → tap an item to go to its list → read-only detail. Live updates within 5 s. Reports → pick a report → filter → drill down to a trip.
+Dashboard "Needs attention" → tap an item to go to its list → read-only detail. Data refreshes on open and on pull to refresh; no auto-updates (D-035). Reports → pick a report → filter → drill down to a trip.
 
 ## 6. States (every data screen)
 

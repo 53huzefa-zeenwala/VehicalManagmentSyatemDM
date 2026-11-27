@@ -5,14 +5,17 @@ One mobile app (Flutter, Android and iOS) with **Staff** and **Admin** roles, on
 - **Staff (the drivers)** scan a vehicle's QR code, take it out of a parking lot, and bring it back. A live timer runs the whole time.
 - **Admins** manage vehicles, staff, lots and transfers, and monitor everything live and in reports.
 
-**Status:** requirements are done (v1.1). UX structure and the visual design ("Emerald Ops") are in review. No application code yet. Delivery is phased: UX first, then architecture, then build.
+**Status:** requirements done (v1.1); UX structure and visual design ("Emerald Ops") in review. Backend API in progress: the backend API is complete (milestones M1–M6: auth, master data, trips, transfers, notifications, dashboard, reports) and tested; deployment steps are in [`DEPLOYMENT.md`](DEPLOYMENT.md). No Flutter code yet.
 
 ## Start here
 
 | File | What |
 |---|---|
 | [`docs/KNOWLEDGE_BASE.md`](docs/KNOWLEDGE_BASE.md) | **Everything in one place**: current rules, roles, screens, design, decisions, open items, environment |
-| [`PROJECT_DECISIONS.md`](PROJECT_DECISIONS.md) | Decision log (D-001 to D-023). Source of truth |
+| [`PROJECT_DECISIONS.md`](PROJECT_DECISIONS.md) | Decision log. Source of truth |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) · [`DATABASE_DESIGN.md`](DATABASE_DESIGN.md) · [`API_DOCUMENTATION.md`](API_DOCUMENTATION.md) | Backend structure, tables, endpoints and error codes |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed in the code |
+| [`DEPLOYMENT.md`](DEPLOYMENT.md) | How to publish and run the API on the server, backups, go-live checklist |
 | [`REQUIREMENTS.md`](REQUIREMENTS.md) | Functional requirements v1.1 (§0 = latest changes) |
 | [`docs/design/mockups/UI_Mockups_v1.pdf`](docs/design/mockups/UI_Mockups_v1.pdf) | UI mock-ups: 24 screens in light and dark |
 | [`docs/ux/UX_ARCHITECTURE.md`](docs/ux/UX_ARCHITECTURE.md) | Navigation, screen inventory, journeys, states |
@@ -20,6 +23,28 @@ One mobile app (Flutter, Android and iOS) with **Staff** and **Admin** roles, on
 | [`DEVELOPMENT_ROADMAP.md`](DEVELOPMENT_ROADMAP.md) | Phase status |
 | [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | Every question round with the client and owner |
 | [`CLAUDE.md`](CLAUDE.md) | Working rules for the AI assistant |
+
+## Backend API (`backend/`)
+
+ASP.NET Core on .NET 8 (SDK pinned in `backend/global.json`), EF Core code-first migrations, SQL Server.
+
+**One-time setup on a dev machine** (values stay in `dotnet user-secrets`, never in git — this repo is public):
+
+```powershell
+cd backend
+dotnet tool restore
+dotnet user-secrets set "ConnectionStrings:Default" "<dev database connection string>" --project src/VehicleManagementDM.Api
+dotnet user-secrets set "Seed:FirstAdmin:FullName" "<name>" --project src/VehicleManagementDM.Api
+dotnet user-secrets set "Seed:FirstAdmin:Mobile" "<+971...>" --project src/VehicleManagementDM.Api
+dotnet user-secrets set "Seed:FirstAdmin:Password" "<8+ characters>" --project src/VehicleManagementDM.Api
+dotnet user-secrets set "TestDatabase:ConnectionString" "<server connection string, any database>" --project tests/VehicleManagementDM.Api.Tests
+```
+
+**Run:** `dotnet run --project src/VehicleManagementDM.Api --launch-profile https` → Swagger at `https://localhost:7181/swagger`. On startup the API creates the database if missing, applies migrations, and creates the first admin if none exists (its login ID is written to the log).
+
+**Test:** `dotnet test` — integration tests create a throwaway `VehicleManagementDM_Test_<guid>` database on the test server and drop it afterwards.
+
+**After changing an entity or configuration:** `dotnet ef migrations add <Name> --project src/VehicleManagementDM.Api --output-dir Data/Migrations`, then commit the migration with the change. A test fails if a model change has no migration.
 
 ## Re-render the mock-ups
 
@@ -39,4 +64,5 @@ docs/ux/          UX architecture + low-fi wireframes
 docs/design/      design system, mock-up PDF and PNGs
 prototype/ui-mock dummy app used for the mock-ups
 tools/            render script
+backend/          API solution (src/VehicleManagementDM.Api, tests/VehicleManagementDM.Api.Tests)
 ```

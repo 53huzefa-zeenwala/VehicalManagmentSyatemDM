@@ -1,10 +1,11 @@
 # Project Knowledge Base
 
-**Current state as of 2026-11-26.** This file holds everything known about the project in one place, reflecting every change up to decision D-023. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
+**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-048. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
 
 **Reading order for a new session:**
 1. This file
 2. `PROJECT_DECISIONS.md` (source of truth)
+2a. For API work: `ARCHITECTURE.md` (structure, milestones §13) → `DATABASE_DESIGN.md` (tables, location rules) → `API_DOCUMENTATION.md` (endpoints, error codes)
 3. `REQUIREMENTS.md` v1.1 (§0 lists the changes)
 4. `docs/ux/UX_ARCHITECTURE.md`
 5. `docs/design/DESIGN_SYSTEM.md`
@@ -26,7 +27,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | | Staff (driver) | Admin |
 |---|---|---|
 | Who | Field staff on their **personal phones**. Each staff member drives the vehicles they take out | Supervisors; more admin accounts can be added. Our team creates the first one |
-| Login | Staff ID (`DM` + YY + 5 digits, e.g. `DM2600042`, generated) + password issued by the admin | Admin ID + password |
+| Login | Staff ID (`DM` + YY + 5 digits, e.g. `DM2600042`, generated) + password issued by the admin | Admin ID (`ADM` + YY + 5 digits, e.g. `ADM2600001`, D-037) + password |
 | Can | Scan a vehicle; start, swap, cancel and end **their own** trips; confirm transfers; see lots and space; see their own trips and profile | Manage vehicles, categories and types, QR labels, staff, admins, lots, destinations and settings; create transfers; see live trips, the dashboard, reports and the audit log; resolve "Not at a lot" vehicles and set vehicle status |
 | Cannot | Manage master data; see other people's trips | **End, swap or cancel trips; scan QR codes** (monitor only, D-021) |
 
@@ -55,8 +56,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 
 ### 4.1 Trips
 
-**Start** (staff, from an assigned lot only):
-1. Origin lot (skipped when the staff member has only one).
+**Start** (staff, from any active lot; staff have no assigned lots, D-047). The origin is the lot the vehicle is parked at:
 2. Vehicle: scan the QR code, or type the registration number.
 3. Destination: area → location.
 4. **Staff signature**: the staff member signs to confirm taking the vehicle.
@@ -64,7 +64,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 
 **Checks at start:**
 - The vehicle is Available and located at the origin lot.
-- The staff member has no other active trip.
+- The staff member has no other active trip. Driving an in-transit transfer counts as one (D-026).
 - The vehicle is in no other trip or transfer.
 
 **While active:**
@@ -81,7 +81,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 
 **States:** Active → Ended, or Cancelled. There is no "ended by admin" state any more (D-021).
 
-**Open risk OI-10:** nobody except the staff member can close a trip.
+**Stuck trips (D-024, OI-10 closed):** nobody except the staff member can close a trip. If they can't act, the trip stays Active, reminders continue, it stays overdue in the admin's Live tab and "Needs attention", and hours keep growing. Risk accepted by the owner.
 
 ### 4.2 Hours
 
@@ -101,7 +101,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 ### 4.4 Transfers
 
 - The admin creates a transfer: vehicle + destination lot, with an optional note. **No driver is chosen.**
-- Any staff member of the origin lot confirms departure, and **whoever confirms it drives**. Hours start then.
+- Any staff member confirms departure (D-047), and **whoever confirms it drives**. Hours start then. They must have no active trip, and while driving the transfer they can't start a trip or receive a hand-over (D-026).
 - Any staff member confirms arrival, and hours end.
 - The vehicle counts at the origin lot until arrival.
 - The admin can cancel a transfer before departure.
@@ -116,7 +116,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 
 ### 4.6 Accounts
 
-- Staff profile fields: full name, photo, mobile, optional email, **driving licence number**, assigned lots (one or more), Staff ID.
+- Staff profile fields: full name, photo, mobile, optional email, **driving licence number**, Staff ID. **No assigned lots** (D-047).
 - The admin resets staff passwords; our team resets the first admin's. There's no forced password change at first login. Users can change their own password.
 - Lockout after 5 failed attempts, for 15 minutes.
 - Deactivated accounts end their sessions immediately.
@@ -125,7 +125,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 ### 4.7 Reports and dashboard (admin)
 
 - **Dashboard:** live count of vehicles on trip, a trips-per-hour chart, trips today, hours out, free spaces, then "Needs attention" (overdue trips, vehicles not at a lot, lots over capacity, transfers waiting).
-- **Live tab:** trips (overdue first) and transfers.
+- **Live tab:** trips (overdue first) and transfers. No auto-updates: data loads on open and pull to refresh; timers tick on the phone (D-035).
 - **Trip detail:** read-only, with staff, vehicle, route, segments and the reminder log.
 - **Reports** (5, on screen with filters, no export): vehicle running hours, staff hours and activity (= driver hours), lot utilization, trip log (including cancelled and handed-over trips), transfers.
 - **Audit log:** every admin create, edit, deactivate, status change and transfer.
@@ -184,6 +184,31 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | D-021 | **Admins monitor only**, no admin scanner | Approved |
 | D-022 | Staff tabs Home·Trips·Scan·Lots·Profile; admin 4 tabs | Approved |
 | D-023 | **Attendance removed** | Approved |
+| D-024 | **Stuck trips stay open** (OI-10 risk accepted) | Approved |
+| D-025 | Development continues on Windows 11 | Approved |
+| D-026 | **Driving a transfer = the one active trip** | Approved |
+| D-027 | **Start API development now** (ahead of Phases 4–6); owner gives coding style | Approved |
+| D-028 | **API = same SDK/template as the Sufizz Bikes backend** (net8.0, VS 2022, MVC template + API controllers, EF Core, JWT, Swagger, folder publish); nothing new on the server | Approved |
+| D-029 | **New, empty database** for this app | Approved |
+| D-030 | **Code-first migrations**, applied at startup; DB created if missing | Approved |
+| D-031 | **Cookie-based authentication** (replaces token wording in REQUIREMENTS §8) | Approved |
+| D-032 | **All errors logged + one JSON error format**, never HTML; real message where possible | Approved |
+| D-033 | API structure and conventions, `ARCHITECTURE.md` (v0.2); code name `VehicleManagementDM`; Production errors = "Something went wrong" + traceId; error logs kept 30 days | Approved |
+| D-034 | **Photos/signatures as files** on the server; DB stores only the API-generated unique name; served only via authenticated API | Approved |
+| D-035 | **No auto-refresh**; users refresh manually (supersedes 5 s real-time target) | Approved |
+| D-036 | **Self-signed HTTPS**, app accepts every certificate. **Security risk accepted** (pinning declined) | Approved |
+| D-037 | **Admin ID** `ADM` + YY + 5 digits | Approved |
+| D-038 | Dev + test DBs on the server's SQL Server | Approved |
+| D-039 | **Notifications in-app only for now**; push later | Approved |
+| D-040 | **QR images and PDF labels built in the app** | Approved |
+| D-041 | Hand-over: receiver does nothing | Approved |
+| D-042 | **API plan M0–M6**; photos up to **20 MB**, signatures 512 KB | Approved |
+| D-043 | **DB design approved.** Cancel/swap-out vehicle → Available + admin notified; first reminder default 120 min; per-type capacities needn't sum to total; status change only when not out | Approved |
+| D-044 | Password 8–128 chars; unknown routes 404 for everyone (owner changed from 401) | Approved |
+| D-045 | Settings limits (prefix 1–5 letters, delay 1–1,440 min); vehicle history → M4, staff trips and hand-over picker → M3 | Approved |
+| D-046 | Trip details from M3: origin = vehicle's lot; swap from any active lot; hand-over to any free staff; cancel note required; overdue = first reminder passed; staff see trips they took part in | Approved |
+| D-047 | **Staff have no assigned lots**: start from any active lot, confirm any transfer; `StaffLots` dropped | Approved |
+| D-048 | M4–M6 details: transfer rules, notification audiences (all staff / all admins), dashboard and report definitions, deployment layout | Proposed |
 
 ## 8. Phase status
 
@@ -192,8 +217,10 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 0 Requirement clarification | ✅ Done |
 | 1 Business analysis | ✅ Done (`REQUIREMENTS.md` v1.1) |
 | 2 UX / IA + 3 Design system | 🟡 In review together (D-016). Waiting on D-014 and D-017 |
-| 4 High-fidelity UI (remaining screens and states) | Next, after approval |
-| 5–10 Architecture, database, backend, Flutter, QA, deployment | Not started |
+| 4 High-fidelity UI (remaining screens and states) | After approval |
+| 5–6 Architecture, database | Not started; decisions made during API work are logged and written up later (D-027) |
+| 7 Backend API | ✅ **M1–M6 done** (2026-11-27): auth, errors, logging, files, master data + audit, trips, transfers, notifications + reminders, dashboard, 5 reports, audit log view, vehicle history; release files and `DEPLOYMENT.md`. 105 tests pass. Not yet deployed to the server (checklist in `DEPLOYMENT.md` §7) |
+| 8–10 Flutter, QA, deployment | Not started |
 
 ## 9. Open items
 
@@ -204,17 +231,37 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | OI-03 | Owner of the Google Maps API key and billing | Phase 7 |
 | OI-04 | App name, icon, logo (placeholder "Fleet & Parking") | Phase 4 |
 | OI-05 | App store accounts and distribution | Phase 10 |
-| OI-06 | Hosting and SQL Server edition | Phase 5 |
-| OI-07 | Development machine (deferred by the owner) | Phase 7 |
-| OI-08 | Tell the client: one app with roles, not two apps | Before Phase 4 sign-off |
+| OI-06 | Hosting: the server that already runs the Sufizz Bikes backend (D-028). Its SQL Server is 2019 Express RTM (15.0.2000.5) | Phase 5 |
+| OI-07 | Development machine: Windows 11 (D-025). Install missing tools when their phase starts | Phase 7 |
+| OI-08 | Tell the client: one app with roles, not two apps; admin views refresh manually, not "real time" (D-035) | Before Phase 4 sign-off |
 | OI-09 | .NET 8 is past end of support (10 Nov 2026); revisit | Before Phase 7 |
-| OI-10 | **Who closes a trip if its staff member can't** (admins are monitor-only) | Before Phase 5 |
+| OI-10 | ~~Who closes a trip if its staff member can't~~ Closed by D-024 (stays open) | — |
+| OI-11 | iOS builds and signing: a Mac or a cloud macOS build service | Phase 8 |
+| OI-12 | **Database for this app.** Reachable via the app server's SQL Server (2019 Express). New database decided (D-029). Still to set up: its own least-privilege login (not the `sysadmin` one). Express limits: 10 GB per database, ~1.4 GB buffer memory, 4 cores. SQL Server port open to the internet with a `sysadmin` login is a security risk | Phase 7, now |
+| OI-13 | Exact ASP.NET Core 8 runtime patch and hosting model (IIS or Kestrel service) on the server | Before first deploy |
+| OI-14 | ~~HTTPS with domain + real certificate~~ Closed by D-036 (self-signed, app accepts all certificates) | — |
 
 ## 10. Environment and tooling
 
-- **Machine:** Apple Silicon Mac, macOS 15.5.
-- **Not installed:** .NET SDK, Flutter, Xcode (Command Line Tools only), Android SDK, JDK, Docker, GitHub CLI (`gh`), Homebrew.
-- **Available:** git 2.39, Google Chrome 157 (headless), Python 3.14 + Pillow 12.2, macOS PDFKit via JXA (used to read and preview PDFs).
+- **Machine (current, D-025):** Windows 11 Pro. Checked 2026-11-26:
+  - **Available:** git 2.45, Python 3.12 + Pillow 12.3 (`python` / `py`, no `python3`), Google Chrome, .NET SDK 8.0.202 + 9.0.321 (ASP.NET Core runtime 8.0.3), OpenJDK 21, adb, GitHub CLI 2.102, SQL Server Express (service `MSSQL$SQLEXPRESS`, stopped).
+  - **Not found:** Flutter, Docker, `sqlcmd`.
+  - The render script and README were written for macOS; verify on Windows before the next render.
+- **API reference project (D-028):** `E:\visual studio project\SufizzBikesBackend\`. Use only its SDK, target framework, template and publish method. **Don't copy its code or code style**; the owner gives the coding instructions.
+- **DB connectivity (2026-11-26):**
+  - The host in the reference connection string is **not reachable** from this machine (TCP 1433 fails, SqlClient timeout).
+  - The **app server's own host is reachable** on TCP 1433. Login with the reference credentials succeeded (166 ms): **SQL Server 2019 Express (64-bit), version 15.0.2000.5 (RTM, no cumulative updates)**. The login is `sysadmin`. Only read-only server-property queries were run.
+  - So development can connect to the server's SQL Server directly. Still open (OI-12): a dedicated database and a least-privilege login for this app.
+- **Public repo rule:** never write server IPs, database names, logins, passwords or JWT keys into this repository.
+- **Backend dev setup (D-038):** secrets live in `dotnet user-secrets` on this PC only:
+  - API project: `ConnectionStrings:Default` (server SQL Server, database `VehicleManagementDM_Dev`) and `Seed:FirstAdmin:*` (first admin; its password is only in user-secrets, its login ID is in the startup log).
+  - Test project: `TestDatabase:ConnectionString` (server, `master`); tests create and drop `VehicleManagementDM_Test_<guid>`.
+  - Currently the `sa` login from the Sufizz Bikes config (owner's choice, temporary until OI-12).
+  - Commands: README "Backend API". Run: `dotnet run --project src/VehicleManagementDM.Api --launch-profile https` (from `backend/`), Swagger at `https://localhost:7181/swagger`. Test: `dotnet test`.
+- **Lessons learned (backend):**
+  - Use `SqlConnectionStringBuilder["Data Source"]` (indexer with the exact keyword) in PowerShell; property-style assignment silently failed once and left the old host in a secret.
+  - `WebApplicationFactory` config overrides aren't visible while `Program` registers services; read settings via the options system (lazily), never eagerly.
+- **Machine (until 2026-11-26):** Apple Silicon Mac, macOS 15.5, where the project was started. It had git 2.39, Chrome 157, Python 3.14 + Pillow 12.2, and no .NET, Flutter, Xcode, Android SDK, JDK, Docker or `gh`.
 - **Render pipeline:** `python3 -I tools/render_mockups.py`.
   1. Syncs the icon-font subset.
   2. Checks every screen for overflow, in light and dark.
@@ -270,6 +317,18 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 2026-11-22 | Rounds 1d/1e answered (D-010–D-012); `REQUIREMENTS.md` v1.0 approved (D-013); UX architecture + wireframes; "Fleet Signage" rejected; "Emerald Ops" dummy app + PDF (D-017, D-018) |
 | 2026-11-23 | Staff = driver, admins monitor only, Profile tab (D-020–D-022); attendance removed (D-023); PDF now 24 screens |
 | 2026-11-26 | Knowledge base rewritten to the current state; project put under git and pushed to GitHub. Completeness audit: `UX_ARCHITECTURE.md` rewritten to v0.2, `REQUIREMENTS.md` v1.1 updated inline (no stale driver, attendance or admin-end lines left), contrast checker added |
+| 2026-11-26 (later) | Development moved to Windows 11 (D-025). Stuck trips stay open (D-024, OI-10 closed). Transfer driving counts as the active trip (D-026). Stale "ended by admin" lines removed from `REQUIREMENTS.md` BR-10 and AUD-01 |
+| 2026-11-26 (later) | API development approved to start (D-027). Stack fixed to the Sufizz Bikes backend's SDK and template (D-028). DB connection test: reference connection-string host not reachable; the app server's SQL Server (2019 Express) reachable and login works (OI-12). No code written |
+| 2026-11-26 (later) | Owner set API rules: new DB (D-029), migrations at startup (D-030), cookie auth (D-031), one JSON error format + log everything (D-032). `ARCHITECTURE.md` v0.1 written (D-033, proposed). No code written |
+| 2026-11-26 (later) | Owner answered the architecture open points: name `VehicleManagementDM`, generic Production errors + traceId, 30-day log retention, files on server disk (D-034), manual refresh (D-035), self-signed cert accepted (D-036, risk accepted), admin IDs `ADM`+YY+5 (D-037). `ARCHITECTURE.md` v0.2 approved. No code written |
+| 2026-11-26 (later) | API plan approved (D-042, milestones M0–M6; photos 20 MB). Dev/test DB on server (D-038), in-app notifications first (D-039), QR PDF in app (D-040), hand-over without receiver action (D-041). M0 done: `DATABASE_DESIGN.md` v0.1, `API_DOCUMENTATION.md` v0.1, `ARCHITECTURE.md` v0.3. No code written |
+| 2026-11-26 (later) | Owner accepted all DB-design answers (D-043): `DATABASE_DESIGN.md` v0.2 and `API_DOCUMENTATION.md` v0.2 approved; M0 closed |
+| 2026-11-27 | **M1 built** in `backend/`: solution, errors, logging, migrations, cookie auth, file store, auth/files/health endpoints; 49 tests pass against the server; `VehicleManagementDM_Dev` created on the server. D-044 proposed. `CHANGELOG.md` started |
+| 2026-11-27 (later) | Owner: "complete all remaining work". **M4** transfers, **M5** notifications/reminder job/dashboard/reports/audit log, vehicle history, **M6** publish profile, `web.config`, `DEPLOYMENT.md`; migration `TransfersAndNotifications` applied to the dev database; 105 tests pass; D-048 proposed |
+| 2026-11-27 (later) | Owner approved M3 and D-046, then removed staff lot assignment (D-047): API, migration `RemoveStaffLots`, tests (94 pass) and docs updated |
+| 2026-11-27 (later) | Owner approved M2 and D-045. **M3 built**: trips with app-lock concurrency, `Trips` migration applied to the dev database; 95 tests pass. D-046 proposed |
+| 2026-11-27 (later) | **M2 built**: master data endpoints, occupancy, audit interceptor, `MasterData` migration applied to the dev database; 78 tests pass. D-045 proposed |
+| 2026-11-27 (later) | Owner changed D-044: unknown routes answer 404 to signed-out callers too (was 401); password rule kept. D-044 approved; 51 tests pass |
 
 ## 13. Owner preferences
 
