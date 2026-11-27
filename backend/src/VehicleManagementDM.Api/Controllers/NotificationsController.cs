@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Paging;
+using VehicleManagementDM.Api.Features.Notifications;
 
-namespace VehicleManagementDM.Api.Features.Notifications;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>The signed-in user's in-app notifications, newest first (NTF-03). No auto-refresh (D-035).</summary>
 [ApiController]

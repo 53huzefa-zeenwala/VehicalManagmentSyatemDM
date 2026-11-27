@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Paging;
+using VehicleManagementDM.Api.Features.Transfers;
 
-namespace VehicleManagementDM.Api.Features.Transfers;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>Transfers between lots (TRF). Admins create and cancel; staff confirm departure and arrival.</summary>
 [ApiController]

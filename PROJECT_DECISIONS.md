@@ -56,7 +56,9 @@ Permanent record of every important decision. Never delete entries: replaced dec
 | D-045 | 2026-11-27 | Business logic | Settings limits (prefix 1–5 letters, reminder delay 1–1,440 min) and M2 scope notes | Approved |
 | D-046 | 2026-11-27 | Business logic | Trip details settled while building M3 (origin = vehicle's lot, swap from any active lot, overdue rule, visibility) | Approved |
 | D-047 | 2026-11-27 | Business logic | Staff have no assigned lots: any staff member (the driver) can start from any active lot and confirm any transfer | Approved |
-| D-048 | 2026-11-27 | Business logic | Details settled while building M4–M6 (transfer rules, notification audiences, dashboard and report definitions, deployment layout) | Proposed |
+| D-048 | 2026-11-27 | Business logic | Details settled while building M4–M6 (transfer rules, notification audiences, dashboard and report definitions, deployment layout) | Approved |
+| D-049 | 2026-11-27 | Architecture | API controllers live in one `Controllers/` folder; business logic stays in `Features/<Area>` | Approved |
+| D-050 | 2026-11-27 | Deployment | API hosted in IIS on the app server, port 8445 (HTTPS), ASP.NET Core 8.0.18 runtime; first admin created by the owner | Approved |
 
 ---
 
@@ -826,7 +828,7 @@ Permanent record of every important decision. Never delete entries: replaced dec
   - API: staff endpoints and `auth/me` lose their lot fields; start no longer accepts `originLotId` (API_DOCUMENTATION.md v0.6).
   - UX/mock-ups: Profile (S-24), staff form/detail (A-16) and the start flow lose assigned lots and the lot step. The rendered PDF still shows them until Phase 4 re-renders.
 
-## D-048 — Details settled in M4–M6 (proposed)
+## D-048 — Details settled in M4–M6
 
 - **Date:** 2026-11-27
 - **Category:** Business logic, Deployment
@@ -860,6 +862,30 @@ Permanent record of every important decision. Never delete entries: replaced dec
     - Secrets in server environment variables.
 - **Reasoning:** Needed to finish M4–M6; each follows the closest requirement or decision.
 - **Alternatives considered:** Notifying only staff "near" a lot (impossible without lot links); a fixed reminder burst after downtime; optional report ranges.
-- **Final selection:** Pending owner confirmation.
-- **Status:** Proposed
+- **Final selection:** As listed; approved by the owner 2026-11-27.
+- **Status:** Approved
 - **Impact:** `API_DOCUMENTATION.md` v1.0 §4.10–§4.13; `DEPLOYMENT.md`.
+
+## D-049 — Controllers in one `Controllers/` folder
+
+- **Date:** 2026-11-27
+- **Category:** Architecture
+- **Decision:** All API controllers move to `backend/src/VehicleManagementDM.Api/Controllers/`, one controller per file (`AdminsController` split out of `StaffController.cs`), namespace `VehicleManagementDM.Api.Controllers`. Services, rules and DTOs stay in `Features/<Area>/`. Request/response classes that were declared inside the Destinations, Settings and VehicleCategories controller files moved to `<Area>Dtos.cs` in their feature folder.
+- **Reasoning:** Owner asked for it: one folder listing every endpoint is easier to read.
+- **Alternatives considered:** Controllers inside feature folders (the previous layout); a full `Controllers/` + `Models/` split.
+- **Final selection:** Controllers only; models/DTOs unchanged.
+- **Status:** Approved (owner request)
+- **Impact:** Code layout only; no route, behaviour or contract change. `ARCHITECTURE.md` §1 updated. 105 tests pass.
+
+## D-050 — Hosting on the app server
+
+- **Date:** 2026-11-27
+- **Category:** Deployment
+- **Decision:**
+  - The API runs in **IIS** on the same app server as the Sufizz Bikes backend, in its own site and app pool, on **port 8445** (HTTPS).
+  - Server runtime: ASP.NET Core **8.0.18** (`dotnet --list-runtimes`). The framework-dependent build runs on it; nothing to install.
+  - The owner creates the first admin account (via the API seed or SQL) at deploy time.
+  - Server setup (DEPLOYMENT.md §3) is done by the owner at deploy time.
+- **Reasoning:** Owner's answers; matches D-028 (nothing new installed on the server).
+- **Status:** Approved (owner answers)
+- **Impact:** Resolves OI-13. `DEPLOYMENT.md` §1, §3.3, §7. The Flutter app's base URL is the server address on port 8445 (kept out of the public repo).

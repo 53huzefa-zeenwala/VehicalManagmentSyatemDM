@@ -409,4 +409,4 @@ All targets here are `[P-19]` unless tagged otherwise.
 | OI-11 | iOS builds and signing: a Mac or a cloud macOS build service (development is on Windows, D-025) | Phase 8 |
 | OI-12 | A new database (D-029); still open: its own least-privilege login on the server's SQL Server (2019 Express) | Phase 7 |
 | OI-14 | ~~HTTPS with a domain name and a real certificate~~ Closed by D-036: self-signed certificate, accepted by the app (risk accepted) | — |
-| OI-13 | Server's exact ASP.NET Core 8 runtime patch and hosting model (IIS or Kestrel service) | Before first deploy |
+| OI-13 | ~~Server's exact ASP.NET Core 8 runtime patch and hosting model~~ **Resolved 2026-11-27 (D-050):** IIS, ASP.NET Core 8.0.18, port 8445 | Before first deploy |

@@ -18,7 +18,7 @@ Phase order approved in D-005. Updated 2026-11-22.
 
 ## Next actions
 
-0. **API (D-027–D-048):** all milestones M0–M6 done 2026-11-27 (105 tests). Owner reviews D-048. Then deploy with `DEPLOYMENT.md` (own SQL login OI-12, server runtime/port OI-13, data folders, backups). Next phase: Flutter app (Phase 8), after the UX/design approvals (D-014, D-017) and Phase 4 screens.
+0. **API (D-027–D-048):** all milestones M0–M6 done 2026-11-27 (105 tests). D-048 approved. Next: deploy with `DEPLOYMENT.md` (IIS, 8.0.18, port 8445 per D-050; own SQL login OI-12, data folders, backups). Next phase: Flutter app (Phase 8), after the UX/design approvals (D-014, D-017) and Phase 4 screens.
 1. Owner reviews `docs/design/mockups/UI_Mockups_v1.pdf`, then approves or changes D-014 (UX structure) and D-017 (Emerald Ops). (OI-10 closed by D-024, 2026-11-26.)
 2. Optional: validate the themed screens with 2–3 staff and 1 admin.
 3. Phase 4: design every remaining screen and state, in both themes.

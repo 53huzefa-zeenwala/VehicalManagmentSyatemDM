@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManagementDM.Api.Common.Auth;
+using VehicleManagementDM.Api.Features.Lots;
 using VehicleManagementDM.Api.Features.Lots.Dtos;
 
-namespace VehicleManagementDM.Api.Features.Lots;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>Parking lots (LOT-01..07). Everyone signed in sees lots and availability; admins manage them.</summary>
 [ApiController]

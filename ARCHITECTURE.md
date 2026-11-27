@@ -36,22 +36,24 @@ backend/
 │  ├─ appsettings.Development.json
 │  ├─ Properties/launchSettings.json, PublishProfiles/
 │  │
-│  ├─ Features/                      one folder per business area
+│  ├─ Controllers/                   all API controllers, one per file, HTTP only (D-049)
+│  │     Auth, Staff, Admins, Vehicles, VehicleCategories, Lots, Destinations, Trips,
+│  │     Transfers, Notifications, Reports (dashboard, R-1..R-5, audit log), Settings,
+│  │     Files (authenticated download of photos and signatures, §11)
+│  │
+│  ├─ Features/                      business logic, one folder per business area
 │  │  ├─ Auth/                       login, logout, me, change password
-│  │  ├─ Staff/                      staff CRUD, lots, reset password
-│  │  ├─ Admins/
-│  │  ├─ Vehicles/                   vehicles, categories, types, QR
+│  │  ├─ Accounts/                   staff and admin accounts, reset password
+│  │  ├─ Vehicles/                   vehicles, QR labels, vehicle history
+│  │  ├─ VehicleCategories/          categories and types (DTOs only; logic in the controller)
 │  │  ├─ Lots/                       lots, capacity, baseline, occupancy
-│  │  ├─ Destinations/               areas, locations
-│  │  ├─ Trips/                      start, swap, hand-over, cancel, end, history
+│  │  ├─ Destinations/               areas, locations (DTOs only)
+│  │  ├─ Trips/                      start, swap, hand-over, cancel, end, history, duty rules
 │  │  ├─ Transfers/
 │  │  ├─ Notifications/
-│  │  ├─ Dashboard/
-│  │  ├─ Reports/
-│  │  ├─ Settings/
-│  │  ├─ Files/                      authenticated download of photos and signatures (§11)
-│  │  └─ Audit/
-│  │     (each folder holds: <X>Controller.cs, <X>Service.cs, Dtos/ (requests + responses))
+│  │  ├─ Reports/                    dashboard, reports, audit log
+│  │  └─ Settings/                   (DTOs only)
+│  │     (each folder holds: <X>Service.cs and its requests/responses)
 │  │
 │  ├─ Domain/
 │  │  ├─ Entities/                   EF entity classes (shared across features)
@@ -79,7 +81,7 @@ backend/
 ```
 
 **Why this shape**
-- **Feature folders**: everything about trips sits in `Features/Trips`. Easy to find, easy to change, and it avoids a 40-file `Controllers/` folder.
+- **`Controllers/` + feature folders** (D-049): every endpoint is listed in one `Controllers/` folder (13 files), so the API surface is easy to read; the business rules for an area sit together in `Features/<Area>`.
 - **Controllers → services → `AppDbContext`**: controllers stay thin (HTTP only); services hold business rules; EF Core's `DbContext` is already a unit of work, so no repository layer on top.
 - **One API project**: a separate Domain/Application/Infrastructure project split adds ceremony without benefit at this size. The folders keep the same boundaries, so splitting later stays possible.
 - **Template**: same SDK and target framework as the reference. API controllers only (`AddControllers`), without the MVC `Views/` part, because this API serves no pages.

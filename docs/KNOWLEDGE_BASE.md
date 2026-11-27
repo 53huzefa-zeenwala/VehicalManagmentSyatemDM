@@ -1,6 +1,6 @@
 # Project Knowledge Base
 
-**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-048. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
+**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-050. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
 
 **Reading order for a new session:**
 1. This file
@@ -208,7 +208,9 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | D-045 | Settings limits (prefix 1–5 letters, delay 1–1,440 min); vehicle history → M4, staff trips and hand-over picker → M3 | Approved |
 | D-046 | Trip details from M3: origin = vehicle's lot; swap from any active lot; hand-over to any free staff; cancel note required; overdue = first reminder passed; staff see trips they took part in | Approved |
 | D-047 | **Staff have no assigned lots**: start from any active lot, confirm any transfer; `StaffLots` dropped | Approved |
-| D-048 | M4–M6 details: transfer rules, notification audiences (all staff / all admins), dashboard and report definitions, deployment layout | Proposed |
+| D-048 | M4–M6 details: transfer rules, notification audiences (all staff / all admins), dashboard and report definitions, deployment layout | Approved |
+| D-049 | API controllers in one `Controllers/` folder; logic stays in `Features/<Area>` | Approved |
+| D-050 | Hosting: IIS on the app server, ASP.NET Core 8.0.18, port 8445; first admin created by the owner | Approved |
 
 ## 8. Phase status
 
@@ -238,7 +240,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | OI-10 | ~~Who closes a trip if its staff member can't~~ Closed by D-024 (stays open) | — |
 | OI-11 | iOS builds and signing: a Mac or a cloud macOS build service | Phase 8 |
 | OI-12 | **Database for this app.** Reachable via the app server's SQL Server (2019 Express). New database decided (D-029). Still to set up: its own least-privilege login (not the `sysadmin` one). Express limits: 10 GB per database, ~1.4 GB buffer memory, 4 cores. SQL Server port open to the internet with a `sysadmin` login is a security risk | Phase 7, now |
-| OI-13 | Exact ASP.NET Core 8 runtime patch and hosting model (IIS or Kestrel service) on the server | Before first deploy |
+| OI-13 | **Resolved 2026-11-27 (D-050):** IIS on the app server, ASP.NET Core 8.0.18 runtime, API on port 8445 (HTTPS) | Done |
 | OI-14 | ~~HTTPS with domain + real certificate~~ Closed by D-036 (self-signed, app accepts all certificates) | — |
 
 ## 10. Environment and tooling
@@ -325,6 +327,9 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 2026-11-26 (later) | Owner accepted all DB-design answers (D-043): `DATABASE_DESIGN.md` v0.2 and `API_DOCUMENTATION.md` v0.2 approved; M0 closed |
 | 2026-11-27 | **M1 built** in `backend/`: solution, errors, logging, migrations, cookie auth, file store, auth/files/health endpoints; 49 tests pass against the server; `VehicleManagementDM_Dev` created on the server. D-044 proposed. `CHANGELOG.md` started |
 | 2026-11-27 (later) | Owner: "complete all remaining work". **M4** transfers, **M5** notifications/reminder job/dashboard/reports/audit log, vehicle history, **M6** publish profile, `web.config`, `DEPLOYMENT.md`; migration `TransfersAndNotifications` applied to the dev database; 105 tests pass; D-048 proposed |
+| 2026-11-27 (later) | Owner approved D-048. No open decisions remain for the API |
+| 2026-11-27 (later) | Owner: controllers into one folder. All 13 controllers moved to `Controllers/` (D-049); 105 tests pass |
+| 2026-11-27 (later) | Owner: IIS, runtime 8.0.18, port 8445 (OI-13 resolved, D-050). Release package built; changes committed and pushed |
 | 2026-11-27 (later) | Owner approved M3 and D-046, then removed staff lot assignment (D-047): API, migration `RemoveStaffLots`, tests (94 pass) and docs updated |
 | 2026-11-27 (later) | Owner approved M2 and D-045. **M3 built**: trips with app-lock concurrency, `Trips` migration applied to the dev database; 95 tests pass. D-046 proposed |
 | 2026-11-27 (later) | **M2 built**: master data endpoints, occupancy, audit interceptor, `MasterData` migration applied to the dev database; 78 tests pass. D-045 proposed |

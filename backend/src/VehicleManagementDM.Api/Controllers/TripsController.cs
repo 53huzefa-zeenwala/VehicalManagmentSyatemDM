@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Paging;
+using VehicleManagementDM.Api.Features.Trips;
 using VehicleManagementDM.Api.Features.Trips.Dtos;
 
-namespace VehicleManagementDM.Api.Features.Trips;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>
 /// Trips (TRP). Staff start, swap, hand over, cancel and end their own trips; admins only monitor (D-021).

@@ -9,8 +9,8 @@ using VehicleManagementDM.Api.Common.Storage;
 using VehicleManagementDM.Api.Common.Time;
 using VehicleManagementDM.Api.Data;
 using VehicleManagementDM.Api.Domain.Entities;
-using VehicleManagementDM.Api.Features.Auth.Dtos;
 using VehicleManagementDM.Api.Domain.Enums;
+using VehicleManagementDM.Api.Features.Auth.Dtos;
 using VehicleManagementDM.Api.Features.Trips;
 
 namespace VehicleManagementDM.Api.Features.Auth;

@@ -2,6 +2,10 @@
 
 Notable changes to the code. Dates are GST. Documentation-only changes are tracked in `PROJECT_DECISIONS.md` and `docs/KNOWLEDGE_BASE.md`.
 
+## 2026-11-27 — Controllers in one folder (D-049)
+
+- API controllers moved to `Controllers/` (one per file, `AdminsController` now separate). Business logic stays in `Features/<Area>`. No route or behaviour change; 105 tests pass.
+
 ## 2026-11-27 — Backend M4–M6: transfers, notifications, reports, release
 
 - **Tables** (migration `TransfersAndNotifications`): Transfers (one open transfer per vehicle), ReminderLogs, Notifications.

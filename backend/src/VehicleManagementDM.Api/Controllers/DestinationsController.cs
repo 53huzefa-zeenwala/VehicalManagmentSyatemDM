@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +6,9 @@ using VehicleManagementDM.Api.Common.Errors;
 using VehicleManagementDM.Api.Common.Validation;
 using VehicleManagementDM.Api.Data;
 using VehicleManagementDM.Api.Domain.Entities;
+using VehicleManagementDM.Api.Features.Destinations;
 
-namespace VehicleManagementDM.Api.Features.Destinations;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>Destinations as Area → Location (DST-01). Admins write; everyone signed in reads.</summary>
 [ApiController]
@@ -87,25 +87,3 @@ public sealed class DestinationsController(AppDbContext db) : ControllerBase
         return new LocationResponse(location.Id, location.Name, location.IsActive);
     }
 }
-
-public sealed class AreaRequest
-{
-    [Required(ErrorMessage = "Enter a name.")]
-    [StringLength(100, ErrorMessage = "The name can have at most 100 characters.")]
-    public string Name { get; init; } = string.Empty;
-
-    public bool IsActive { get; init; } = true;
-}
-
-public sealed class LocationRequest
-{
-    [Required(ErrorMessage = "Enter a name.")]
-    [StringLength(150, ErrorMessage = "The name can have at most 150 characters.")]
-    public string Name { get; init; } = string.Empty;
-
-    public bool IsActive { get; init; } = true;
-}
-
-public sealed record AreaResponse(int Id, string Name, bool IsActive, IReadOnlyList<LocationResponse> Locations);
-
-public sealed record LocationResponse(int Id, string Name, bool IsActive);

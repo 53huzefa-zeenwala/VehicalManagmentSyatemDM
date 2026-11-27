@@ -5,7 +5,7 @@ using VehicleManagementDM.Api.Common.Errors;
 using VehicleManagementDM.Api.Common.Storage;
 using VehicleManagementDM.Api.Data;
 
-namespace VehicleManagementDM.Api.Features.Files;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>
 /// Serves photos and signatures to signed-in users only (D-034, ARCHITECTURE.md §11).

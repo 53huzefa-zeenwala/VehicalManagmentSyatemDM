@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using VehicleManagementDM.Api.Common.Auth;
+using VehicleManagementDM.Api.Features.Auth;
 using VehicleManagementDM.Api.Features.Auth.Dtos;
 
-namespace VehicleManagementDM.Api.Features.Auth;
+namespace VehicleManagementDM.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/auth")]

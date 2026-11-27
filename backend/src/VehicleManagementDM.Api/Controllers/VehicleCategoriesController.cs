@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +6,9 @@ using VehicleManagementDM.Api.Common.Errors;
 using VehicleManagementDM.Api.Common.Validation;
 using VehicleManagementDM.Api.Data;
 using VehicleManagementDM.Api.Domain.Entities;
+using VehicleManagementDM.Api.Features.VehicleCategories;
 
-namespace VehicleManagementDM.Api.Features.VehicleCategories;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>Vehicle categories and their types (VEH-01). Admins write; everyone signed in reads.</summary>
 [ApiController]
@@ -88,23 +88,3 @@ public sealed class VehicleCategoriesController(AppDbContext db) : ControllerBas
         return new TypeResponse(type.Id, type.Name, type.IsActive);
     }
 }
-
-public sealed class NameRequest
-{
-    [Required(ErrorMessage = "Enter a name.")]
-    [StringLength(60, ErrorMessage = "The name can have at most 60 characters.")]
-    public string Name { get; init; } = string.Empty;
-}
-
-public sealed class NameAndStatusRequest
-{
-    [Required(ErrorMessage = "Enter a name.")]
-    [StringLength(60, ErrorMessage = "The name can have at most 60 characters.")]
-    public string Name { get; init; } = string.Empty;
-
-    public bool IsActive { get; init; } = true;
-}
-
-public sealed record CategoryResponse(int Id, string Name, bool IsActive, IReadOnlyList<TypeResponse> Types);
-
-public sealed record TypeResponse(int Id, string Name, bool IsActive);

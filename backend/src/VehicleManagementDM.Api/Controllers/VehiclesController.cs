@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Errors;
 using VehicleManagementDM.Api.Common.Paging;
+using VehicleManagementDM.Api.Features.Vehicles;
 using VehicleManagementDM.Api.Features.Vehicles.Dtos;
 
-namespace VehicleManagementDM.Api.Features.Vehicles;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>Vehicle catalogue management for admins (VEH, QR). Staff lookup by QR arrives with trips (M3).</summary>
 [ApiController]

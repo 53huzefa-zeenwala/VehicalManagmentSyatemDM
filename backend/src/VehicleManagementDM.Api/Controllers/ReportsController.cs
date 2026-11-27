@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VehicleManagementDM.Api.Common.Auth;
 using VehicleManagementDM.Api.Common.Paging;
+using VehicleManagementDM.Api.Features.Reports;
 using VehicleManagementDM.Api.Features.Transfers;
 using VehicleManagementDM.Api.Features.Trips.Dtos;
 
-namespace VehicleManagementDM.Api.Features.Reports;
+namespace VehicleManagementDM.Api.Controllers;
 
 /// <summary>Admin dashboard, the five on-screen reports and the audit log (RPT-01..04, AUD-02). Monitoring only (D-021).</summary>
 [ApiController]

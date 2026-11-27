@@ -6,7 +6,7 @@
 
 | Need | Status |
 |---|---|
-| ASP.NET Core **8** runtime (hosting bundle for IIS) | Already there for the Sufizz Bikes backend (D-028). Confirm the exact patch with `dotnet --list-runtimes` (OI-13) |
+| ASP.NET Core **8** runtime (hosting bundle for IIS) | Installed: **8.0.18** (`Microsoft.AspNetCore.App` and `Microsoft.NETCore.App`, checked 2026-11-27, D-050). Our build runs on any 8.0.x patch |
 | SQL Server | The server's SQL Server 2019 Express (D-029). Nothing to install |
 | Anything else | Nothing. All NuGet packages ship inside the publish folder |
 
@@ -55,7 +55,7 @@ Never use `sa` in production. Consider restricting port 1433 to known IPs in the
 **IIS (in-process, as the Sufizz Bikes backend):**
 
 1. New application pool: *No Managed Code*, start mode *AlwaysRunning* (keeps reminders running).
-2. New site pointing at `...\site`, HTTPS binding with the server's certificate on a free port (OI-13; the Sufizz Bikes backend already uses its own ports).
+2. New site pointing at `...\site`, HTTPS binding with the server's certificate on port **8445** (D-050).
 3. Set the environment variables below for the site, either in the server's own `web.config` `<environmentVariables>` (never committed) or as app-pool environment variables.
 
 | Variable | Value |
@@ -99,7 +99,7 @@ Test a restore of both together at least once before go-live (REQUIREMENTS.md §
 
 ## 7. Pre-go-live checklist
 
-- [ ] Server runtime is ASP.NET Core 8.0.x; record the patch level (OI-13). .NET 8 is out of Microsoft support (OI-09, D-008).
+- [x] Server runtime is ASP.NET Core 8.0.18, hosted in IIS (D-050). .NET 8 is out of Microsoft support (OI-09, D-008); installing the last 8.0 patch on the server is advised.
 - [ ] Database `VehicleManagementDM` and login `vms_app` created; `sa` not used (OI-12).
 - [ ] The three data folders exist with write permission; Data Protection keys persist across a site restart (sign in, restart, still signed in).
 - [ ] HTTPS binding works from a phone on mobile data (the app accepts the self-signed certificate, D-036).
