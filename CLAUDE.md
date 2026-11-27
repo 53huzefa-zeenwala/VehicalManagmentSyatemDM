@@ -10,7 +10,7 @@
 
 ## Project context
 
-- Product: one mobile app (Android + iOS) with role-based access (Admin, Staff), per D-007. It runs on one centralized backend, API and database. No web portal.
+- Product: two mobile apps (Android + iOS), **DM Staff** and **DM Admin**, sharing one core package (D-053, replaces D-007). They run on one centralized backend, API and database. No web portal.
 - Stack: Flutter · ASP.NET Core Web API on .NET 8 (D-008) · Microsoft SQL Server.
 - Source requirements, in priority order:
   1. Approved decisions in `PROJECT_DECISIONS.md`.
@@ -45,6 +45,7 @@
 | `DEVELOPMENT_ROADMAP.md` | Phases, status, what is done and what remains. |
 | `CHANGELOG.md` | Notable changes, once code exists. |
 | `DEPLOYMENT.md` | Publishing the API to the server, settings, backups, go-live checklist. |
+| `app/` | Flutter workspace (D-053, D-055): `packages/dm_core` (shared), `apps/staff`, later `apps/admin`. Build/run in `README.md`. |
 | `backend/` | API solution (.NET 8): `src/VehicleManagementDM.Api`, `tests/VehicleManagementDM.Api.Tests`. Setup in `README.md`. |
 
 Create a file only when its phase starts. Do not create documentation without a clear purpose.

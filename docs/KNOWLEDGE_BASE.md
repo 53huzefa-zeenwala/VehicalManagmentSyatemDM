@@ -1,6 +1,6 @@
 # Project Knowledge Base
 
-**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-052. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
+**Current state as of 2026-11-27.** This file holds everything known about the project in one place, reflecting every change up to decision D-055. Older documents may still contain superseded lines; when they disagree, this file and `PROJECT_DECISIONS.md` win.
 
 **Reading order for a new session:**
 1. This file
@@ -15,7 +15,7 @@
 
 ## 1. The product in one paragraph
 
-One mobile app (Flutter, Android and iOS) with two roles, Staff and Admin, on one ASP.NET Core Web API (.NET 8) and one Microsoft SQL Server database. There is no web portal.
+Two mobile apps (Flutter, Android and iOS), **DM Staff** and **DM Admin**, sharing one core package (D-053), on one ASP.NET Core Web API (.NET 8) and one Microsoft SQL Server database. There is no web portal.
 
 - **Staff** take municipal fleet vehicles (cars, garbage trucks, ambulances…) out of parking lots and bring them back. **The staff member is the driver.** The app records who took which vehicle, from which lot, to which destination and for how long. A live timer runs until the vehicle is back.
 - **Admins** set up the master data (vehicles, staff, lots, destinations), create transfers between lots, and **monitor** activity live and in reports. They never act on trips themselves.
@@ -141,7 +141,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 
 **Still to design** (Phase 4): the remaining list and form screens (vehicle, staff, lot, destination and category forms; staff detail; admin management; settings; audit log; notifications; transfer confirm for staff; QR bulk print), plus empty, error, offline and permission states.
 
-## 6. Design system: "Emerald Ops" (D-017, proposed)
+## 6. Design system: "Emerald Ops" (D-017, approved)
 
 - **Colours:**
   - Emerald primary `#0B7A62` (dark mode: mint `#34D3A6`)
@@ -151,7 +151,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
   - Light background `#F3F6F5`; night dark background `#0A1214`
   - All text pairings pass WCAG AA (computed).
 - **Type:** Plus Jakarta Sans (with tabular figures for timers). Arabic later: pair with IBM Plex Sans Arabic or Noto Kufi Arabic.
-- **Icons:** Material Symbols Rounded.
+- **Icons:** Material Symbols Rounded in the mock-ups; the Flutter apps use the built-in Material Icons (rounded), because Material Symbols lose icons in shrunk release builds (D-055).
 - **Signature elements:** the live bar, UAE-style plate badges, emerald hero cards with route lines, the raised staff Scan button. Status is always an icon + a word.
 - **Shape:** cards 22 px radius, buttons 54 px tall / 17 px radius, 4-pt spacing.
 - **Alternatives** (last page of the PDF): Ocean (blue + orange), Midnight Lime.
@@ -167,17 +167,17 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | D-004 | Instagram palette | Superseded by D-017 |
 | D-005 | UX-first phased delivery (10 phases) | Approved |
 | D-006 | Client clarifications batch 1 | Approved |
-| D-007 | One app, role from the account | Approved |
+| D-007 | One app, role from the account | Superseded by D-053 |
 | D-008 | .NET 8 (end-of-life risk accepted) | Approved |
 | D-009 | Business rules batch 2 | Approved; driver and admin-end parts superseded |
 | D-010 | Business rules batch 3 | Approved; driver and attendance parts superseded |
 | D-011 | Staff ID format `DM`+YY+5 digits | Approved |
 | D-012 | Business rules batch 4 (segments, transfer hours, RTL-ready, on-screen reports) | Approved; Driver ID and attendance parts superseded |
 | D-013 | `REQUIREMENTS.md` v1.0 + P-01…P-22 | Approved; P-02 and P-11 superseded |
-| D-014 | UX structure UX-01…UX-12 | Proposed |
+| D-014 | UX structure UX-01…UX-12 | Approved (2026-11-27) |
 | D-015 | "Fleet Signage" design | Rejected |
 | D-016 | Review UX and design together on themed screens | Approved |
-| D-017 | "Emerald Ops" design | Proposed |
+| D-017 | "Emerald Ops" design | Approved (2026-11-27) |
 | D-018 | Deliverables = dummy app → PNG → PDF; knowledge base | Approved |
 | D-019 | Scan button in both tab bars | Superseded by D-022 |
 | D-020 | **The staff member is the driver**, staff signature kept, swap = vehicle or hand-over, transfer driver = whoever confirms departure | Approved |
@@ -213,6 +213,9 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | D-050 | Hosting: IIS on the app server, ASP.NET Core 8.0.18, port 8445; first admin created by the owner | Approved |
 | D-051 | **Passwords stored as plain text** (replaces hashing); compared in code, case-sensitive; risk accepted by the owner | Approved |
 | D-052 | Production connects with `sa` (owner choice, risk accepted); settings in `appsettings.Production.json` on the server only | Approved |
+| D-053 | Two apps (DM Staff, DM Admin) sharing `app/packages/dm_core`; replaces D-007 | Approved |
+| D-054 | Flutter started before all Phase 4 screens; D-014 and D-017 approved | Approved |
+| D-055 | Mobile stack and toolchain pins (Flutter 3.35.3, AGP 8.7.2, Gradle 8.10.2, SDK 36; Riverpod, go_router, dio, mobile_scanner) | Approved |
 
 ## 8. Phase status
 
@@ -220,11 +223,12 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 |---|---|
 | 0 Requirement clarification | ✅ Done |
 | 1 Business analysis | ✅ Done (`REQUIREMENTS.md` v1.1) |
-| 2 UX / IA + 3 Design system | 🟡 In review together (D-016). Waiting on D-014 and D-017 |
+| 2 UX / IA + 3 Design system | ✅ Approved (D-014, D-017; 2026-11-27) |
 | 4 High-fidelity UI (remaining screens and states) | After approval |
 | 5–6 Architecture, database | Not started; decisions made during API work are logged and written up later (D-027) |
-| 7 Backend API | ✅ **M1–M6 done** (2026-11-27): auth, errors, logging, files, master data + audit, trips, transfers, notifications + reminders, dashboard, 5 reports, audit log view, vehicle history; release files and `DEPLOYMENT.md`. 105 tests pass. Not yet deployed to the server (checklist in `DEPLOYMENT.md` §7) |
-| 8–10 Flutter, QA, deployment | Not started |
+| 7 Backend API | ✅ **M1–M6 done** (2026-11-27): auth, errors, logging, files, master data + audit, trips, transfers, notifications + reminders, dashboard, 5 reports, audit log view, vehicle history; release files and `DEPLOYMENT.md`. 105 tests pass. Deployed 2026-11-27 to IIS on the app server, port 8445 (D-050, D-052); test data seeded |
+| 8 Flutter | 🟡 Staff app first cut built (2026-11-27): all staff screens, 17 tests, release APK. Admin app next |
+| 9–10 QA, deployment | Not started |
 
 ## 9. Open items
 
@@ -256,6 +260,15 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
   - The host in the reference connection string is **not reachable** from this machine (TCP 1433 fails, SqlClient timeout).
   - The **app server's own host is reachable** on TCP 1433. Login with the reference credentials succeeded (166 ms): **SQL Server 2019 Express (64-bit), version 15.0.2000.5 (RTM, no cumulative updates)**. The login is `sysadmin`. Only read-only server-property queries were run.
   - So development can connect to the server's SQL Server directly. Still open (OI-12): a dedicated database and a least-privilege login for this app.
+- **Flutter toolchain (D-055, owner's working setup):** Flutter 3.35.3 at `E:\downloads\flutter_windows_3.35.3-stable\flutter` (not on PATH; prepend `bin`), `PUB_CACHE=E:\flutter_pub_cache`, `JAVA_HOME` = Android Studio JBR 21, Android SDK at `%LOCALAPPDATA%\Android\Sdk` (platform 36, build-tools 36.0.0, NDK 28.2.13676358). No emulator binary installed; test on a phone over USB (`adb`).
+- **Lessons learned (Flutter):**
+  - Latest `mobile_scanner` (7.5), `url_launcher_android` and `path_provider_android` pull androidx libraries that need AGP 8.9.1+. With AGP 8.7.2: `mobile_scanner` 7.0.x, and `dependency_overrides` in `app/pubspec.yaml` (url_launcher_android 6.3.14, path_provider_android 2.2.15).
+  - Pub cache on E: and project on D: break incremental Kotlin compilation ("Could not close incremental caches"); `kotlin.incremental=false` in `gradle.properties`.
+  - PowerShell eats `^` in `flutter pub add 'pkg:^1.0'`; write constraints in `pubspec.yaml` directly.
+  - `material_symbols_icons`: most outline icons go blank in release builds (icon-font shrinking). Use built-in `Icons.*_rounded` / `*_outlined`.
+  - Release builds show a grey box and log nothing on a widget error: `main.dart` now prints errors to `adb logcat -s flutter` and shows a readable panel.
+  - Don't pass objects needed after a router refresh through go_router `extra`; pass an id in the path and load it (trip summary).
+  - Phone testing over Tailscale: `adb pair <tailscale-ip>:<pair port> <code>` once, then `adb connect <tailscale-ip>:<port from Wireless debugging>`; the port changes whenever Wireless debugging restarts. `adb reverse tcp:7181 tcp:7181` lets the phone reach the local API as `https://localhost:7181`. Keep *Stay awake* on.
 - **Public repo rule:** never write server IPs, database names, logins, passwords or JWT keys into this repository.
 - **Backend dev setup (D-038):** secrets live in `dotnet user-secrets` on this PC only:
   - API project: `ConnectionStrings:Default` (server SQL Server, database `VehicleManagementDM_Dev`) and `Seed:FirstAdmin:*` (first admin; its password is only in user-secrets, its login ID is in the startup log).
@@ -339,6 +352,8 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 2026-11-27 (later) | Owner's seed run got `503 DATABASE_NOT_READY`: IIS had stopped the idle app and the first request restarted it. Fix: requests wait up to 15 s for startup (`Database:StartupWaitSeconds`); DEPLOYMENT.md asks for Idle Time-out 0 + Preload Enabled. 107 tests pass; release zip rebuilt, not yet deployed |
 | 2026-11-27 (later) | Owner's 2nd seed run also got 503 (server still on the old build). `seed-test-data.ps1` now retries sign-in on `DATABASE_NOT_READY` (12 × 5 s; tested against an unreachable database). **Security finding:** the SQL Server error log shows continuous `sa` password-guessing from many internet IPs (hundreds to 1,000+ attempts per IP, 2026-11-20 to 27). Port 1433 must be firewalled and the `sa` password changed (D-052 risk) |
 | 2026-11-27 (later) | Owner changed the `sa` password and limited port 1433 to the dev PC's IP (AWS security group + Windows Firewall rule *SQL 1433 - trusted IPs only*); no outside login attempts since. Dev/test user-secrets updated; 107 tests pass. Seed script run on the server: 2 categories / 4 types, lots TEST-A/TEST-B, 2 areas / 4 locations, vehicles TEST-1001…1005, staff DM2600001/DM2600002; all audited. Verified via SQL |
+| 2026-11-27 (later) | Owner: two apps (staff, admin), staff first, first cut; one repo with shared core; Android only; Emerald Ops approved; toolchain = owner's working setup. D-053–D-055 logged, D-007 superseded, D-014/D-017 approved. Built `app/` workspace (`dm_core` + `apps/staff`) with all staff screens; 17 tests pass, analyzer clean, release APK (66 MB) builds. Not yet checked on a phone |
+| 2026-11-27 (later) | Phone test (Nothing Phone 3a, Android 17, over Tailscale + wireless adb, local API with a throwaway database): all staff flows work. 7 bugs found and fixed (icons → built-in rounded set, grey screen after ending, false "session ended", amber controls, scanner layout, handed-over trips missing in My trips, transfer driving-time row). Error capture added. 19 tests pass. Throwaway database dropped. Next: live-server check with the owner signing in |
 | 2026-11-27 (later) | Owner approved M3 and D-046, then removed staff lot assignment (D-047): API, migration `RemoveStaffLots`, tests (94 pass) and docs updated |
 | 2026-11-27 (later) | Owner approved M2 and D-045. **M3 built**: trips with app-lock concurrency, `Trips` migration applied to the dev database; 95 tests pass. D-046 proposed |
 | 2026-11-27 (later) | **M2 built**: master data endpoints, occupancy, audit interceptor, `MasterData` migration applied to the dev database; 78 tests pass. D-045 proposed |

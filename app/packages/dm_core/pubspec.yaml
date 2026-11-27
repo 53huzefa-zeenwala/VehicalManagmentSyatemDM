@@ -1,0 +1,32 @@
+name: dm_core
+description: "Shared core for the DM mobile apps - API client, session, models, theme and widgets (D-053)."
+publish_to: none
+version: 0.1.0
+resolution: workspace
+
+environment:
+  sdk: ^3.9.2
+  flutter: ">=3.35.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.11.1
+  cookie_jar: ^4.0.9
+  dio_cookie_manager: ^3.5.0
+  path_provider: ^2.1.5
+  flutter_riverpod: ^2.6.1
+  intl: ^0.20.3
+  flutter_svg: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans.ttf
+  assets:
+    - assets/illustrations/

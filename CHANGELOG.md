@@ -2,6 +2,24 @@
 
 Notable changes to the code. Dates are GST. Documentation-only changes are tracked in `PROJECT_DECISIONS.md` and `docs/KNOWLEDGE_BASE.md`.
 
+## 2026-11-27 — Staff app: fixes from the first phone test
+
+Tested on a real phone (Android 17) against a local API with throwaway data: sign-in, Home, scan by typed registration, start trip (all steps), swap vehicle, end trip + summary, cancel, hand-over, transfer depart/arrive, notifications, lots, trips list, change password, log out / sign in. Fixed:
+- Icons: switched from `material_symbols_icons` (most outline icons went blank in release builds) to Flutter's built-in rounded icons; APK stays ~66 MB.
+- Grey screen after ending a trip: the summary now loads the trip by id instead of receiving it through navigation; the start flow returns Home if its data is lost.
+- Release builds now log UI errors to the device log and show a readable message instead of a grey box.
+- First launch no longer says "Your session has ended".
+- Segmented controls and scanner buttons no longer use amber (reserved for "live"); scanner close/torch sit at the top.
+- My trips now lists trips you handed over (still running under someone else) with "Handed over".
+- Transfer screen: driving time shows only after arrival (the live timer covers the trip).
+19 tests pass.
+
+## 2026-11-27 — Staff app, first cut (D-053–D-055)
+
+- New `app/` Flutter workspace: `packages/dm_core` (API client with persistent session cookie, error envelope, models, repositories, Emerald Ops theme light/dark, shared widgets) and `apps/staff` ("DM Staff", `com.dm.vms.staff`).
+- Staff screens: sign-in, Home (no trip / running / overdue), QR scanner with typed-registration fallback, start trip (vehicle, destination, signature, review), active trip, end trip (verify, return lot, confirm, summary), swap vehicle / hand over, cancel, my trips + detail, lots, transfer task (depart / arrive), notifications, profile + change password + theme.
+- Toolchain pinned to the owner's setup (Flutter 3.35.3, AGP 8.7.2, Gradle 8.10.2, SDK 36). 17 tests pass; `flutter analyze` clean; release APK builds.
+
 ## 2026-11-27 — Cold-start wait
 
 - During startup, API requests now wait up to 15 s (`Database:StartupWaitSeconds`) for the database check before answering `503 DATABASE_NOT_READY`. Found on the server: the first request after IIS restarted the app got 503. DEPLOYMENT.md §3.3 now also lists *Idle Time-out = 0* and *Preload Enabled*. 107 tests pass.

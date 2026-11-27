@@ -1,0 +1,19 @@
+# Pub workspace for the mobile apps (D-053): one shared core package, one folder per app.
+name: dm_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+
+workspace:
+  - packages/dm_core
+  - apps/staff
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+
+# Android plugin implementations pinned to versions that build with Android Gradle Plugin 8.7.2 (D-055);
+# newer ones need AGP 8.9+. Same versions as the owner's other app on this toolchain.
+dependency_overrides:
+  url_launcher_android: 6.3.14
+  path_provider_android: 2.2.15

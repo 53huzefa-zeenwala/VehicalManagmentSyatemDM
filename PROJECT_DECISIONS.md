@@ -15,17 +15,17 @@ Permanent record of every important decision. Never delete entries: replaced dec
 | D-004 | 2026-11-15 | UX/UI | Palette: Ink Heather / Putty Grey / Canary Flash, 60/30/10 | Superseded by D-017 |
 | D-005 | 2026-11-15 | Process | UX-first phased delivery; no code before requirements are clarified | Approved |
 | D-006 | 2026-11-18 | Business logic | Client clarifications (batch 1) adopted as requirements | Approved (source: client) |
-| D-007 | 2026-11-18 | Architecture | One mobile app; the role (Admin or Staff) comes from the account | Approved |
+| D-007 | 2026-11-18 | Architecture | One mobile app; the role (Admin or Staff) comes from the account | Superseded by D-053 |
 | D-008 | 2026-11-18 | Technology | Keep .NET 8 for the API (end-of-life risk accepted) | Approved |
 | D-009 | 2026-11-18 | Business logic | Business rules batch 2 (owner answers, form 3) | Approved; driver and admin-end parts superseded by D-020, D-021 |
 | D-010 | 2026-11-22 | Business logic | Business rules batch 3 (owner answers, form 4) | Approved; driver parts superseded by D-020 |
 | D-011 | 2026-11-22 | Business logic | Staff ID format `DM` + YY + 5-digit sequence | Approved 2026-11-22 |
 | D-012 | 2026-11-22 | Business logic | Business rules batch 4 (form 5 + final questions) | Approved; Driver ID part superseded by D-020 |
 | D-013 | 2026-11-22 | Process | `REQUIREMENTS.md` v1.0 approved, including P-01 to P-22; Phase 1 closed | Approved; P-02, P-11 superseded (D-020, D-021) → v1.1 |
-| D-014 | 2026-11-22 | UX/UI | UX structure: role-based navigation, active-trip bar, flows (UX-01 to UX-11) | Proposed |
+| D-014 | 2026-11-22 | UX/UI | UX structure: role-based navigation, active-trip bar, flows (UX-01 to UX-11) | Approved (2026-11-27, D-054) |
 | D-015 | 2026-11-22 | UX/UI | Design system v0.1 "Fleet Signage": tokens, fonts, icons, components | Rejected |
 | D-016 | 2026-11-22 | Process | Review the UX structure and design system together, on themed screens | Approved |
-| D-017 | 2026-11-22 | UX/UI | New visual direction "Emerald Ops" (colours chosen by Claude, as the owner delegated) | Proposed |
+| D-017 | 2026-11-22 | UX/UI | New visual direction "Emerald Ops" (colours chosen by Claude, as the owner delegated) | Approved (2026-11-27, D-054) |
 | D-018 | 2026-11-22 | Process | Design deliverables = dummy app → screenshots → PDF; project knowledge base | Approved |
 | D-019 | 2026-11-22 | UX/UI | Centre Scan button in both tab bars (UX-12) | Superseded by D-022 |
 | D-020 | 2026-11-23 | Business logic | The staff member is the driver; no separate driver records | Approved |
@@ -61,6 +61,9 @@ Permanent record of every important decision. Never delete entries: replaced dec
 | D-050 | 2026-11-27 | Deployment | API hosted in IIS on the app server, port 8445 (HTTPS), ASP.NET Core 8.0.18 runtime; first admin created by the owner | Approved |
 | D-051 | 2026-11-27 | Security | Passwords stored as plain text (replaces PBKDF2 hashing); risk accepted by the owner | Approved |
 | D-052 | 2026-11-27 | Deployment | Production connects with the `sa` login; server settings in `appsettings.Production.json` kept only on the server; risk accepted by the owner | Approved |
+| D-053 | 2026-11-27 | Architecture | Two mobile apps (Staff, Admin) sharing one core package; replaces D-007 | Approved |
+| D-054 | 2026-11-27 | Process | Start the Flutter phase now, before all Phase 4 screens exist; D-014 and D-017 approved | Approved |
+| D-055 | 2026-11-27 | Technology | Mobile stack and toolchain pins (Flutter 3.35.3, Android SDK 36, AGP 8.7.2, Riverpod, go_router, dio) | Approved |
 
 ---
 
@@ -148,7 +151,7 @@ Permanent record of every important decision. Never delete entries: replaced dec
 - **Reasoning:** Owner's choice (N1). One store listing, one codebase, simpler distribution and updates.
 - **Alternatives considered:** Two apps sharing one codebase, as listed in the original PDF scope.
 - **Final selection:** One app.
-- **Status:** Approved. Supersedes the "two dedicated apps" part of D-001.
+- **Status:** Superseded by D-053 on 2026-11-27 (two apps sharing one core package). Originally approved; it superseded the "two dedicated apps" part of D-001.
 - **Impact:**
   - The PDF's deliverables list says two apps, so the client should be told.
   - Admin features ship inside the app on staff's personal phones, hidden by role. The API must check every permission on the server, never trust the app.
@@ -272,7 +275,7 @@ Permanent record of every important decision. Never delete entries: replaced dec
 - **Status:** Approved
 - **Impact:** UX work builds on `REQUIREMENTS.md`. Any later change to requirements needs a new decision entry.
 
-## D-014 — UX structure (proposed)
+## D-014 — UX structure
 
 - **Date:** 2026-11-22
 - **Category:** UX/UI
@@ -297,7 +300,7 @@ Permanent record of every important decision. Never delete entries: replaced dec
   - A drawer menu for admins. Rejected: it hides the main areas.
   - A smart "scan to start or end" button. Deferred: unclear to new users.
 - **Final selection:** Pending owner approval.
-- **Status:** Proposed
+- **Status:** Approved by the owner on 2026-11-27 ("Use Emerald Ops", D-054). Staff screens follow it; mock-up items changed by later decisions (D-047, D-043, D-046) follow those decisions.
 - **Impact:** Phase 3 components (timer bar, step flow, confirm sheet, pickers) and Phase 4 screens. Wireframes: `docs/ux/wireframes.html`.
 
 ## D-015 — Design system v0.1 "Fleet Signage" (proposed)
@@ -338,7 +341,7 @@ Permanent record of every important decision. Never delete entries: replaced dec
 
 > **2026-11-22 update:** D-015 was rejected by the owner ("not what I want; I want good-looking UI"). D-004 is superseded by D-017.
 
-## D-017 — Visual direction "Emerald Ops" (proposed)
+## D-017 — Visual direction "Emerald Ops"
 
 - **Date:** 2026-11-22
 - **Category:** UX/UI
@@ -354,7 +357,7 @@ Permanent record of every important decision. Never delete entries: replaced dec
   - Every text pairing passes WCAG AA (computed).
 - **Alternatives considered:** Ocean (blue + orange) and Midnight Lime. Both are rendered on the last page of the PDF; switching is a token change.
 - **Final selection:** Emerald Ops, pending the owner's review of `docs/design/mockups/UI_Mockups_v1.pdf`.
-- **Status:** Proposed
+- **Status:** Approved by the owner on 2026-11-27 ("Use Emerald Ops", D-054).
 - **Impact:**
   - Supersedes D-004.
   - D-015 is rejected.
@@ -920,3 +923,38 @@ Permanent record of every important decision. Never delete entries: replaced dec
 - **Alternatives considered:** a dedicated `vms_app` login with rights on this database only (DEPLOYMENT.md §3.2), still possible later by changing the connection string.
 - **Status:** Approved (owner, after the risk was explained). Resolves OI-12.
 - **Impact:** DEPLOYMENT.md §3.2, §3.3, §7; `.gitignore`; API project file.
+
+## D-053 — Two mobile apps sharing one core
+
+- **Date:** 2026-11-27
+- **Category:** Architecture
+- **Decision:**
+  - Two Flutter apps: **Staff** ("DM Staff", `com.dm.vms.staff`) and **Admin** ("DM Admin", `com.dm.vms.admin`). Names and IDs can change before a store release.
+  - One folder `app/` (a pub workspace): `packages/dm_core` holds what both share (API client, session, models, theme, shared widgets); `apps/staff` and `apps/admin` hold the screens.
+  - Staff app first; the admin app follows.
+  - The API is unchanged: it already checks every permission by role. The staff app refuses admin accounts and the admin app refuses staff accounts.
+- **Reasoning:** Owner's choice. Each app carries only its own screens; the shared package avoids writing the API client, sign-in and theme twice.
+- **Alternatives considered:** one app with roles (D-007); two independent projects; one project with two build flavors.
+- **Status:** Approved. Supersedes D-007.
+- **Impact:** UX_ARCHITECTURE.md stays valid per role (staff tabs, admin tabs); "role-based navigation" now means one app per role.
+
+## D-054 — Start the Flutter phase now
+
+- **Date:** 2026-11-27
+- **Category:** Process
+- **Decision:** Start Phase 8 (Flutter) with the staff app as a first cut, although Phase 4 (remaining high-fidelity screens) is not complete. The owner approved the UX structure (D-014) and the Emerald Ops design (D-017). Screens without a mock-up follow the design system and UX_ARCHITECTURE.md.
+- **Reasoning:** Owner's request ("start building app now … first cut rough will be okay"). Same kind of deviation from D-005 as D-027 was for the backend.
+- **Status:** Approved
+
+## D-055 — Mobile stack and toolchain
+
+- **Date:** 2026-11-27
+- **Category:** Technology
+- **Decision:**
+  - **Toolchain (owner's working setup, pinned):** Flutter 3.35.3 stable / Dart 3.9.2 at `E:\downloads\flutter_windows_3.35.3-stable\flutter` (no `flutter upgrade`); JDK = Android Studio JBR 21; compileSdk/targetSdk 36; NDK 28.2.13676358; Android Gradle Plugin 8.7.2; Gradle 8.10.2; Kotlin 2.1.20; Java 17; `PUB_CACHE=E:\flutter_pub_cache`. Android only for now; iOS later on a Mac.
+  - **Packages:** flutter_riverpod (state), go_router (navigation), dio + cookie_jar + dio_cookie_manager + path_provider (API and session cookie), mobile_scanner (QR), signature (signature pad), flutter_svg, intl, url_launcher. Models written by hand (no code generation).
+  - **Icons:** Flutter's built-in Material Icons, rounded style (outlined variants for inactive tabs). *Changed 2026-11-27 after the phone test: the `material_symbols_icons` package's fonts lose most outline icons when a release build shrinks icon fonts; keeping them would need `--no-tree-shake-icons` (+15 MB APK). The built-in rounded set looks almost the same and shrinks correctly. This adjusts the design's "Material Symbols Rounded" (D-017) for the apps only.*
+  - **Configuration:** the API base URL comes from `--dart-define-from-file`; the real file is git-ignored (public repo). The self-signed certificate (D-036) is accepted only for the configured API host.
+  - **Release signing:** debug keystore for sideloading; a real keystore is needed before Play Store.
+- **Reasoning:** Matches the owner's other Flutter project that builds on this PC; well-known, maintained packages; no code generation keeps the build simple.
+- **Status:** Approved (toolchain from the owner; packages as planned and approved 2026-11-27)

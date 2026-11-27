@@ -329,3 +329,25 @@ The owner reviews after each milestone. Dev and test databases are on the server
 - **M3:** every trip action runs in one transaction under SQL Server application locks (`sp_getapplock`) on the staff member(s), vehicle(s) and trip involved, taken in a fixed order so actions can't deadlock; the filtered unique indexes (one active trip per staff member and per vehicle) are the final guard. Tested with two phones starting the same vehicle at once.
 - **M4–M6:** transfers use the same app-lock pattern as trips (`Common/Database/AppLocks`); "busy" (BR-02, D-026) is one shared rule for trips and transfers (`DutyRules`); the reminder job (`BackgroundJobs/ReminderJob`) claims each due reminder with a conditional update so it is sent once; push goes through `IPushSender`, registered as the approved no-op until Firebase exists (D-039). Release: `Properties/PublishProfiles/FolderProfile.pubxml` (framework-dependent), `web.config` (JSON errors pass through IIS, 21 MB request filter), `appsettings.Development.json` excluded from publish; runbook in `DEPLOYMENT.md`.
 - The ASP.NET Core exception-middleware log is silenced in `appsettings.json` because `ErrorLogWriter` already logs every error once.
+
+## 14. Mobile apps (D-053, D-054, D-055)
+
+```
+app/                         pub workspace (one pubspec.lock)
+  packages/dm_core/          shared: AppConfig, ApiClient (dio + persistent cookie jar), ApiException,
+                             SessionController, models, Repos (one method per endpoint), Emerald Ops theme
+                             (tokens light/dark, Plus Jakarta Sans), GST helpers, shared widgets, illustrations
+  apps/staff/                DM Staff: go_router (tabs Home · Trips · [Scan] · Lots · Profile + pushed flows),
+                             Riverpod state, screens in lib/features/
+  apps/admin/                DM Admin (next)
+  dart_defines/              build-time API_BASE_URL per app (real files git-ignored)
+```
+
+- **Session:** the API's `vms.auth` cookie, stored by `PersistCookieJar` in the app's support folder; sign-in always asks for "remember me" (30 days). Start-up calls `auth/me`. Any `UNAUTHENTICATED` / `ACCOUNT_DEACTIVATED` answer clears the cookie and shows sign-in with the server's message. Each app accepts only its own role.
+- **Errors:** every failure is an `ApiException` built from the API's error envelope (or a network/timeout case); screens show `detail`, field errors inline, and the `traceId` as "Ref".
+- **Certificate:** the self-signed certificate (D-036) is accepted for the configured API host only, for API calls and images (`HttpOverrides`).
+- **Images:** photo and signature URLs need the session, so `AuthImage` sends the cookie.
+- **Refresh (D-035):** data loads when a screen opens and on pull-to-refresh; only timers tick on the device.
+- **Times:** UTC from the API, shown in GST (UTC+4); date filters sent as GST dates.
+- **Tests:** `dm_core` unit tests (error envelope, model parsing from API-shaped JSON, time formatting); staff widget tests (sign-in validation and errors, Home in its three states).
+
