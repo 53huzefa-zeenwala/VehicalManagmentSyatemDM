@@ -64,6 +64,8 @@ Permanent record of every important decision. Never delete entries: replaced dec
 | D-053 | 2026-11-27 | Architecture | Two mobile apps (Staff, Admin) sharing one core package; replaces D-007 | Approved |
 | D-054 | 2026-11-27 | Process | Start the Flutter phase now, before all Phase 4 screens exist; D-014 and D-017 approved | Approved |
 | D-055 | 2026-11-27 | Technology | Mobile stack and toolchain pins (Flutter 3.35.3, Android SDK 36, AGP 8.7.2, Riverpod, go_router, dio) | Approved |
+| D-056 | 2026-11-27 | Business logic | No map or location in v1: lots have no latitude/longitude; no lots map, no pin picker | Approved |
+| D-057 | 2026-11-27 | Architecture | Admin app details: scope (all admin screens), QR label outputs (print, share image, save image), photo upload, label size | Approved |
 
 ---
 
@@ -952,9 +954,34 @@ Permanent record of every important decision. Never delete entries: replaced dec
 - **Category:** Technology
 - **Decision:**
   - **Toolchain (owner's working setup, pinned):** Flutter 3.35.3 stable / Dart 3.9.2 at `E:\downloads\flutter_windows_3.35.3-stable\flutter` (no `flutter upgrade`); JDK = Android Studio JBR 21; compileSdk/targetSdk 36; NDK 28.2.13676358; Android Gradle Plugin 8.7.2; Gradle 8.10.2; Kotlin 2.1.20; Java 17; `PUB_CACHE=E:\flutter_pub_cache`. Android only for now; iOS later on a Mac.
-  - **Packages:** flutter_riverpod (state), go_router (navigation), dio + cookie_jar + dio_cookie_manager + path_provider (API and session cookie), mobile_scanner (QR), signature (signature pad), flutter_svg, intl, url_launcher. Models written by hand (no code generation).
+  - **Packages:** flutter_riverpod (state), go_router (navigation), dio + cookie_jar + dio_cookie_manager + path_provider (API and session cookie), mobile_scanner (QR), signature (signature pad), flutter_svg, intl, url_launcher (removed 2026-11-27 with the map, D-056). Models written by hand (no code generation).
   - **Icons:** Flutter's built-in Material Icons, rounded style (outlined variants for inactive tabs). *Changed 2026-11-27 after the phone test: the `material_symbols_icons` package's fonts lose most outline icons when a release build shrinks icon fonts; keeping them would need `--no-tree-shake-icons` (+15 MB APK). The built-in rounded set looks almost the same and shrinks correctly. This adjusts the design's "Material Symbols Rounded" (D-017) for the apps only.*
   - **Configuration:** the API base URL comes from `--dart-define-from-file`; the real file is git-ignored (public repo). The self-signed certificate (D-036) is accepted only for the configured API host.
   - **Release signing:** debug keystore for sideloading; a real keystore is needed before Play Store.
 - **Reasoning:** Matches the owner's other Flutter project that builds on this PC; well-known, maintained packages; no code generation keeps the build simple.
 - **Status:** Approved (toolchain from the owner; packages as planned and approved 2026-11-27)
+
+## D-056 — No map or location in v1
+
+- **Date:** 2026-11-27
+- **Category:** Business logic
+- **Decision:** The map is not part of the current scope. Parking lots have **no latitude/longitude**: the fields are removed from the database, the API and both apps. There is no lots map (C-11), no map pin picker (A-19) and no "Map" button on the staff Lots tab. Lots keep their written address.
+- **Reasoning:** Owner: "map is not part of the process for current SRS"; skip location in the whole system rather than ask admins for coordinates.
+- **Alternatives considered:** paste a Google Maps link or type latitude/longitude; an in-app pin picker with a Google Maps key.
+- **Status:** Approved. Changes LOT-01 (no Google Maps pin) and LOT-06 (no map view) for v1; adding a map later needs a new decision and a Google Maps key.
+- **Impact:** REQUIREMENTS.md (LOT-01, LOT-06), UX_ARCHITECTURE.md (C-11, A-19, staff Lots), DATABASE_DESIGN.md and API_DOCUMENTATION.md (lot fields), migration `RemoveLotCoordinates`, `tools/seed-test-data.ps1`, staff app (Map button and `url_launcher` removed). Rollout: hand out the new staff APK with the new API (old staff APKs still work; only their Map button would point wrong).
+
+## D-057 — Admin app details
+
+- **Date:** 2026-11-27
+- **Category:** Architecture
+- **Decision:**
+  - **Scope:** every admin screen in UX_ARCHITECTURE.md §4.3 in one build: Dashboard, Live (trips, transfers), trip and transfer detail, new transfer, Manage (vehicles, QR labels, categories and types, staff, admins, lots, destinations, settings, audit log), the 5 reports, profile and notifications.
+  - **QR labels (D-040):** the app draws them and offers **Print** (Android print dialog), **Share as image** and **Save image** to the phone's gallery. No PDF sharing. Default label 50 × 70 mm, 12 per A4 sheet (3 × 4); easy to change.
+  - **Photos:** vehicle and staff photos from the camera or gallery, resized on the phone (longest side 1,600 px, JPEG) before upload.
+  - **Packages added:** image_picker, share_plus, gal (save to gallery), printing + pdf (print dialog only), qr (QR matrix). Versions pinned to what builds with AGP 8.7.2 (D-055).
+  - Screens shared by both apps (sign-in, notifications, change password, trip and transfer detail) move into `dm_core`.
+  - D-035 stays: no automatic refresh; pull to refresh; running timers tick on the phone.
+- **Reasoning:** Owner's answers on 2026-11-27 (all screens in one go; photos from camera and gallery; QR as print, share as photo or download as image).
+- **Status:** Approved
+

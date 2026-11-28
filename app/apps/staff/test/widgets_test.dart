@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:staff/features/home.dart';
-import 'package:staff/features/login.dart';
 import 'package:staff/features/trips.dart';
 import 'package:staff/state.dart';
 
@@ -88,7 +87,10 @@ void main() {
   testWidgets('login asks for ID and password before calling the server', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [sessionProvider.overrideWith(() => _FakeSession(const SignedOut()))],
+        overrides: [
+          appRoleProvider.overrideWithValue(UserRole.staff),
+          sessionProvider.overrideWith(() => _FakeSession(const SignedOut())),
+        ],
         child: MaterialApp(theme: AppTheme.light(), home: const LoginScreen()),
       ),
     );
@@ -105,6 +107,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appRoleProvider.overrideWithValue(UserRole.staff),
           sessionProvider.overrideWith(
             () => _FakeSession(
               const SignedOut(),

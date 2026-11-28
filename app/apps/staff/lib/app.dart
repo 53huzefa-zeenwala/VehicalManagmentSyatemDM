@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'router.dart';
-import 'state.dart';
 
 class StaffApp extends ConsumerWidget {
   const StaffApp({super.key});

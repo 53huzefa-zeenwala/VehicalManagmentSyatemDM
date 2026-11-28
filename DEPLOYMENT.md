@@ -137,6 +137,8 @@ WHERE [LoginId] = '<login ID>';
 4. Check: `GET https://<server>:<port>/health` → `{"status":"Healthy","database":"Healthy"}`.
 5. First deploy only: create the first admin, either with the seed variables (read the login ID from the startup log `First admin account created with login ID …`, then remove the variables) or with SQL (§3.4). Sign in and change the password.
 
+**Release of 2026-11-28 (D-056):** the API drops the lot latitude/longitude columns (migration `RemoveLotCoordinates`, applied on start). Older staff APKs keep working, but their Lots "Map" button would open a wrong place, so give staff the new APK (no Map button) with this release. The new apps also work with the older API.
+
 ## 4a. Test data (optional)
 
 After the first admin exists, run on any PC with PowerShell 7:

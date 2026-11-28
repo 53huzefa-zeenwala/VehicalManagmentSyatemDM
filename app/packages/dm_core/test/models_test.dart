@@ -69,8 +69,6 @@ void main() {
       'code': 'TEST-A',
       'name': 'Test Lot A',
       'address': 'Somewhere',
-      'latitude': 25.1972,
-      'longitude': 55.2744,
       'contactName': 'Test Contact',
       'contactNumber': '+971500000001',
       'opensAt': null,

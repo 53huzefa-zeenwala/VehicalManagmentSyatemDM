@@ -87,10 +87,6 @@ public class ParkingLot : IHasTimestamps, IAuditable
 
     public string Address { get; set; } = string.Empty;
 
-    public decimal Latitude { get; set; }
-
-    public decimal Longitude { get; set; }
-
     public string ContactName { get; set; } = string.Empty;
 
     public string ContactNumber { get; set; } = string.Empty;

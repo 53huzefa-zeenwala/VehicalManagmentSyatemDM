@@ -120,7 +120,7 @@ A staff member needs at least one lot (checked by the API).
 | Code | varchar(20) | | **Unique** |
 | Name | nvarchar(100) | | |
 | Address | nvarchar(300) | | |
-| Latitude, Longitude | decimal(9,6) | | Google Maps pin |
+| ~~Latitude, Longitude~~ | — | | **Removed** by migration `RemoveLotCoordinates` (D-056: no map in v1) |
 | ContactName | nvarchar(100) | | |
 | ContactNumber | varchar(20) | | |
 | OpensAt, ClosesAt | time(0) | ✓ | Information only (LOT-05) |

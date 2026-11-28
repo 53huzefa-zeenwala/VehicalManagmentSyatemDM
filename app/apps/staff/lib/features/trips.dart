@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../state.dart';
-import 'common.dart';
-import 'trip_view.dart';
 
 /// S-16 My trips: Today / This week / Month, grouped by day, the running trip pinned at the top (TRP-12).
 class TripsScreen extends ConsumerStatefulWidget {

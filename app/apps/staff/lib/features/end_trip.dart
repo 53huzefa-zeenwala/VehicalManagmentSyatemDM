@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../state.dart';
 import 'common.dart';
 import 'scan.dart';
-import 'trip_view.dart';
 
 /// S-10 → S-11 → S-12 → S-13: verify the vehicle, pick the return lot, confirm, see the summary (TRP-09, TRP-10).
 class EndTripScreen extends ConsumerStatefulWidget {

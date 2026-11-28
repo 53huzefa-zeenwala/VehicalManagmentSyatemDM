@@ -17,7 +17,6 @@ dependencies:
   # 7.0.x: later versions pull androidx libraries that need Android Gradle Plugin 8.9+ (toolchain is 8.7.2, D-055).
   mobile_scanner: ">=7.0.1 <7.1.0"
   signature: ^6.4.0
-  url_launcher: ^6.3.2
   intl: ^0.20.3
   flutter_svg: ^2.3.0
   path_provider: ^2.1.5

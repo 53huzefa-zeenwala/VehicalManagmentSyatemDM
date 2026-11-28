@@ -48,27 +48,29 @@ dotnet user-secrets set "TestDatabase:ConnectionString" "<server connection stri
 
 ## Mobile apps (`app/`)
 
-Flutter pub workspace (D-053): `packages/dm_core` (API client, session, models, theme, shared widgets) and one folder per app (`apps/staff`; `apps/admin` later). Android only for now.
+Flutter pub workspace (D-053): `packages/dm_core` (API client, session, models, theme, shared widgets and screens) and one folder per app: `apps/staff` (DM Staff) and `apps/admin` (DM Admin). Android only for now.
 
 **Toolchain (pinned, D-055):** Flutter 3.35.3 stable (don't `flutter upgrade`), Android Studio JBR 21 as `JAVA_HOME`, Android SDK platform 36 + build-tools 36.0.0 + NDK 28.2.13676358, Android Gradle Plugin 8.7.2, Gradle 8.10.2, Kotlin 2.1.20. Newer Android plugin versions need AGP 8.9+, so `app/pubspec.yaml` pins a few of them.
 
 **One-time setup:**
 - Flutter is not on PATH; prepend it per shell: `$env:Path = "E:\downloads\flutter_windows_3.35.3-stable\flutter\bin;" + $env:Path`
 - `$env:PUB_CACHE = 'E:\flutter_pub_cache'`
-- `app/apps/staff/android/local.properties` (not in git): `sdk.dir=` your Android SDK, `flutter.sdk=` your Flutter folder.
-- Copy `app/dart_defines/staff.example.json` to `staff.json` and set `API_BASE_URL` (server origin, e.g. `https://<server>:8445`). The real file is git-ignored.
+- `app/apps/staff/android/local.properties` and `app/apps/admin/android/local.properties` (not in git): `sdk.dir=` your Android SDK, `flutter.sdk=` your Flutter folder.
+- Copy `app/dart_defines/staff.example.json` to `staff.json` and `admin.example.json` to `admin.json`, and set `API_BASE_URL` (server origin, e.g. `https://<server>:8445`). The real files are git-ignored.
 
 **Commands** (from `app/`):
 
 ```powershell
 flutter pub get
-flutter analyze apps/staff packages/dm_core
+flutter analyze apps/staff apps/admin packages/dm_core
 cd packages/dm_core; flutter test; cd ../..
 cd apps/staff; flutter test
-flutter build apk --release --dart-define-from-file=../../dart_defines/staff.json
+flutter build apk --release --obfuscate --split-debug-info=build/debug-symbols --dart-define-from-file=../../dart_defines/staff.json
+cd ../admin; flutter test
+flutter build apk --release --obfuscate --split-debug-info=build/debug-symbols --dart-define-from-file=../../dart_defines/admin.json
 ```
 
-The APK is `app/apps/staff/build/app/outputs/flutter-apk/app-release.apk`, signed with the debug keystore (sideloading only; a real keystore is needed for Play Store).
+Each APK is `app/apps/<app>/build/app/outputs/flutter-apk/app-release.apk`: one universal APK for every phone type, signed with the debug keystore (sideloading only; a real keystore is needed for Play Store). Keep `build/debug-symbols` to read crash stack traces from the obfuscated build.
 
 ## Re-render the mock-ups
 

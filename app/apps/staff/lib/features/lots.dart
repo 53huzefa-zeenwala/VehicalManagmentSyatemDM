@@ -1,11 +1,10 @@
 import 'package:dm_core/dm_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../state.dart';
 
-/// S-18 Lots: free spaces per lot and per vehicle type (LOT-07). Map opens in the phone's maps app.
+/// S-18 Lots: free spaces per lot and per vehicle type (LOT-07). No map in v1 (D-056).
 class LotsScreen extends ConsumerWidget {
   const LotsScreen({super.key});
 
@@ -43,11 +42,6 @@ class _LotCard extends StatelessWidget {
   const _LotCard({required this.lot});
 
   final Lot lot;
-
-  Future<void> _openMap() => launchUrl(
-    Uri.parse('geo:${lot.latitude},${lot.longitude}?q=${lot.latitude},${lot.longitude}(${Uri.encodeComponent(lot.name)})'),
-    mode: LaunchMode.externalApplication,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +88,7 @@ class _LotCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Row(
-            children: [
-              Expanded(child: Text(lot.address, style: context.text.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis)),
-              TextButton.icon(onPressed: _openMap, icon: const Icon(Icons.map_rounded), label: const Text('Map')),
-            ],
-          ),
+          Text(lot.address, style: context.text.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
         ],
       ),
     );

@@ -7,9 +7,7 @@ import 'features/active_trip.dart';
 import 'features/cancel_trip.dart';
 import 'features/end_trip.dart';
 import 'features/home.dart';
-import 'features/login.dart';
 import 'features/lots.dart';
-import 'features/notifications.dart';
 import 'features/profile.dart';
 import 'features/scan.dart';
 import 'features/start_trip.dart';
@@ -17,6 +15,7 @@ import 'features/swap.dart';
 import 'features/transfer.dart';
 import 'features/trips.dart';
 import 'shell.dart';
+import 'state.dart';
 
 /// Staff navigation (UX_ARCHITECTURE.md, D-022): tabs Home · Trips · [Scan] · Lots · Profile, flows pushed on top.
 final routerProvider = Provider<GoRouter>((ref) {
@@ -74,11 +73,22 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/transfers/:id',
         builder: (_, state) => TransferScreen(id: int.parse(state.pathParameters['id']!)),
       ),
-      GoRoute(path: '/notifications', builder: (_, _) => const NotificationsScreen()),
+      GoRoute(path: '/notifications', builder: (_, _) => const NotificationsScreen(onOpen: _openNotification)),
       GoRoute(path: '/profile/password', builder: (_, _) => const ChangePasswordScreen()),
     ],
   );
 });
+
+/// A notification opens its trip (the running one on the trip screen) or its transfer task.
+Future<void> _openNotification(BuildContext context, WidgetRef ref, AppNotification item) async {
+  switch (item.targetType) {
+    case 'Trip':
+      final active = ref.read(activeTripProvider).valueOrNull;
+      await context.push(active?.id == item.targetId ? '/trip' : '/trips/${item.targetId}');
+    case 'Transfer':
+      await context.push('/transfers/${item.targetId}');
+  }
+}
 
 class _Splash extends StatelessWidget {
   const _Splash();

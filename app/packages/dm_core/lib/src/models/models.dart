@@ -268,6 +268,7 @@ class TripDetail {
     this.returnLot,
     this.cancel,
     this.warnings = const [],
+    this.reminders = const [],
   });
 
   factory TripDetail.fromJson(Json json) => TripDetail(
@@ -287,6 +288,7 @@ class TripDetail {
     returnLot: LotRef.maybe(json['returnLot']),
     cancel: json['cancel'] == null ? null : TripCancel.fromJson(asJson(json['cancel'])),
     warnings: asList(json['warnings'], Notice.fromJson),
+    reminders: asList(json['reminders'], ReminderEntry.fromJson),
   );
 
   final int id;
@@ -306,7 +308,20 @@ class TripDetail {
   final TripCancel? cancel;
   final List<Notice> warnings;
 
+  /// Reminders sent so far (TRP-06); filled for admins (A-04).
+  final List<ReminderEntry> reminders;
+
   bool get isActive => status == TripStatus.active;
+}
+
+class ReminderEntry {
+  const ReminderEntry({required this.number, required this.sentAtUtc});
+
+  factory ReminderEntry.fromJson(Json json) =>
+      ReminderEntry(number: integer(json, 'number'), sentAtUtc: utc(json, 'sentAtUtc'));
+
+  final int number;
+  final DateTime sentAtUtc;
 }
 
 class TripSummary {
@@ -408,6 +423,7 @@ class LotTypeOccupancy {
     required this.occupied,
     this.capacity,
     this.available,
+    this.baselineOccupied = 0,
   });
 
   factory LotTypeOccupancy.fromJson(Json json) => LotTypeOccupancy(
@@ -415,6 +431,7 @@ class LotTypeOccupancy {
     type: str(json, 'type'),
     category: str(json, 'category'),
     capacity: intOrNull(json, 'capacity'),
+    baselineOccupied: integer(json, 'baselineOccupied'),
     occupied: integer(json, 'occupied'),
     available: intOrNull(json, 'available'),
   );
@@ -425,6 +442,9 @@ class LotTypeOccupancy {
 
   /// Null when the lot sets no capacity for this type.
   final int? capacity;
+
+  /// Vehicles of this type counted as parked before the system went live (admin-set).
+  final int baselineOccupied;
   final int occupied;
   final int? available;
 }
@@ -435,8 +455,6 @@ class Lot {
     required this.code,
     required this.name,
     required this.address,
-    required this.latitude,
-    required this.longitude,
     required this.contactName,
     required this.contactNumber,
     required this.lotType,
@@ -444,6 +462,9 @@ class Lot {
     required this.byType,
     this.opensAt,
     this.closesAt,
+    this.isActive = true,
+    this.baselineOccupied = 0,
+    this.rowVersion = '',
   });
 
   factory Lot.fromJson(Json json) => Lot(
@@ -451,8 +472,6 @@ class Lot {
     code: str(json, 'code'),
     name: str(json, 'name'),
     address: str(json, 'address'),
-    latitude: dbl(json, 'latitude'),
-    longitude: dbl(json, 'longitude'),
     contactName: str(json, 'contactName'),
     contactNumber: str(json, 'contactNumber'),
     opensAt: strOrNull(json, 'opensAt'),
@@ -460,14 +479,15 @@ class Lot {
     lotType: enumOf(LotType.values, json['lotType'], LotType.other),
     total: LotTotals.fromJson(asJson(json['total'])),
     byType: asList(json['byType'], LotTypeOccupancy.fromJson),
+    isActive: json['isActive'] as bool? ?? true,
+    baselineOccupied: integer(json, 'baselineOccupied'),
+    rowVersion: str(json, 'rowVersion'),
   );
 
   final int id;
   final String code;
   final String name;
   final String address;
-  final double latitude;
-  final double longitude;
   final String contactName;
   final String contactNumber;
   final String? opensAt;
@@ -475,6 +495,11 @@ class Lot {
   final LotType lotType;
   final LotTotals total;
   final List<LotTypeOccupancy> byType;
+  final bool isActive;
+  final int baselineOccupied;
+
+  /// Concurrency token for edits (admin).
+  final String rowVersion;
 
   String get hours => opensAt == null || closesAt == null ? 'Open 24 hours' : '$opensAt – $closesAt';
 
@@ -482,22 +507,29 @@ class Lot {
 }
 
 class Location {
-  const Location({required this.id, required this.name});
+  const Location({required this.id, required this.name, this.isActive = true});
 
-  factory Location.fromJson(Json json) => Location(id: integer(json, 'id'), name: str(json, 'name'));
+  factory Location.fromJson(Json json) =>
+      Location(id: integer(json, 'id'), name: str(json, 'name'), isActive: json['isActive'] as bool? ?? true);
 
   final int id;
   final String name;
+  final bool isActive;
 }
 
 class Area {
-  const Area({required this.id, required this.name, required this.locations});
+  const Area({required this.id, required this.name, required this.locations, this.isActive = true});
 
-  factory Area.fromJson(Json json) =>
-      Area(id: integer(json, 'id'), name: str(json, 'name'), locations: asList(json['locations'], Location.fromJson));
+  factory Area.fromJson(Json json) => Area(
+    id: integer(json, 'id'),
+    name: str(json, 'name'),
+    isActive: json['isActive'] as bool? ?? true,
+    locations: asList(json['locations'], Location.fromJson),
+  );
 
   final int id;
   final String name;
+  final bool isActive;
   final List<Location> locations;
 }
 

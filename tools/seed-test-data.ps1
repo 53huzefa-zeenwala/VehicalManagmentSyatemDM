@@ -96,10 +96,10 @@ foreach ($categoryName in $categorySpec.Keys) {
 
 # --- Lots -----------------------------------------------------------------------------------------
 $lotSpec = @(
-    @{ code = 'TEST-A'; name = 'Test Lot A'; address = 'Test address A, Downtown Dubai'; latitude = 25.1972; longitude = 55.2744
+    @{ code = 'TEST-A'; name = 'Test Lot A'; address = 'Test address A, Downtown Dubai'
        opensAt = '06:00'; closesAt = '23:00'; lotType = 'Open'; totalCapacity = 50
        caps = @{ 'Test Sedan' = 20; 'Test SUV' = 10; 'Test Scooter' = 10; 'Test Motorbike' = 10 } }
-    @{ code = 'TEST-B'; name = 'Test Lot B'; address = 'Test address B, Dubai Marina'; latitude = 25.0805; longitude = 55.1403
+    @{ code = 'TEST-B'; name = 'Test Lot B'; address = 'Test address B, Dubai Marina'
        opensAt = $null; closesAt = $null; lotType = 'Underground'; totalCapacity = 30
        caps = @{ 'Test Sedan' = 15; 'Test SUV' = 5; 'Test Scooter' = 5; 'Test Motorbike' = 5 } }
 )
@@ -111,7 +111,6 @@ foreach ($spec in $lotSpec) {
     if (-not $lot) {
         $lot = Invoke-Api POST 'lots' @{
             code = $spec.code; name = $spec.name; address = $spec.address
-            latitude = $spec.latitude; longitude = $spec.longitude
             contactName = 'Test Contact'; contactNumber = '+971500000001'
             opensAt = $spec.opensAt; closesAt = $spec.closesAt; lotType = $spec.lotType
             totalCapacity = $spec.totalCapacity; baselineOccupied = 0

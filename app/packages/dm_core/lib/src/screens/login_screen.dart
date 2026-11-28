@@ -1,10 +1,16 @@
-import 'package:dm_core/dm_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-/// C-02: emerald header with the truck, then Staff ID and password. Errors come from the API (wrong ID or
-/// password, locked, deactivated, connection).
+import '../auth/session.dart';
+import '../models/models.dart';
+import '../net/api_exception.dart';
+import '../theme/app_theme.dart';
+import '../theme/tokens.dart';
+import '../widgets/widgets.dart';
+
+/// C-02: emerald header with the truck, then ID and password. Errors come from the API (wrong ID or password,
+/// locked, deactivated, connection). The wording follows the app's role (D-053).
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
@@ -51,6 +57,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.dm;
+    final isAdmin = ref.watch(appRoleProvider) == UserRole.admin;
+    final idLabel = isAdmin ? 'Admin ID' : 'Staff ID';
     final session = ref.watch(sessionProvider);
     final notice = _error ?? (session is SignedOut ? session.message : null);
     return Scaffold(
@@ -79,11 +87,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             width: 52,
                             height: 52,
                             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-                            child: Icon(Icons.local_shipping_rounded, color: c.isDark ? c.pDeep : c.primary, size: 30),
+                            child: Icon(
+                              isAdmin ? Icons.admin_panel_settings_rounded : Icons.local_shipping_rounded,
+                              color: c.isDark ? c.pDeep : c.primary,
+                              size: 30,
+                            ),
                           ),
                           const SizedBox(height: 18),
                           Text('Fleet & Parking', style: dmStyle(30, FontWeight.w800, color: Colors.white, spacing: -.8)),
-                          Text('Staff', style: dmStyle(15, FontWeight.w600, color: Colors.white70)),
+                          Text(isAdmin ? 'Admin' : 'Staff', style: dmStyle(15, FontWeight.w600, color: Colors.white70)),
                           const Spacer(),
                           const Align(
                             alignment: Alignment.bottomRight,
@@ -111,7 +123,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     children: [
                       Text('Sign in', style: context.text.headlineMedium),
                       const SizedBox(height: 4),
-                      Text('Use the Staff ID and password from your admin.', style: context.text.bodyMedium),
+                      Text(
+                        isAdmin ? 'Use your Admin ID and password.' : 'Use the Staff ID and password from your admin.',
+                        style: context.text.bodyMedium,
+                      ),
                       const SizedBox(height: 22),
                       if (notice != null) ...[
                         Container(
@@ -133,8 +148,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         textCapitalization: TextCapitalization.characters,
                         autofillHints: const [AutofillHints.username],
                         textInputAction: TextInputAction.next,
-                        decoration: const InputDecoration(labelText: 'Staff ID', prefixIcon: Icon(Icons.badge_rounded)),
-                        validator: (value) => (value ?? '').trim().isEmpty ? 'Enter your Staff ID.' : null,
+                        decoration: InputDecoration(labelText: idLabel, prefixIcon: const Icon(Icons.badge_rounded)),
+                        validator: (value) => (value ?? '').trim().isEmpty ? 'Enter your $idLabel.' : null,
                       ),
                       const SizedBox(height: 14),
                       TextFormField(
@@ -157,7 +172,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: TextButton(onPressed: () => _forgotPassword(context), child: const Text('Forgot password?')),
+                        child: TextButton(
+                          onPressed: () => _forgotPassword(context, isAdmin: isAdmin),
+                          child: const Text('Forgot password?'),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       FilledButton(
@@ -178,7 +196,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _forgotPassword(BuildContext context) => showModalBottomSheet<void>(
+  void _forgotPassword(BuildContext context, {required bool isAdmin}) => showModalBottomSheet<void>(
     context: context,
     builder: (_) => Padding(
       padding: const EdgeInsets.fromLTRB(DmSize.gutter, 0, DmSize.gutter, 32),
@@ -189,7 +207,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           Text('Forgot your password?', style: context.text.titleLarge),
           const SizedBox(height: 8),
           Text(
-            'Ask your admin to reset it. They give you a new password, and you can change it in Profile after signing in.',
+            isAdmin
+                ? 'Ask another admin to reset it in Manage → Admins. You can change it in your profile after signing in.'
+                : 'Ask your admin to reset it. They give you a new password, and you can change it in Profile after '
+                      'signing in.',
             style: context.text.bodyMedium,
           ),
           const SizedBox(height: 18),

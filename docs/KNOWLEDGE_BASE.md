@@ -37,7 +37,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 - Authentication
 - Staff management (with driving licence), admin management
 - Vehicle catalogue (Category → Type), QR codes (generate, image or PDF label, bulk print)
-- Parking lots (capacity per type, baseline count, map), destinations (Area → Location)
+- Parking lots (capacity per type, baseline count; no map in v1, D-056), destinations (Area → Location)
 - Trips (start, live timer, reminders, swap or hand-over, cancel, end)
 - Transfers
 - Push notifications
@@ -92,11 +92,11 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 
 ### 4.3 Lots and capacity
 
-- **Fields:** name, unique code, address, Google Maps pin, contact person and number, opening and closing time (information only), type (Open, Underground or Other), total capacity, capacity per vehicle type, status (Active/Inactive), baseline occupied count.
+- **Fields:** name, unique code, address (no map pin, D-056), contact person and number, opening and closing time (information only), type (Open, Underground or Other), total capacity, capacity per vehicle type, status (Active/Inactive), baseline occupied count.
 - **Occupancy:** occupied = baseline + vehicles located at the lot and not on a trip + vehicles in a transfer that hasn't arrived yet. Available = capacity − occupied, per type and in total.
 - **Full lot:** a warning, never a block.
 - **Inactive lots:** can't be used for start, return or transfer.
-- **Map view:** for staff and admins.
+- **Map view:** none in v1 (D-056); the Lots list shows free spaces.
 
 ### 4.4 Transfers
 
@@ -136,7 +136,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 - **Admin tab bar:** Dashboard · Live · Manage · Reports. No scan button.
 
 **Designed screens** (in the PDF, light and dark):
-- **Staff:** Home (ready), Scan, Start: Vehicle (1/4), Destination (2/4), Signature (3/4), Review (4/4), Home (trip running), Active trip (overdue, hand-over in the timeline), Swap, End: return lot, Trip summary, Cancel, My trips, Lots (map + list), Profile, Sign in.
+- **Staff:** Home (ready), Scan, Start: Vehicle (1/4), Destination (2/4), Signature (3/4), Review (4/4), Home (trip running), Active trip (overdue, hand-over in the timeline), Swap, End: return lot, Trip summary, Cancel, My trips, Lots (list; map removed, D-056), Profile, Sign in.
 - **Admin:** Dashboard, Live, Trip detail (read-only), New transfer, Manage hub, Vehicle detail (resolve "Not at a lot", QR), Lot detail, Report.
 
 **Still to design** (Phase 4): the remaining list and form screens (vehicle, staff, lot, destination and category forms; staff detail; admin management; settings; audit log; notifications; transfer confirm for staff; QR bulk print), plus empty, error, offline and permission states.
@@ -227,7 +227,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 4 High-fidelity UI (remaining screens and states) | After approval |
 | 5–6 Architecture, database | Not started; decisions made during API work are logged and written up later (D-027) |
 | 7 Backend API | ✅ **M1–M6 done** (2026-11-27): auth, errors, logging, files, master data + audit, trips, transfers, notifications + reminders, dashboard, 5 reports, audit log view, vehicle history; release files and `DEPLOYMENT.md`. 105 tests pass. Deployed 2026-11-27 to IIS on the app server, port 8445 (D-050, D-052); test data seeded |
-| 8 Flutter | 🟡 Staff app first cut built (2026-11-27): all staff screens, 17 tests, release APK. Admin app next |
+| 8 Flutter | 🟡 Staff app built and phone-tested (2026-11-27); admin app built (2026-11-28, D-057): every admin screen, QR labels (print, share, save), photos. Next: admin phone test, live-server check |
 | 9–10 QA, deployment | Not started |
 
 ## 9. Open items
@@ -236,7 +236,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 |---|---|---|
 | OI-01 | Scale: vehicles, lots, staff, trips per day | Phase 5 |
 | OI-02 | Privacy policy text and retention. Smaller now: no attendance photos or GPS; signatures and phone numbers remain | Phase 7 |
-| OI-03 | Owner of the Google Maps API key and billing | Phase 7 |
+| ~~OI-03~~ | Not needed: no map in v1 (D-056) | Closed |
 | OI-04 | App name, icon, logo (placeholder "Fleet & Parking") | Phase 4 |
 | OI-05 | App store accounts and distribution | Phase 10 |
 | OI-06 | Hosting: the server that already runs the Sufizz Bikes backend (D-028). Its SQL Server is 2019 Express RTM (15.0.2000.5) | Phase 5 |
@@ -353,6 +353,7 @@ Client context (inferred): a Dubai municipal fleet. Evidence: "DM" branding and 
 | 2026-11-27 (later) | Owner's 2nd seed run also got 503 (server still on the old build). `seed-test-data.ps1` now retries sign-in on `DATABASE_NOT_READY` (12 × 5 s; tested against an unreachable database). **Security finding:** the SQL Server error log shows continuous `sa` password-guessing from many internet IPs (hundreds to 1,000+ attempts per IP, 2026-11-20 to 27). Port 1433 must be firewalled and the `sa` password changed (D-052 risk) |
 | 2026-11-27 (later) | Owner changed the `sa` password and limited port 1433 to the dev PC's IP (AWS security group + Windows Firewall rule *SQL 1433 - trusted IPs only*); no outside login attempts since. Dev/test user-secrets updated; 107 tests pass. Seed script run on the server: 2 categories / 4 types, lots TEST-A/TEST-B, 2 areas / 4 locations, vehicles TEST-1001…1005, staff DM2600001/DM2600002; all audited. Verified via SQL |
 | 2026-11-27 (later) | Owner: two apps (staff, admin), staff first, first cut; one repo with shared core; Android only; Emerald Ops approved; toolchain = owner's working setup. D-053–D-055 logged, D-007 superseded, D-014/D-017 approved. Built `app/` workspace (`dm_core` + `apps/staff`) with all staff screens; 17 tests pass, analyzer clean, release APK (66 MB) builds. Not yet checked on a phone |
+| 2026-11-28 | **Admin app built** (D-057): all admin screens; shared screens moved into `dm_core`. Owner removed the map and lot coordinates from the whole system (D-056; migration `RemoveLotCoordinates`). 33 Flutter tests + 107 backend tests pass; admin API calls checked against a local API |
 | 2026-11-27 (later) | Phone test (Nothing Phone 3a, Android 17, over Tailscale + wireless adb, local API with a throwaway database): all staff flows work. 7 bugs found and fixed (icons → built-in rounded set, grey screen after ending, false "session ended", amber controls, scanner layout, handed-over trips missing in My trips, transfer driving-time row). Error capture added. 19 tests pass. Throwaway database dropped. Next: live-server check with the owner signing in |
 | 2026-11-27 (later) | Owner approved M3 and D-046, then removed staff lot assignment (D-047): API, migration `RemoveStaffLots`, tests (94 pass) and docs updated |
 | 2026-11-27 (later) | Owner approved M2 and D-045. **M3 built**: trips with app-lock concurrency, `Trips` migration applied to the dev database; 95 tests pass. D-046 proposed |

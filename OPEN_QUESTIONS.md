@@ -309,7 +309,7 @@ Answer: _pending_
 
 **D3 · Important — Lot details**
 Which fields: name, code, address, GPS pin, contact person, operating hours, notes? Is a map view needed?
-★ Name, code, address, optional GPS pin; no map view in v1.
+★ Name, code, address, optional GPS pin; no map view in v1. **Final (2026-11-27, D-056): no GPS pin and no map view in v1.**
 Answer: _pending_
 
 ### E. Vehicles, categories & QR codes

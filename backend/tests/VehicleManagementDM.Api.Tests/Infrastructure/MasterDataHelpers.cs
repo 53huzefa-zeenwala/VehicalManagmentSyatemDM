@@ -25,8 +25,6 @@ public static class MasterDataHelpers
         code = code ?? "L" + Guid.NewGuid().ToString("N")[..8],
         name = Unique("Lot"),
         address = "Al Qusais Industrial Area 2, Dubai",
-        latitude = 25.27m,
-        longitude = 55.38m,
         contactName = "Lot Supervisor",
         contactNumber = "+971500000010",
         opensAt = "06:00",

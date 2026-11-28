@@ -55,7 +55,7 @@ It tracks municipal fleet vehicles (cars, garbage trucks, ambulances, and so on)
 **In v1**
 - Authentication and accounts
 - Staff (who are also the drivers, D-020), vehicle catalogue, QR codes
-- Parking lots with capacity and a map
+- Parking lots with capacity (map removed for v1, D-056)
 - Destinations
 - Trips: start, live timer, swap or hand-over, cancel, end (staff only; admins monitor, D-021)
 - Transfers
@@ -102,7 +102,7 @@ It tracks municipal fleet vehicles (cars, garbage trucks, ambulances, and so on)
 | Scan a vehicle QR or type the registration number | — (D-021) | ✓ |
 | Manage parking lots, capacity and baseline counts | ✓ | — |
 | View lot details and availability for all lots | ✓ | ✓ |
-| Map view of lots | ✓ | ✓ `[P-20]` |
+| ~~Map view of lots~~ | — | — *(removed for v1, D-056)* |
 | Manage destinations (areas, locations) | ✓ | — |
 | Start a trip (from any active lot, D-047) | — `[P-22]` | ✓ |
 | Swap (vehicle, or hand over to another staff member) or cancel an active trip | — (D-021) | Own trips |
@@ -178,12 +178,12 @@ The server enforces every permission. The app only hides what a role can't use `
 
 | ID | Requirement | Source |
 |---|---|---|
-| LOT-01 | Create, edit, activate and deactivate lots. Fields: name, code (unique), full address, Google Maps pin, contact person, contact number, opening and closing time, lot type (Open, Underground or Other), total capacity, capacity per vehicle type, status | Client |
+| LOT-01 | Create, edit, activate and deactivate lots. Fields: name, code (unique), full address, ~~Google Maps pin~~ (no location in v1, D-056), contact person, contact number, opening and closing time, lot type (Open, Underground or Other), total capacity, capacity per vehicle type, status | Client |
 | LOT-02 | The admin can set a baseline occupied count for spaces taken by vehicles outside the system, both per type and in total | D-009, P-09 |
 | LOT-03 | Occupied and available spaces are calculated automatically, per type and in total (BR-05) | Client |
 | LOT-04 | A full lot or vehicle type shows a warning but the action is still allowed. Over-capacity is flagged on the dashboard | D-009 |
 | LOT-05 | Operating hours are shown for information only | D-009 |
-| LOT-06 | A map view shows every lot with its availability | Client |
+| ~~LOT-06~~ | ~~A map view shows every lot with its availability~~ **Not in v1 (D-056)**; the Lots list shows availability | Client |
 | LOT-07 | An inactive lot can't be used to start a trip, return a vehicle or receive a transfer | P-08 |
 
 ### 5.7 Destinations (DST)
@@ -356,7 +356,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 
 | Integration | Used for | Note |
 |---|---|---|
-| Google Maps | Lot pin picking and the map view | Needs a Google Cloud API key and billing account (OI-03) |
+| ~~Google Maps~~ | Not needed in v1: no map, no pin (D-056) | — |
 | FCM (Android) / APNs (iOS) | Push reminders and transfer alerts | Needs Firebase and Apple developer accounts |
 | Device camera | QR scanning (staff only) | Requires runtime permission |
 | ~~Device location~~ | ~~GPS on attendance entries~~: not needed after D-023 | — |
@@ -388,7 +388,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 | P-17 | Push notifications for transfers, plus an in-app notification list |
 | P-18 | Theme choice: System, Light or Dark |
 | P-19 | The targets in §8, session behaviour (AUTH-02, AUTH-07) and error handling (QR-06) |
-| P-20 | Staff can see the map view too |
+| ~~P-20~~ | ~~Staff can see the map view too~~ (no map in v1, D-056) |
 | P-21 | Transfers in transit use the same reminder rule as trips |
 | P-22 | Only staff start trips (admins monitor, end, swap and cancel) |
 
@@ -398,7 +398,7 @@ All targets here are `[P-19]` unless tagged otherwise.
 |---|---|---|
 | OI-01 | Scale: vehicles, lots, staff, trips per day (A3) | Phase 5 |
 | OI-02 | Privacy policy text, data retention periods, and which data-protection rules apply | Phase 7 |
-| OI-03 | Who owns the Google Maps API key and billing account | Phase 7 |
+| ~~OI-03~~ | ~~Who owns the Google Maps API key and billing account~~ Not needed: no map in v1 (D-056) | Closed |
 | OI-04 | App name, icon and logo (placeholder: "DM") | Phase 4 |
 | OI-05 | App store accounts and distribution: public, unlisted or private | Phase 10 |
 | OI-06 | Hosting: the existing Sufizz Bikes backend server (D-028). SQL Server 2019 Express RTM | Phase 5 |

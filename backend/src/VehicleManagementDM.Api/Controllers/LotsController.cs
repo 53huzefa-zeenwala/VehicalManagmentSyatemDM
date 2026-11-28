@@ -11,7 +11,7 @@ namespace VehicleManagementDM.Api.Controllers;
 [Route("api/v1/lots")]
 public sealed class LotsController(LotService lots) : ControllerBase
 {
-    /// <summary>All lots with occupancy, for the list and the map (LOT-06). Staff see active lots only.</summary>
+    /// <summary>All lots with occupancy, for the list (no map in v1, D-056). Staff see active lots only.</summary>
     [HttpGet]
     public Task<IReadOnlyList<LotResponse>> List([FromQuery] bool includeInactive, CancellationToken cancellationToken) =>
         lots.ListAsync(includeInactive && User.IsInRole(Roles.Admin), cancellationToken);

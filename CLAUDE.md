@@ -45,7 +45,7 @@
 | `DEVELOPMENT_ROADMAP.md` | Phases, status, what is done and what remains. |
 | `CHANGELOG.md` | Notable changes, once code exists. |
 | `DEPLOYMENT.md` | Publishing the API to the server, settings, backups, go-live checklist. |
-| `app/` | Flutter workspace (D-053, D-055): `packages/dm_core` (shared), `apps/staff`, later `apps/admin`. Build/run in `README.md`. |
+| `app/` | Flutter workspace (D-053, D-055): `packages/dm_core` (shared), `apps/staff`, `apps/admin`. Build/run in `README.md`. |
 | `backend/` | API solution (.NET 8): `src/VehicleManagementDM.Api`, `tests/VehicleManagementDM.Api.Tests`. Setup in `README.md`. |
 
 Create a file only when its phase starts. Do not create documentation without a clear purpose.

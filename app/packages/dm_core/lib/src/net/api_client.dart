@@ -35,6 +35,8 @@ class ApiClient {
         receiveTimeout: const Duration(seconds: 40),
         headers: {'X-App-Version': appVersion, HttpHeaders.acceptHeader: 'application/json'},
         contentType: Headers.jsonContentType,
+        // `ids=1&ids=2` (ASP.NET Core binds repeated keys to a list).
+        listFormat: ListFormat.multi,
       ),
     );
     dio.httpClientAdapter = IOHttpClientAdapter(
@@ -75,6 +77,27 @@ class ApiClient {
   /// For calls that answer 204 No Content.
   Future<void> postNoContent(String path, {Object? body}) =>
       _send(() => _dio.post<Object?>(path, data: body), (_) {});
+
+  Future<T> put<T>(String path, {Object? body, required T Function(Object? json) parse}) =>
+      _send(() => _dio.put<Object?>(path, data: body), parse);
+
+  /// Multipart upload of one file (field `file`), e.g. a vehicle or staff photo.
+  Future<T> upload<T>(
+    String path, {
+    required List<int> bytes,
+    required String fileName,
+    required String mimeType,
+    required T Function(Object? json) parse,
+  }) {
+    final [type, subtype] = mimeType.split('/');
+    final form = FormData.fromMap({
+      'file': MultipartFile.fromBytes(bytes, filename: fileName, contentType: DioMediaType(type, subtype)),
+    });
+    return _send(
+      () => _dio.put<Object?>(path, data: form, options: Options(contentType: Headers.multipartFormDataContentType)),
+      parse,
+    );
+  }
 
   /// Forgets the session cookie (sign-out, or the server ended the session).
   Future<void> clearSession() => _cookies.deleteAll();

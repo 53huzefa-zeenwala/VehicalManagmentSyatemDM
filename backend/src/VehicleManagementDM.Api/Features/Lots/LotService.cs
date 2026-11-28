@@ -85,8 +85,6 @@ public sealed class LotService(AppDbContext db)
         lot.Code = request.Code.Trim().ToUpperInvariant();
         lot.Name = Text.Clean(request.Name);
         lot.Address = Text.Clean(request.Address);
-        lot.Latitude = request.Latitude!.Value;
-        lot.Longitude = request.Longitude!.Value;
         lot.ContactName = Text.Clean(request.ContactName);
         lot.ContactNumber = request.ContactNumber.Trim();
         lot.OpensAt = TimeOfDay.Parse(request.OpensAt);
@@ -160,8 +158,6 @@ public sealed class LotService(AppDbContext db)
                 lot.Code,
                 lot.Name,
                 lot.Address,
-                lot.Latitude,
-                lot.Longitude,
                 lot.ContactName,
                 lot.ContactNumber,
                 TimeOfDay.Format(lot.OpensAt),

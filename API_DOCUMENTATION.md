@@ -78,8 +78,8 @@ Warnings that don't block (full lot, BR-09) come back in successful responses as
   "brand": "Isuzu", "model": "NPR", "colour": "White", "photoUrl": "/api/v1/files/vehicles/….jpg",
   "status": "Available", "currentLot": { "id": 3, "name": "Al Qusais Depot" } /* null = not at a lot */ }
 
-// Lot (list, map and detail)
-{ "id": 3, "code": "AQD", "name": "Al Qusais Depot", "address": "…", "latitude": 25.27, "longitude": 55.38,
+// Lot (list and detail; no coordinates since D-056)
+{ "id": 3, "code": "AQD", "name": "Al Qusais Depot", "address": "…",
   "contactName": "…", "contactNumber": "+971…", "opensAt": "06:00", "closesAt": "22:00",
   "lotType": "Open", "isActive": true, "baselineOccupied": 5,
   "total": { "capacity": 80, "occupied": 61, "available": 19, "isFull": false, "isOverCapacity": false },
@@ -182,7 +182,7 @@ Warnings that don't block (full lot, BR-09) come back in successful responses as
 
 | Method | Path | Role | Purpose |
 |---|---|---|---|
-| GET | `lots?includeInactive=` | A,S | `LotSummary[]` with occupancy (map + list) |
+| GET | `lots?includeInactive=` | A,S | `LotSummary[]` with occupancy (list) |
 | GET | `lots/{id}` | A,S | Same shape as a list item (staff get 404 for inactive lots) |
 | POST | `lots` | A | Create |
 | PUT | `lots/{id}` | A | Edit, including capacities and baselines (`typeCapacities` replaces the whole list), plus `rowVersion` |
@@ -190,7 +190,7 @@ Warnings that don't block (full lot, BR-09) come back in successful responses as
 
 ```jsonc
 // POST lots
-{ "code": "AQD", "name": "Al Qusais Depot", "address": "…", "latitude": 25.27, "longitude": 55.38,
+{ "code": "AQD", "name": "Al Qusais Depot", "address": "…",
   "contactName": "…", "contactNumber": "+971…", "opensAt": "06:00", "closesAt": "22:00",
   "lotType": "Open", "totalCapacity": 80, "baselineOccupied": 5,
   "typeCapacities": [ { "vehicleTypeId": 2, "capacity": 20, "baselineOccupied": 0 } ] }

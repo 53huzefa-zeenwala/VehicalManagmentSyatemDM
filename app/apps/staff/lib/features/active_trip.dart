@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../state.dart';
-import 'trip_view.dart';
 
 /// S-09: running trip — timer ring, vehicle and route, segment timeline, End / Swap / Cancel.
 class ActiveTripScreen extends ConsumerWidget {

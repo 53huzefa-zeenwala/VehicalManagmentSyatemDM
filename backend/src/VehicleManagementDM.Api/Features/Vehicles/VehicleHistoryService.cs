@@ -1,3 +1,5 @@
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using VehicleManagementDM.Api.Common.Errors;
 using VehicleManagementDM.Api.Common.Paging;
@@ -32,6 +34,7 @@ public sealed class VehicleHistoryService(AppDbContext db, TimeProvider timeProv
             .Where(a => a.EntityType == "Vehicle" && a.EntityId == vehicleId)
             .Join(db.Users, a => a.UserId, u => u.Id, (a, u) => new { a.Action, a.AtUtc, a.AfterJson, Admin = u.FullName })
             .ToListAsync(cancellationToken);
+        var lotNames = await db.ParkingLots.AsNoTracking().ToDictionaryAsync(l => l.Id, l => l.Name, cancellationToken);
 
         var entries = segments
             .Select(s => new VehicleHistoryEntry(
@@ -59,7 +62,7 @@ public sealed class VehicleHistoryService(AppDbContext db, TimeProvider timeProv
                 c.AtUtc,
                 null,
                 c.Action,
-                $"{c.Action} by {c.Admin}" + (c.AfterJson is null ? string.Empty : $": {c.AfterJson}"),
+                DescribeChange(c.Action, c.Admin, c.AfterJson, lotNames),
                 null,
                 null,
                 null)))
@@ -71,6 +74,40 @@ public sealed class VehicleHistoryService(AppDbContext db, TimeProvider timeProv
             page.Page,
             page.PageSize,
             entries.Count);
+    }
+
+    /// <summary>
+    /// Readable line for an admin change, from the audit entry's changed values (never the raw JSON: it would show
+    /// internal fields such as the QR token).
+    /// </summary>
+    internal static string DescribeChange(string action, string admin, string? afterJson, IReadOnlyDictionary<int, string> lotNames)
+    {
+        var after = afterJson is null ? null : JsonNode.Parse(afterJson) as JsonObject;
+        var status = after?["status"]?.GetValue<string>();
+        var lotId = after?["currentLotId"]?.GetValue<int?>();
+        var lotName = lotId.HasValue && lotNames.TryGetValue(lotId.Value, out var name) ? name : null;
+        switch (action)
+        {
+            case "Create":
+                return $"Added by {admin}";
+            case "StatusChange" when status is not null:
+                return $"Status set to {Humanize(status).ToLowerInvariant()} by {admin}";
+            case "LocationResolve":
+                return lotName is null ? $"Location changed by {admin}" : $"Placed at {lotName} by {admin}";
+            case "Update" when after is { Count: > 0 }:
+                var fields = after.Select(p => Humanize(p.Key).ToLowerInvariant()).Where(f => f != "qr token" && f != "photo file name");
+                var list = string.Join(", ", fields);
+                return list.Length == 0 ? $"Edited by {admin}" : $"Edited by {admin}: {list}";
+            default:
+                return $"{Humanize(action)} by {admin}";
+        }
+    }
+
+    /// <summary>"UnderMaintenance" / "registrationNumber" → "Under maintenance" / "Registration number".</summary>
+    private static string Humanize(string name)
+    {
+        var spaced = Regex.Replace(name, "(?<=[a-z])(?=[A-Z])", " ");
+        return spaced.Length == 0 ? spaced : char.ToUpperInvariant(spaced[0]) + spaced[1..].ToLowerInvariant();
     }
 }
 

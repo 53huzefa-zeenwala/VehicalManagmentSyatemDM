@@ -414,14 +414,6 @@ namespace VehicleManagementDM.Api.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Latitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("decimal(9,6)");
-
-                    b.Property<decimal>("Longitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("decimal(9,6)");
-
                     b.Property<string>("LotType")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -459,10 +451,6 @@ namespace VehicleManagementDM.Api.Data.Migrations
                     b.ToTable("ParkingLots", null, t =>
                         {
                             t.HasCheckConstraint("CK_ParkingLots_BaselineOccupied", "[BaselineOccupied] >= 0");
-
-                            t.HasCheckConstraint("CK_ParkingLots_Latitude", "[Latitude] BETWEEN -90 AND 90");
-
-                            t.HasCheckConstraint("CK_ParkingLots_Longitude", "[Longitude] BETWEEN -180 AND 180");
 
                             t.HasCheckConstraint("CK_ParkingLots_TotalCapacity", "[TotalCapacity] >= 0");
                         });

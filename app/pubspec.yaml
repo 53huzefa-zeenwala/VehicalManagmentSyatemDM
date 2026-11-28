@@ -8,6 +8,7 @@ environment:
 workspace:
   - packages/dm_core
   - apps/staff
+  - apps/admin
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -15,5 +16,9 @@ dev_dependencies:
 # Android plugin implementations pinned to versions that build with Android Gradle Plugin 8.7.2 (D-055);
 # newer ones need AGP 8.9+. Same versions as the owner's other app on this toolchain.
 dependency_overrides:
-  url_launcher_android: 6.3.14
   path_provider_android: 2.2.15
+  # 0.8.13+ needs androidx.activity 1.12 / core 1.18 (AGP 8.9.1+); 0.8.12+21 uses activity 1.9.3 / core 1.13.1.
+  image_picker_android: 0.8.12+21
+  # image 4.11.0 calls ZLibDecoder.decodeLazy, missing from archive 4.0.x, but pdf 3.12 (the newest on Dart 3.9)
+  # caps archive below 4.1; 4.10.1 works with archive 4.0.9.
+  image: 4.10.1

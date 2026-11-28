@@ -1,5 +1,4 @@
 import 'package:dm_core/dm_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The staff member's running trip (null when none). Shared by the shell's live bar, Home and the trip screens.
@@ -34,15 +33,6 @@ final transferProvider = FutureProvider.autoDispose.family<Transfer, int>(
   (ref, id) => ref.watch(reposProvider).transfer(id),
 );
 
-final notificationsProvider = FutureProvider.autoDispose<NotificationPage>(
-  (ref) => ref.watch(reposProvider).notifications(),
-);
-
-/// Unread count for the bell; refreshed when Home or Notifications reload.
-final unreadCountProvider = FutureProvider.autoDispose<int>(
-  (ref) async => (await ref.watch(reposProvider).notifications(unreadOnly: true)).unreadCount,
-);
-
 enum TripRange { today, week, month }
 
 final tripsProvider = FutureProvider.autoDispose.family<List<TripSummary>, TripRange>((ref, range) async {
@@ -54,5 +44,3 @@ final tripsProvider = FutureProvider.autoDispose.family<List<TripSummary>, TripR
   };
   return (await ref.watch(reposProvider).trips(fromGst: from, toGst: today)).items;
 });
-
-final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);

@@ -2,6 +2,15 @@
 
 Notable changes to the code. Dates are GST. Documentation-only changes are tracked in `PROJECT_DECISIONS.md` and `docs/KNOWLEDGE_BASE.md`.
 
+## 2026-11-28 — Admin app (D-057) and no map in v1 (D-056)
+
+- New `apps/admin` ("DM Admin", `com.dm.vms.admin`): Dashboard (today's figures, trips per hour, needs attention), Live (running trips with timers and filters; open transfers; new transfer), trip detail (read-only, reminders sent), transfer detail (timeline, cancel before departure), Manage (vehicles: list with search and filters, detail with photo, status, place at a lot, QR label, history, add/edit form; bulk QR labels; categories and types; staff with generated ID, photo, trips and hours, reset password, (de)activate; admins; lots with capacity and baseline per type; destinations; settings; audit log with before/after), the 5 reports, profile, notifications.
+- QR labels drawn in the app (50 × 70 mm, 12 per A4 sheet): Print (Android print dialog), Share image, Save image to the gallery.
+- `dm_core`: admin models and `AdminRepos` (one method per admin endpoint), `put` and multipart upload in the API client, conflict detection (`409 CONCURRENCY_CONFLICT`); sign-in, notifications, change password and trip/transfer cards moved here and shared by both apps.
+- Lot latitude/longitude removed from the database (migration `RemoveLotCoordinates`), API, both apps and the seed script; the staff Lots tab has no Map button (and no `url_launcher`).
+- Pinned for AGP 8.7.2: `image_picker_android` 0.8.12+21; `image` 4.10.1 (4.11 needs a newer `archive` than `pdf` allows on Dart 3.9).
+- Tests: 107 backend; 19 `dm_core`, 7 staff, 7 admin. `flutter analyze` clean.
+
 ## 2026-11-27 — Staff app: fixes from the first phone test
 
 Tested on a real phone (Android 17) against a local API with throwaway data: sign-in, Home, scan by typed registration, start trip (all steps), swap vehicle, end trip + summary, cancel, hand-over, transfer depart/arrive, notifications, lots, trips list, change password, log out / sign in. Fixed:

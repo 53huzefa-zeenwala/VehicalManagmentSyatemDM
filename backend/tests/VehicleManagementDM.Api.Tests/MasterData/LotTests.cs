@@ -78,17 +78,20 @@ public sealed class LotTests(ApiFactory factory)
     }
 
     [Fact]
-    public async Task Invalid_coordinates_are_field_errors()
+    public async Task Lots_have_no_map_coordinates()
     {
+        // D-056: no map in v1. Old clients that still send coordinates are not rejected; the values are ignored.
         var admin = await factory.AdminClientAsync();
-        var body = MasterDataHelpers.LotBody();
-        var json = System.Text.Json.JsonSerializer.SerializeToNode(body)!;
-        json["latitude"] = 123;
+        var json = System.Text.Json.JsonSerializer.SerializeToNode(MasterDataHelpers.LotBody())!;
+        json["latitude"] = 25.27;
+        json["longitude"] = 55.38;
 
         var response = await admin.PostAsJsonAsync("/api/v1/lots", json);
 
-        var error = await ApiAssert.ErrorAsync(response, HttpStatusCode.BadRequest, ErrorCodes.ValidationFailed);
-        Assert.Equal(["Latitude must be between -90 and 90."], error.Errors!["latitude"]);
+        Assert.True(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync());
+        var created = await response.Content.ReadFromJsonAsync<System.Text.Json.Nodes.JsonObject>();
+        Assert.False(created!.ContainsKey("latitude"));
+        Assert.False(created.ContainsKey("longitude"));
     }
 
     private static System.Text.Json.Nodes.JsonNode WithRowVersion(object body, byte[] rowVersion)

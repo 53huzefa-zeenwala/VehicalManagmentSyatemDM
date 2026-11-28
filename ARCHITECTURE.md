@@ -330,16 +330,19 @@ The owner reviews after each milestone. Dev and test databases are on the server
 - **M4–M6:** transfers use the same app-lock pattern as trips (`Common/Database/AppLocks`); "busy" (BR-02, D-026) is one shared rule for trips and transfers (`DutyRules`); the reminder job (`BackgroundJobs/ReminderJob`) claims each due reminder with a conditional update so it is sent once; push goes through `IPushSender`, registered as the approved no-op until Firebase exists (D-039). Release: `Properties/PublishProfiles/FolderProfile.pubxml` (framework-dependent), `web.config` (JSON errors pass through IIS, 21 MB request filter), `appsettings.Development.json` excluded from publish; runbook in `DEPLOYMENT.md`.
 - The ASP.NET Core exception-middleware log is silenced in `appsettings.json` because `ErrorLogWriter` already logs every error once.
 
-## 14. Mobile apps (D-053, D-054, D-055)
+## 14. Mobile apps (D-053, D-054, D-055, D-057)
 
 ```
 app/                         pub workspace (one pubspec.lock)
   packages/dm_core/          shared: AppConfig, ApiClient (dio + persistent cookie jar), ApiException,
-                             SessionController, models, Repos (one method per endpoint), Emerald Ops theme
-                             (tokens light/dark, Plus Jakarta Sans), GST helpers, shared widgets, illustrations
+                             SessionController, models, Repos + AdminRepos (one method per endpoint), Emerald Ops
+                             theme (tokens light/dark, Plus Jakarta Sans), GST helpers, shared widgets and the
+                             screens both apps use (sign-in, notifications, change password, trip/transfer cards)
   apps/staff/                DM Staff: go_router (tabs Home · Trips · [Scan] · Lots · Profile + pushed flows),
                              Riverpod state, screens in lib/features/
-  apps/admin/                DM Admin (next)
+  apps/admin/                DM Admin: go_router (tabs Dashboard · Live · Manage · Reports + pushed details and
+                             forms), QR labels drawn in the app (qr + Canvas → PNG; print via printing/pdf, share
+                             via share_plus, save via gal), photos via image_picker (resized on the phone)
   dart_defines/              build-time API_BASE_URL per app (real files git-ignored)
 ```
 
@@ -349,5 +352,8 @@ app/                         pub workspace (one pubspec.lock)
 - **Images:** photo and signature URLs need the session, so `AuthImage` sends the cookie.
 - **Refresh (D-035):** data loads when a screen opens and on pull-to-refresh; only timers tick on the device.
 - **Times:** UTC from the API, shown in GST (UTC+4); date filters sent as GST dates.
-- **Tests:** `dm_core` unit tests (error envelope, model parsing from API-shaped JSON, time formatting); staff widget tests (sign-in validation and errors, Home in its three states).
+- **Edits (admin):** every edit sends the record's `rowVersion`; a `409 CONCURRENCY_CONFLICT` shows "Changed by someone else — Reload".
+- **Lists (admin):** paged endpoints load page by page as the list scrolls (`PagedListView`); filters restart from page 1.
+- **No map (D-056):** lots have no coordinates; there is no map in either app.
+- **Tests:** `dm_core` unit tests (error envelope, model parsing from API-shaped JSON incl. admin shapes, time formatting); staff widget tests (sign-in validation and errors, Home in its three states, handed-over trips); admin widget tests (sign-in wording, dashboard, vehicle form validation, conflict dialog, QR label PNG size).
 

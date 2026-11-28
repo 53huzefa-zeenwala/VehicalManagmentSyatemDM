@@ -22,14 +22,6 @@ public class LotRequest
     [StringLength(300, ErrorMessage = "The address can have at most 300 characters.")]
     public string Address { get; init; } = string.Empty;
 
-    [Required(ErrorMessage = "Pick the location on the map.")]
-    [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90.")]
-    public decimal? Latitude { get; init; }
-
-    [Required(ErrorMessage = "Pick the location on the map.")]
-    [Range(-180, 180, ErrorMessage = "Longitude must be between -180 and 180.")]
-    public decimal? Longitude { get; init; }
-
     [Required(ErrorMessage = "Enter a contact person.")]
     [StringLength(100, ErrorMessage = "The contact name can have at most 100 characters.")]
     public string ContactName { get; init; } = string.Empty;
@@ -83,14 +75,12 @@ public sealed class LotStatusRequest
     public byte[]? RowVersion { get; init; }
 }
 
-/// <summary>Lot with live occupancy (BR-05), used for the list, the map and the detail screen.</summary>
+/// <summary>Lot with live occupancy (BR-05), used for the list and the detail screen.</summary>
 public sealed record LotResponse(
     int Id,
     string Code,
     string Name,
     string Address,
-    decimal Latitude,
-    decimal Longitude,
     string ContactName,
     string ContactNumber,
     string? OpensAt,

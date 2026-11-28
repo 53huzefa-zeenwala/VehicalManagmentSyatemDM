@@ -97,6 +97,9 @@ class ApiException implements Exception {
       code == 'DATABASE_UNAVAILABLE' ||
       code == 'DATABASE_TIMEOUT';
 
+  /// Someone else saved the same record first (stale `rowVersion`): reload before editing again.
+  bool get isConflict => code == 'CONCURRENCY_CONFLICT';
+
   /// First message for a request field (JSON name), for showing under the input.
   String? fieldError(String field) {
     final messages = fieldErrors[field];

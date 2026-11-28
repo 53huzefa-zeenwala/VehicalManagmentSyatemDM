@@ -44,7 +44,7 @@ One app. After login, the account's role decides which shell loads (D-007).
 | Home | Today's work | Hero: Scan to start trip (or the active trip with End / Swap / Cancel) · last trip · transfer tasks · my lot's free space |
 | Trips | The vehicles I started (Client §1) | Active trip + history, labelled by outcome (completed, cancelled, handed over); date filter |
 | **Scan** (centre) | Main action | Opens the scanner: starts a trip, ends the current one, or confirms a transfer, depending on context |
-| Lots | Space across all lots (Client §1) | Map + list with free spaces per type |
+| Lots | Space across all lots (Client §1) | List with free spaces per type (no map in v1, D-056) |
 | Profile | Me | Details, driving licence, my trips this month, theme, change password, log out |
 
 **Admin shell: bottom navigation, 4 tabs, no Scan**
@@ -77,7 +77,6 @@ flowchart TD
     SH --> STT[S-22 Transfer task]
     STR[S-16 My trips] --> STD[S-17 Trip detail]
     SL[S-18 Lots] --> LD[C-10 Lot detail]
-    SL --> LM[C-11 Lots map]
     SPR[S-24 Profile] --> PW[C-06 Change password]
   end
 
@@ -91,7 +90,7 @@ flowchart TD
     AM --> ACT[A-14 Categories & types]
     AM --> AS[A-16 Staff]
     AM --> AA[A-17 Admins]
-    AM --> ALO[A-18..A-19 Parking lots]
+    AM --> ALO[A-18 Parking lots]
     AM --> ADS[A-20 Destinations]
     AM --> ASET[A-21 Settings]
     AM --> AAU[A-23 Audit log]
@@ -121,7 +120,7 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 | C-08 | Notifications | NTF-03 | Grouped by day; tapping one opens its target |
 | C-09 ✓ | Vehicle scanner (staff only) | QR-05, QR-06 | Camera viewfinder · torch · "Type registration number" · result card or a blocking reason |
 | C-10 | Lot detail | LOT-01, LOT-07 | Free spaces per type, address, contact, hours; Edit for admins |
-| C-11 ✓ | Lots map | LOT-06 | Pins showing availability; tapping a pin opens a summary card that leads to C-10 (shown on S-18) |
+| ~~C-11~~ | ~~Lots map~~ | — | **Removed for v1 (D-056)**: no map |
 
 ### 4.2 Staff
 
@@ -144,7 +143,7 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 | S-15 ✓ | Cancel trip | TRP-08 | Reason category + note → place the vehicle → confirm (hours count, and the screen says so) |
 | S-16 ✓ | My trips | TRP-12 | Active card pinned at the top; history by day with outcome badges; date filter |
 | S-17 | Trip detail | TRP-10 | Read-only; segment timeline |
-| S-18 ✓ | Lots | LOT-07 | Map + per-lot cards with free spaces per type |
+| S-18 ✓ | Lots | LOT-07 | Per-lot cards with free spaces per type (no map, D-056) |
 | ~~S-19–S-21~~ | ~~Attendance~~ | — | **Removed (D-023)** |
 | S-22 | Transfer task | TRF-02, TRF-04 | Shows the transfer; **Confirm departure** (any staff member, D-047; the person who confirms drives) or **Confirm arrival** (any staff) |
 | S-24 ✓ | Profile (tab) | P-01 + licence | Details, driving licence, my trips this month, theme, change password, log out *(assigned lots removed, D-047; the mock-up still shows them)* |
@@ -170,8 +169,8 @@ C = common · S = staff · A = admin · R = report. "Req" points to `REQUIREMENT
 | ~~A-15~~ | ~~Drivers~~ | — | **Removed (D-020)**: drivers are staff |
 | A-16 | Staff · list / detail / form | STF-01..03 | Generated ID shown after creation · licence number · reset password · trips and hours *(no assigned lots, D-047)* |
 | A-17 | Admins · list / form | AUTH-05, 06 | Add an admin · reset password · deactivate (can't deactivate yourself) |
-| A-18 ✓ | Parking lots · list / detail / form | LOT-01, 02 | Detail designed. Form sections: basics · location (A-19) · contact and hours · capacity per type · baseline counts |
-| A-19 | Map pin picker | LOT-01 | Search an address or drag the pin |
+| A-18 ✓ | Parking lots · list / detail / form | LOT-01, 02 | Detail designed. Form sections: basics · contact and hours · capacity per type · baseline counts |
+| ~~A-19~~ | ~~Map pin picker~~ | — | **Removed for v1 (D-056)** |
 | A-20 | Destinations | DST-01 | Areas → locations; add or edit inline |
 | A-21 | App settings | SET-01 | Staff ID prefix (with a live example) · reminder delay |
 | ~~A-22~~ | ~~Attendance rules~~ | — | **Removed (D-023)** |

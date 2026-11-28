@@ -66,14 +66,10 @@ internal sealed class ParkingLotConfiguration : IEntityTypeConfiguration<Parking
         {
             table.HasCheckConstraint("CK_ParkingLots_TotalCapacity", "[TotalCapacity] >= 0");
             table.HasCheckConstraint("CK_ParkingLots_BaselineOccupied", "[BaselineOccupied] >= 0");
-            table.HasCheckConstraint("CK_ParkingLots_Latitude", "[Latitude] BETWEEN -90 AND 90");
-            table.HasCheckConstraint("CK_ParkingLots_Longitude", "[Longitude] BETWEEN -180 AND 180");
         });
         builder.Property(l => l.Code).HasMaxLength(20).IsUnicode(false);
         builder.Property(l => l.Name).HasMaxLength(100);
         builder.Property(l => l.Address).HasMaxLength(300);
-        builder.Property(l => l.Latitude).HasPrecision(9, 6);
-        builder.Property(l => l.Longitude).HasPrecision(9, 6);
         builder.Property(l => l.ContactName).HasMaxLength(100);
         builder.Property(l => l.ContactNumber).HasMaxLength(20).IsUnicode(false);
         builder.Property(l => l.OpensAt).HasPrecision(0);
