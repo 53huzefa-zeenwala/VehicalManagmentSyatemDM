@@ -112,6 +112,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     decoration: InputDecoration(
                       labelText: 'Prefix (1 to 5 letters)',
                       errorText: _error?.fieldError('staffIdPrefix'),
+                      helperMaxLines: 3,
                       helperText: 'Next new staff: ${_prefix.text.toUpperCase()}${year}00001-style. Existing IDs don’t change.',
                     ),
                     validator: (v) {

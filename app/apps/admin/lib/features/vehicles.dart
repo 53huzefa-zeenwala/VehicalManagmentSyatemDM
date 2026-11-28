@@ -341,7 +341,7 @@ class VehicleDetailScreen extends ConsumerWidget {
                   child: PhotoEditor(
                     photoUrl: v.photoUrl,
                     size: 150,
-                    placeholder: const Illustration('car', height: 70),
+                    placeholder: Illustration(v.category.toLowerCase().contains('car') ? 'car' : 'truck', height: 70),
                     upload: (bytes) async {
                       await ref.read(adminReposProvider).uploadVehiclePhoto(id, bytes);
                       _reload(ref);
@@ -378,7 +378,7 @@ class VehicleDetailScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(color: context.dm.wSoft, borderRadius: BorderRadius.circular(16)),
                     child: Text(
-                      'Staff left this vehicle outside a lot. Find it, then set the lot it is parked at.',
+                      'This vehicle isn’t at a lot. Find it, then set the lot it is parked at.',
                       style: dmStyle(13.5, FontWeight.w600, color: context.dm.warn),
                     ),
                   ),
@@ -422,7 +422,8 @@ class VehicleDetailScreen extends ConsumerWidget {
                     child: Text('Status and location can change once the vehicle is back.', style: context.text.bodySmall),
                   ),
                 const SectionLabel('History'),
-                _History(vehicleId: id),
+                // Keyed by rowVersion: reloads after every change to the vehicle (status, place, details, photo).
+                _History(key: ValueKey(v.rowVersion), vehicleId: id),
               ],
             );
           },
@@ -433,7 +434,7 @@ class VehicleDetailScreen extends ConsumerWidget {
 }
 
 class _History extends ConsumerStatefulWidget {
-  const _History({required this.vehicleId});
+  const _History({super.key, required this.vehicleId});
 
   final int vehicleId;
 

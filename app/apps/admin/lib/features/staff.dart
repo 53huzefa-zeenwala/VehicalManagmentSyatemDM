@@ -202,7 +202,11 @@ class _StaffDetailScreenState extends ConsumerState<StaffDetailScreen> {
                     onPressed: () => showResetPassword(
                       context,
                       name: s.fullName,
-                      reset: (password) => ref.read(adminReposProvider).resetStaffPassword(id, password),
+                      reset: (password) async {
+                        await ref.read(adminReposProvider).resetStaffPassword(id, password);
+                        // The reset updates the account (new rowVersion): reload before any further edit.
+                        _reload();
+                      },
                     ),
                     icon: const Icon(Icons.key_rounded),
                     label: const Text('Reset password'),

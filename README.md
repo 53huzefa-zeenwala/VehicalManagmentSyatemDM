@@ -70,7 +70,7 @@ cd ../admin; flutter test
 flutter build apk --release --obfuscate --split-debug-info=build/debug-symbols --dart-define-from-file=../../dart_defines/admin.json
 ```
 
-Each APK is `app/apps/<app>/build/app/outputs/flutter-apk/app-release.apk`: one universal APK for every phone type, signed with the debug keystore (sideloading only; a real keystore is needed for Play Store). Keep `build/debug-symbols` to read crash stack traces from the obfuscated build.
+Each APK is `app/apps/<app>/build/app/outputs/flutter-apk/app-release.apk`: one universal APK for every phone type, signed with the debug keystore (sideloading only; a real keystore is needed for Play Store). Keep `build/debug-symbols` to read crash stack traces from the obfuscated build. Don't use `--split-per-abi`: it raises the version code (e.g. 2001) and the universal APK can then no longer update those installs. Raise `version:` in the app's `pubspec.yaml` for every release handed out.
 
 ## Re-render the mock-ups
 

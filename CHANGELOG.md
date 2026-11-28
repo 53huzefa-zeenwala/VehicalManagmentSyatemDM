@@ -2,6 +2,23 @@
 
 Notable changes to the code. Dates are GST. Documentation-only changes are tracked in `PROJECT_DECISIONS.md` and `docs/KNOWLEDGE_BASE.md`.
 
+## 2026-11-28 — Full admin test on the phone (every page) and fixes
+
+Every admin page tested on the owner's phone against a local API with a throwaway database, plus the staff side of each flow: categories and types, destinations, lots (add with timed hours and capacity per type, edit, deactivate / reactivate), vehicles (add, status, move, edit, "Not at a lot" → dashboard alert → set lot, photo menu, QR labels), transfers (create, cancel; depart / arrive earlier), staff and admins (add with generated ID, edit, reset password, deactivate / reactivate, no self-deactivation), settings ("ADM" reserved, save, restore), audit log (filters, before / after), profile (theme, change password, log out / sign in), notifications (trip cancelled, vehicle swapped out → trip), staff trips (start, swap, hand-over, cancel, end) seen in admin Live and trip timeline, reports (vehicle hours with lot filter, staff hours, trip log with status filter). Photo upload checked through the app's upload code against the API. Fixed:
+- Staff app: after logging out and in as someone else, Home showed no running trip until refreshed; the running trip now reloads on every sign-in.
+- Staff app: with camera access denied the scanner was a silent black screen; it now says camera access is off and points to typing the registration.
+- Admin: deactivating right after a password reset failed with "Changed by someone else" (the reset changes the record); lists reload after a reset.
+- Admin: vehicle history refreshes after every change; photo changes read "Photo changed by …" (API); "not at a lot" notice no longer blames staff; truck placeholder art; helper texts wrap; report days read "Sat 28 Nov"; "1 trip" not "1 trips".
+- Versions: staff 1.0.2 (code 2003), admin 1.0.1 (code 2).
+- Tests: 114 backend, 33 Flutter, all passing.
+
+## 2026-11-28 — Admin app phone test and fixes
+
+Tested on the owner's phone (Android 17, local API with a throwaway database; the emulator on the dev PC crashed and was dropped): admin sign-in, dashboard, Live trips and transfers, new transfer, trip detail (signature, reminders), vehicles (add, detail, QR label print / share / save, bulk sheet), staff (add with generated ID, detail with hours), lots (detail, edit + save), reports (lot utilisation, transfer log), audit log; staff app sign-in, transfer depart / arrive and start trip against the admin's data. Fixed:
+- **Staff app version code** is now 2002 (`1.0.1+2002`). Earlier one-APK-per-phone-type builds had code 2001, so the universal APK (code 1) was refused as a downgrade. Only universal builds from now on.
+- Vehicle history (API) shows readable lines ("Status set to under maintenance by …") instead of raw audit JSON, which exposed the QR token. +6 tests (113 backend).
+- Admin layout: date-range button no longer full width (it squeezed titles in staff detail, audit and trip-log filters); vehicle actions in a 2 × 2 grid; staff actions side by side; vehicle status badge beside the plate; Places tiles no longer amber (reserved for "live"); audit log shows "Vehicle #6" and readable field names.
+
 ## 2026-11-28 — Admin app (D-057) and no map in v1 (D-056)
 
 - New `apps/admin` ("DM Admin", `com.dm.vms.admin`): Dashboard (today's figures, trips per hour, needs attention), Live (running trips with timers and filters; open transfers; new transfer), trip detail (read-only, reminders sent), transfer detail (timeline, cancel before departure), Manage (vehicles: list with search and filters, detail with photo, status, place at a lot, QR label, history, add/edit form; bulk QR labels; categories and types; staff with generated ID, photo, trips and hours, reset password, (de)activate; admins; lots with capacity and baseline per type; destinations; settings; audit log with before/after), the 5 reports, profile, notifications.

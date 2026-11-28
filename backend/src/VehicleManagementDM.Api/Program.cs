@@ -40,6 +40,7 @@ services.AddSingleton<FileErrorLog>();
 services.AddSingleton<ErrorLogWriter>();
 services.AddSingleton<ApiErrorWriter>();
 services.AddSingleton<FileStore>();
+services.AddSingleton<AppVersionGate>();
 services.AddHttpContextAccessor();
 
 // Database (D-029, D-030)
@@ -116,6 +117,7 @@ app.UseRouting();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<AppVersionMiddleware>();
 
 // Secure by default: every controller endpoint needs a signed-in user unless it says [AllowAnonymous].
 app.MapControllers().RequireAuthorization();

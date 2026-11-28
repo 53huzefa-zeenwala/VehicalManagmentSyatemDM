@@ -13,6 +13,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public DbSet<AppSetting> AppSettings => Set<AppSetting>();
 
+    public DbSet<UserAppVersion> UserAppVersions => Set<UserAppVersion>();
+
     public DbSet<ErrorLog> ErrorLogs => Set<ErrorLog>();
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();

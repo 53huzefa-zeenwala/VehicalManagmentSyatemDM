@@ -20,6 +20,7 @@ public sealed class AuthService(
     IHttpContextAccessor httpContextAccessor,
     IOptions<AuthOptions> authOptions,
     TripQueries tripQueries,
+    AppVersionGate versionGate,
     TimeProvider timeProvider)
 {
     private HttpContext HttpContext =>
@@ -54,6 +55,11 @@ public sealed class AuthService(
                 "Account deactivated",
                 "Your account has been deactivated. Contact your administrator.");
         }
+
+        // An outdated app can't sign in either (D-058); checked only after the password, so it reveals nothing.
+        var appVersion = httpContextAccessor.HttpContext?.Request.Headers[AppVersionGate.Header].ToString();
+        await versionGate.EnsureSupportedAsync(user.Role, appVersion, cancellationToken);
+        await versionGate.RecordAsync(user.Id, appVersion, cancellationToken);
 
         // Counter updates use direct UPDATEs so parallel sign-ins never fail with a concurrency conflict.
         if (user.FailedLoginCount != 0 || user.LockoutEndUtc is not null)

@@ -94,6 +94,8 @@ public sealed class VehicleHistoryService(AppDbContext db, TimeProvider timeProv
                 return $"Status set to {Humanize(status).ToLowerInvariant()} by {admin}";
             case "LocationResolve":
                 return lotName is null ? $"Location changed by {admin}" : $"Placed at {lotName} by {admin}";
+            case "Update" when after is { Count: 1 } && after.ContainsKey("photoFileName"):
+                return $"Photo changed by {admin}";
             case "Update" when after is { Count: > 0 }:
                 var fields = after.Select(p => Humanize(p.Key).ToLowerInvariant()).Where(f => f != "qr token" && f != "photo file name");
                 var list = string.Join(", ", fields);

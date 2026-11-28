@@ -90,6 +90,8 @@ class AdminsScreen extends ConsumerWidget {
                               name: a.fullName,
                               reset: (password) => ref.read(adminReposProvider).resetAdminPassword(a.id, password),
                             );
+                            // The reset updates the account (new rowVersion): reload before any further edit.
+                            ref.invalidate(adminsProvider);
                           case 2:
                             await _toggle(context, ref, a);
                         }

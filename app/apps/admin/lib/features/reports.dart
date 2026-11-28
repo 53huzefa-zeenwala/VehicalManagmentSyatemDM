@@ -2,6 +2,7 @@ import 'package:dm_core/dm_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../shell.dart';
 import '../state.dart';
@@ -46,7 +47,8 @@ class _Days extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
     children: [
-      for (final day in days.where((d) => d.seconds > 0)) KeyValueRow(day.date, formatDuration(Duration(seconds: day.seconds))),
+      for (final day in days.where((d) => d.seconds > 0))
+        KeyValueRow(DateFormat('EEE d MMM').format(DateTime.parse(day.date)), formatDuration(Duration(seconds: day.seconds))),
     ],
   );
 }
@@ -218,7 +220,7 @@ class _StaffHoursScreenState extends ConsumerState<StaffHoursScreen> {
                       leading: Avatar(name: row.staff.fullName, photoUrl: row.staff.photoUrl, size: 38),
                       title: Text('${row.staff.fullName} · ${formatDuration(Duration(seconds: row.totalSeconds))}', style: context.text.titleSmall),
                       subtitle: Text(
-                        '${row.trips} trips · ${row.transfers} transfers · ${row.staff.loginId}',
+                        '${row.trips} ${row.trips == 1 ? 'trip' : 'trips'} · ${row.transfers} ${row.transfers == 1 ? 'transfer' : 'transfers'} · ${row.staff.loginId}',
                         style: context.text.bodySmall,
                       ),
                       childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),

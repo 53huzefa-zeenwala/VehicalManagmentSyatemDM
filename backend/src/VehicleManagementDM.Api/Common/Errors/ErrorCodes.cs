@@ -46,6 +46,7 @@ public static class ErrorCodes
     public const string InvalidIdPrefix = "INVALID_ID_PREFIX";
     public const string VehicleInTransfer = "VEHICLE_IN_TRANSFER";
     public const string TransferInvalidState = "TRANSFER_INVALID_STATE";
+    public const string UpdateRequired = "UPDATE_REQUIRED";
 
     // Warnings returned inside successful responses (never block, BR-09)
     public const string LotFull = "LOT_FULL";

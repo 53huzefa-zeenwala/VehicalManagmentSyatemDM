@@ -20,6 +20,25 @@ const _entityTypes = <String?, String>{
   'User': 'People',
 };
 
+/// One record of each type, for list rows ("Vehicle #6").
+const _entityNames = <String, String>{
+  'Vehicle': 'Vehicle',
+  'VehicleCategory': 'Category',
+  'VehicleType': 'Type',
+  'ParkingLot': 'Lot',
+  'LotTypeCapacity': 'Lot capacity',
+  'Area': 'Area',
+  'Location': 'Location',
+  'Transfer': 'Transfer',
+  'User': 'Person',
+};
+
+/// "currentLotId" → "Current lot id", "PasswordReset" → "Password reset".
+String _humanize(String name) {
+  final spaced = name.replaceAllMapped(RegExp('(?<=[a-z])(?=[A-Z])'), (_) => ' ');
+  return spaced.isEmpty ? spaced : spaced[0].toUpperCase() + spaced.substring(1).toLowerCase();
+}
+
 /// A-23: who changed what and when (AUD-01, AUD-02); filter by record type and dates; tap for before/after.
 class AuditLogScreen extends ConsumerStatefulWidget {
   const AuditLogScreen({super.key});
@@ -64,7 +83,7 @@ class _AuditLogScreenState extends ConsumerState<AuditLogScreen> {
             empty: const EmptyView(icon: Icons.history_rounded, title: 'No changes', message: 'Nothing was changed in these dates.'),
             itemBuilder: (context, entry) => ListRow(
               leading: IconTile(_icon(entry.action), tone: Tone.neutral, size: 38),
-              title: '${entry.action} · ${_entityTypes[entry.entityType] ?? entry.entityType} #${entry.entityId}',
+              title: '${_humanize(entry.action)} · ${_entityNames[entry.entityType] ?? entry.entityType} #${entry.entityId}',
               subtitle: '${Gst.dateTime(entry.atUtc)} · ${entry.user.fullName} (${entry.user.loginId})',
               onTap: () => _showEntry(context, entry),
             ),
@@ -97,7 +116,7 @@ class _AuditLogScreenState extends ConsumerState<AuditLogScreen> {
           controller: controller,
           padding: const EdgeInsets.fromLTRB(DmSize.gutter, 0, DmSize.gutter, 24),
           children: [
-            Text('${entry.action} · ${entry.entityType} #${entry.entityId}', style: context.text.titleLarge),
+            Text('${_humanize(entry.action)} · ${_entityNames[entry.entityType] ?? entry.entityType} #${entry.entityId}', style: context.text.titleLarge),
             Text('${Gst.dateTime(entry.atUtc)} · ${entry.user.fullName}', style: context.text.bodyMedium),
             const SizedBox(height: 12),
             if (keys.isEmpty) Text('No field details.', style: context.text.bodyMedium),
@@ -109,7 +128,7 @@ class _AuditLogScreenState extends ConsumerState<AuditLogScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(key, style: context.text.labelMedium),
+                      Text(_humanize(key), style: context.text.labelMedium),
                       const SizedBox(height: 4),
                       if (entry.before != null) Text('Before: ${show(entry.before![key])}', style: context.text.bodySmall),
                       if (entry.after != null) Text('After: ${show(entry.after![key])}', style: context.text.bodyMedium),

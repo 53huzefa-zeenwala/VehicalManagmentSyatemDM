@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dm_core/dm_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -135,8 +137,24 @@ class _ScannerScreenState extends State<ScannerScreen> {
   final _controller = MobileScannerController(formats: const [BarcodeFormat.qrCode]);
   bool _done = false;
 
+  /// Set when the camera still isn't running after a few seconds (e.g. access denied earlier and Android no longer
+  /// asks), so the screen explains it instead of staying black.
+  bool _cameraLate = false;
+  Timer? _cameraCheck;
+
+  @override
+  void initState() {
+    super.initState();
+    _cameraCheck = Timer(const Duration(seconds: 4), () {
+      if (mounted && !_controller.value.isRunning) {
+        setState(() => _cameraLate = true);
+      }
+    });
+  }
+
   @override
   void dispose() {
+    _cameraCheck?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -169,18 +187,30 @@ class _ScannerScreenState extends State<ScannerScreen> {
           MobileScanner(
             controller: _controller,
             onDetect: _onDetect,
-            errorBuilder: (context, error) => Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Text(
-                  error.errorCode == MobileScannerErrorCode.permissionDenied
-                      ? 'Camera access is off. Allow it in Settings, or type the registration number.'
-                      : 'The camera could not start. Type the registration number instead.',
-                  textAlign: TextAlign.center,
-                  style: dmStyle(15, FontWeight.w600, color: Colors.white),
+            // The message for camera problems is drawn above the viewfinder (below), so it is never hidden.
+            errorBuilder: (context, error) => const SizedBox.shrink(),
+          ),
+          ValueListenableBuilder<MobileScannerState>(
+            valueListenable: _controller,
+            builder: (context, state, _) {
+              final error = state.error;
+              if (error == null && (state.isRunning || !_cameraLate)) {
+                return const SizedBox.shrink();
+              }
+              return Align(
+                alignment: const Alignment(0, -0.62),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    error == null || error.errorCode == MobileScannerErrorCode.permissionDenied
+                        ? 'Camera access is off. Allow it for DM Staff in Settings, or type the registration number below.'
+                        : 'The camera could not start. Type the registration number below.',
+                    textAlign: TextAlign.center,
+                    style: dmStyle(15, FontWeight.w600, color: Colors.white),
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
           Center(
             child: Container(

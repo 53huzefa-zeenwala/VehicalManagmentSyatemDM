@@ -14,6 +14,7 @@ public sealed class VehicleHistoryTextTests
     [InlineData("LocationResolve", """{"currentLotId":99}""", "Location changed by Admin One")]
     [InlineData("Update", """{"brand":"Isuzu","registrationNumber":"D 1"}""", "Edited by Admin One: brand, registration number")]
     [InlineData("Update", null, "Update by Admin One")]
+    [InlineData("Update", """{"photoFileName":"abc.jpg"}""", "Photo changed by Admin One")]
     public void Admin_changes_read_as_sentences(string action, string? afterJson, string expected)
     {
         var text = VehicleHistoryService.DescribeChange(action, "Admin One", afterJson, Lots);

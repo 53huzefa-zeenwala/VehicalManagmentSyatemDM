@@ -27,6 +27,16 @@ namespace VehicleManagementDM.Api.Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<string>("MinAdminAppVersion")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("MinStaffAppVersion")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
                     b.Property<int>("ReminderDelayMinutes")
                         .HasColumnType("int");
 
@@ -839,6 +849,26 @@ namespace VehicleManagementDM.Api.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("VehicleManagementDM.Api.Domain.Entities.UserAppVersion", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SeenAtUtc")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserAppVersions", (string)null);
+                });
+
             modelBuilder.Entity("VehicleManagementDM.Api.Domain.Entities.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -1194,6 +1224,17 @@ namespace VehicleManagementDM.Api.Data.Migrations
                     b.Navigation("Trip");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("VehicleManagementDM.Api.Domain.Entities.UserAppVersion", b =>
+                {
+                    b.HasOne("VehicleManagementDM.Api.Domain.Entities.User", "User")
+                        .WithOne()
+                        .HasForeignKey("VehicleManagementDM.Api.Domain.Entities.UserAppVersion", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("VehicleManagementDM.Api.Domain.Entities.Vehicle", b =>

@@ -17,6 +17,8 @@ internal sealed class AppSettingConfiguration : IEntityTypeConfiguration<AppSett
 
         builder.Property(s => s.Id).ValueGeneratedNever();
         builder.Property(s => s.StaffIdPrefix).HasMaxLength(5).IsUnicode(false);
+        builder.Property(s => s.MinStaffAppVersion).HasMaxLength(20).IsUnicode(false);
+        builder.Property(s => s.MinAdminAppVersion).HasMaxLength(20).IsUnicode(false);
         builder.Property(s => s.RowVersion).IsRowVersion();
 
         builder.HasData(new AppSetting

@@ -438,7 +438,7 @@ class NumberField extends StatelessWidget {
     controller: controller,
     keyboardType: TextInputType.number,
     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-    decoration: InputDecoration(labelText: label, errorText: errorText, helperText: helperText),
+    decoration: InputDecoration(labelText: label, errorText: errorText, helperText: helperText, helperMaxLines: 3),
     validator: (value) {
       final number = int.tryParse(value ?? '');
       if (number == null) {

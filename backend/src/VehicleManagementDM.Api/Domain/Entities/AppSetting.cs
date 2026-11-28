@@ -16,5 +16,11 @@ public class AppSetting
     /// <summary>Minutes between later reminders (30, D-009).</summary>
     public int ReminderRepeatMinutes { get; set; } = 30;
 
+    /// <summary>Oldest DM Staff app version allowed to use the API, e.g. "1.0.2"; null = no minimum (D-058).</summary>
+    public string? MinStaffAppVersion { get; set; }
+
+    /// <summary>Oldest DM Admin app version allowed to use the API; null = no minimum (D-058).</summary>
+    public string? MinAdminAppVersion { get; set; }
+
     public byte[] RowVersion { get; set; } = [];
 }

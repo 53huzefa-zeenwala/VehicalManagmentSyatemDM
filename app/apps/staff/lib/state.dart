@@ -5,7 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Loaded on start and refreshed after every trip action or pull-to-refresh (no polling, D-035).
 class ActiveTripController extends AsyncNotifier<TripDetail?> {
   @override
-  Future<TripDetail?> build() => ref.read(reposProvider).activeTrip();
+  Future<TripDetail?> build() {
+    // Rebuild for every sign-in: after logging out and in as someone else, show their trip, not the last person's.
+    final userId = ref.watch(sessionProvider.select((s) => s is SignedIn ? s.me.id : null));
+    return userId == null ? Future.value() : ref.read(reposProvider).activeTrip();
+  }
 
   Future<void> refresh() async {
     state = await AsyncValue.guard(() => ref.read(reposProvider).activeTrip());
